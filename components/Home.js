@@ -5,7 +5,7 @@ function Login() {
     <div>
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+          Click here to see <a href="https://trello.com/b/6LNqv4qE/stockify">the planning</a>
         </h1>
       </main>
     </div>
