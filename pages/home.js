@@ -1,13 +1,13 @@
 import Head from 'next/head';
-import Login from '../components/Login';
+import Home from '../components/Home';
 
 function Index() {
   return (
     <>
       <Head>
-        <title>LoginPage</title>
+        <title>Home</title>
       </Head>
-      <Login />
+      <Home />
     </>
   );
 }
