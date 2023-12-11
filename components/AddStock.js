@@ -5,12 +5,12 @@ import React, { useState, useEffect } from 'react';
 
 function AddStock(props) {
 
-    const [selectedOption, setSelectedOption] = useState('');
+    const [selectedOption, setSelectedOption] = useState(''); // Pour récupérer la catégories choisie par le user
     const [productList, setproductList] = useState([]);
     const [stockToAdd, setStockToAdd] = useState([]);
 
 
-    useEffect(() => {
+    useEffect(() => { // Fetch la liste des produit pour le menu déroulant
         fetch('http://localhost:3000/products/allProducts')
         .then(response => response.json())
         .then(data => {
@@ -24,16 +24,16 @@ function AddStock(props) {
 
 
 
-    const handleCancel = () => {
+    const handleCancel = () => { // Ferme la modal
         setIsOpen(false);
       };
 
     const handleSubmitButton = () => {
-        
+
     };
 
 
-    const handleSelectChange = (event) => {
+    const handleSelectChange = (event) => { // Gère le choix de la catégorie
         setSelectedOption(event.target.value);
     };
 
