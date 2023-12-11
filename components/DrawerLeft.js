@@ -11,10 +11,9 @@ const DrawerLeft = (props) => {
     props.handleDrawerClick();
   };
 
-
   return (
     <>
-      <Drawer title="Accueil" placement='left' width={200} onClose={onClose} open={props.isDrawerOpen} className={styles.main} >
+      <Drawer title="Accueil" onClick={() => router.push('/home')} placement='left' width={200} onClose={onClose} open={props.isDrawerOpen} className={styles.main} >
         <p onClick={() => router.push('/products')} > Products </p>
         <p onClick={() => router.push('/sales')} > Sales </p>
         <p onClick={() => router.push('/statistics')} > Statistics </p>

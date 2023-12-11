@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import styles from '../styles/Admin.module.css';
-import DrawerLeft from './DrawerLeft';
 
 function Admin() {
     const [userData, setUserData] = useState([]);
@@ -15,17 +14,6 @@ function Admin() {
 
         setUserData(Data);
     }, []);
-
-
-    const [isDrawerOpen, setIsDrawerOpen] = useState(true);
-
-    const handleDrawerClick = () => {
-        if (isDrawerOpen) {
-            setIsDrawerOpen(false);
-        } else {
-            setIsDrawerOpen(true);
-        }
-    };
 
 
     return (
@@ -57,7 +45,6 @@ function Admin() {
                         </tbody>
                     </table>
                 </div>
-                <DrawerLeft isDrawerOpen={isDrawerOpen} handleDrawerClick={handleDrawerClick}/>
             </main>
         </div>
     );

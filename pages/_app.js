@@ -13,7 +13,7 @@ function App({ Component, pageProps }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const handleDrawerClick = () => {
-    if(isDrawerOpen) {
+    if (isDrawerOpen) {
       setIsDrawerOpen(false);
     } else {
       setIsDrawerOpen(true);
@@ -26,17 +26,17 @@ function App({ Component, pageProps }) {
         <title>Stockify</title>
       </Head>
       <div className={styles.headerBar}>
-          <div className={styles.iconsSection}>
-            <FontAwesomeIcon icon={faBars} className={styles.iconTop} onClick={() => handleDrawerClick()} /> 
-          </div>
-          <div className={styles.iconsSection} >
-            <FontAwesomeIcon icon={faBell} className={styles.iconTop} /> 
-            <FontAwesomeIcon icon={faChevronDown} className={styles.iconTop} />
-            <FontAwesomeIcon icon={faWatchmanMonitoring} className={styles.iconTop} />
-          </div>
+        <div className={styles.iconsSection}>
+          <FontAwesomeIcon icon={faBars} className={styles.iconTop} onClick={() => handleDrawerClick()} />
         </div>
+        <div className={styles.iconsSection} >
+          <FontAwesomeIcon icon={faBell} className={styles.iconTop} />
+          <FontAwesomeIcon icon={faChevronDown} className={styles.iconTop} />
+          <FontAwesomeIcon icon={faWatchmanMonitoring} className={styles.iconTop} />
+        </div>
+      </div>
       <DrawerLeft isDrawerOpen={isDrawerOpen} handleDrawerClick={handleDrawerClick} />
-      <Component {...pageProps}  />
+      <Component {...pageProps} />
     </>
   );
 }
