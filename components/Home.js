@@ -1,16 +1,21 @@
 import styles from '../styles/Home.module.css';
-import { useRouter } from 'next/router';
+import DrawerLeft from './DrawerLeft';
+import { CaretRightOutlined  } from '@ant-design/icons';
+
+import React, { useState } from 'react';
+
+function Home() {
+
+  const [isDrawerOpen, setIsDrawerOpen] = useState(true);
 
 
-function Login() {
-
-  const router = useRouter();
-
-
-  const redirectToAdmin = () => {
-    router.push('admin');
-  }
-
+  const handleDrawerClick = () => {
+    if(isDrawerOpen) {
+      setIsDrawerOpen(false);
+    } else {
+      setIsDrawerOpen(true);
+    }
+  };
 
 
   return (
@@ -19,10 +24,11 @@ function Login() {
         <h1 className={styles.title}>
           Click here to see <a href="https://trello.com/b/6LNqv4qE/stockify">the planning</a>
         </h1>
-        <button type="submit" onClick={()=> redirectToAdmin()}>Page admin</button>
+        <DrawerLeft isDrawerOpen={isDrawerOpen} handleDrawerClick={handleDrawerClick} />
+        <CaretRightOutlined onClick={handleDrawerClick} className={styles.drawerOpenLogo} />
       </main>
     </div>
   );
 }
 
-export default Login;
+export default Home;
