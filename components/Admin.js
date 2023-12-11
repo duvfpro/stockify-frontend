@@ -7,22 +7,27 @@ function Admin() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        const Data = [
-            { id: 1, username: 'sam', email: 'gay@example.com', isAdmin: false },
-            { id: 2, username: 'franck', email: 'dep@example.com', isAdmin: true },
-            { id: 3, username: 'nathan', email: 'dragqueen@example.com', isAdmin: false },
-            { id: 3, username: 'nathan', email: 'dragqueen@example.com', isAdmin: false },
-            { id: 3, username: 'nathan', email: 'dragqueen@example.com', isAdmin: false },
-            { id: 3, username: 'nathan', email: 'dragqueen@example.com', isAdmin: false },
-            { id: 3, username: 'nathan', email: 'dragqueen@example.com', isAdmin: false },
-            { id: 3, username: 'nathan', email: 'dragqueen@example.com', isAdmin: false },
-            { id: 3, username: 'nathan', email: 'dragqueen@example.com', isAdmin: false },
-            { id: 3, username: 'siu', email: 'dragqueen@example.com', isAdmin: false },
-        ];
+        const fetchData = async () => {
+          try {
+            const response = await fetch('http://localhost:3000/users/allUser');
+            const data = await response.json();
+    
+            const formattedData = data.map((user) => ({
+              username: user.username,
+              email: user.email,
+              isAdmin: user.isAdmin,
+            }));
+    
+            setUserData(formattedData);
+          } catch (error) {
+            console.error('Erreur lors du fetch des données : ', error);
+          }
+        };
+    
+        fetchData();
+      }, []);
 
-        setUserData(Data);
-    }, []);
-
+      console.log(userData)
     const openModal = (user) => {
         setSelectedUser(user);
         setIsModalOpen(true);
