@@ -2,13 +2,14 @@ import styles from '../styles/Home.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faBell, faChevronDown, faWatchmanMonitoring } from '@fortawesome/free-solid-svg-icons';
 import DrawerLeft from './DrawerLeft';
+import LastSales from './LastSales';
 import { CaretRightOutlined  } from '@ant-design/icons';
 
 import React, { useState } from 'react';
 
 function Home() {
 
-  const [isDrawerOpen, setIsDrawerOpen] = useState(true);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const handleDrawerClick = () => {
     if(isDrawerOpen) {
@@ -33,6 +34,8 @@ function Home() {
         </div>
 
         <DrawerLeft isDrawerOpen={isDrawerOpen} handleDrawerClick={handleDrawerClick} />
+
+        <LastSales />
       </main>
   );
 }

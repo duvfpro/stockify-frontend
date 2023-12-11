@@ -3,12 +3,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 
-
-
-
-
-
-
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
