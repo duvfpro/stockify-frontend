@@ -1,22 +1,11 @@
 import styles from '../styles/Drawer.module.css';
-import React, { useState } from 'react';
 import { Drawer } from 'antd';
-import { CaretRightOutlined  } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 
 
 const DrawerLeft = (props) => {
 
   const router = useRouter();
-
-
-  const showDrawer = () => {
-    props.handleDrawerClick();
-  };
-
-  const onChange = (e) => {
-    setPlacement(e.target.value);
-  };
 
   const onClose = () => {
     props.handleDrawerClick();
