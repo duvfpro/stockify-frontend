@@ -1,14 +1,44 @@
 .main {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    padding: 4rem 0;
-  }
+    justify-content: flex-start;
+    height: 100vh;
+    padding: 20px;
+}
 
-  .title {
+.title {
     line-height: 1.15;
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
-  }
+    font-size: 2.5rem;
+    margin-bottom: 17rem;
+}
+
+.tableContainer {
+    max-height: 200px;
+    overflow: auto;
+}
+
+
+.tableHeader {
+    text-align: center;
+    background-color: rgb(105, 201, 201);
+    padding: 12px;
+    border-radius: 5px;
+}
+
+.tableCell {
+    text-align: center;
+    padding: 12px;
+
+}
+
+.emailCell {
+    text-align: right;
+    padding: 12px;
+}
+
+.editButton {
+    padding: 5px 10px;
+    cursor: pointer;
+    
+}
