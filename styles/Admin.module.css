@@ -19,26 +19,50 @@
 }
 
 
-.tableHeader {
+/* Ajoutez ce style pour aligner le contenu des cellules du tableau */
+.tableCell {
+    text-align: left;
+    padding: 8px; /* Ajoutez un espace autour du contenu de la cellule */
+  }
+  
+  /* Ajoutez ce style pour les cellules d'en-tête */
+  .tableHeader {
     text-align: center;
     background-color: rgb(105, 201, 201);
     padding: 12px;
     border-radius: 5px;
-}
-
-.tableCell {
-    text-align: center;
-    padding: 12px;
-
-}
-
-.emailCell {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  
+  /* Ajoutez ce style spécifique pour la colonne "Email" */
+  .emailCell {
     text-align: right;
     padding: 12px;
-}
-
-.editButton {
+  }
+  
+  /* Ajoutez ce style pour le bouton "edit" */
+  .editButton {
     padding: 5px 10px;
     cursor: pointer;
-    
-}
+  }
+  
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2; /* Assurez-vous que la modal est au-dessus des titres du tableau */
+  }
+  
+  .modalContent {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+  }

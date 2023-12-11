@@ -1,11 +1,20 @@
-import '../styles/globals.css';
 import Head from 'next/head';
 import { useState } from 'react';
-import DrawerLeft from '../components/DrawerLeft';
-import styles from '../styles/Navbar.module.css';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faBell, faChevronDown, faWatchmanMonitoring } from '@fortawesome/free-solid-svg-icons';
 
+import '../styles/globals.css';
+import DrawerLeft from '../components/DrawerLeft';
+import styles from '../styles/Navbar.module.css';
+import user from '../reducers/users';
+
+
+
+const store = configureStore({
+  reducer: { user },
+})
 
 
 function App({ Component, pageProps }) {
@@ -21,7 +30,7 @@ function App({ Component, pageProps }) {
   };
 
   return (
-    <>
+    <Provider store={store}>
       <Head>
         <title>Stockify</title>
       </Head>
@@ -37,7 +46,7 @@ function App({ Component, pageProps }) {
       </div>
       <DrawerLeft isDrawerOpen={isDrawerOpen} handleDrawerClick={handleDrawerClick} />
       <Component {...pageProps} />
-    </>
+    </Provider>
   );
 }
 
