@@ -2,7 +2,7 @@ import '../styles/globals.css';
 import Head from 'next/head';
 import { useState } from 'react';
 import DrawerLeft from '../components/DrawerLeft';
-import styles from '../styles/Home.module.css';
+import styles from '../styles/Navbar.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faBell, faChevronDown, faWatchmanMonitoring } from '@fortawesome/free-solid-svg-icons';
 
