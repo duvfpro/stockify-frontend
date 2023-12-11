@@ -1,4 +1,6 @@
 import styles from '../styles/Home.module.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faBell, faChevronDown, faWatchmanMonitoring } from '@fortawesome/free-solid-svg-icons';
 import DrawerLeft from './DrawerLeft';
 import { CaretRightOutlined  } from '@ant-design/icons';
 
@@ -8,7 +10,6 @@ function Home() {
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
 
-
   const handleDrawerClick = () => {
     if(isDrawerOpen) {
       setIsDrawerOpen(false);
@@ -17,17 +18,22 @@ function Home() {
     }
   };
 
-
   return (
-    <div>
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Click here to see <a href="https://trello.com/b/6LNqv4qE/stockify">the planning</a>
-        </h1>
+
+        <div className={styles.headerBar}>
+          <div className={styles.iconsSection}>
+            <FontAwesomeIcon icon={faBars} className={styles.iconTop} onClick={() => handleDrawerClick()} /> 
+          </div>
+          <div className={styles.iconsSection} >
+            <FontAwesomeIcon icon={faBell} className={styles.iconTop} /> 
+            <FontAwesomeIcon icon={faChevronDown} className={styles.iconTop} />
+            <FontAwesomeIcon icon={faWatchmanMonitoring} className={styles.iconTop} />
+          </div>
+        </div>
+
         <DrawerLeft isDrawerOpen={isDrawerOpen} handleDrawerClick={handleDrawerClick} />
-        <CaretRightOutlined onClick={handleDrawerClick} className={styles.drawerOpenLogo} />
       </main>
-    </div>
   );
 }
 

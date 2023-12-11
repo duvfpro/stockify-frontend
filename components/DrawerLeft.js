@@ -26,10 +26,10 @@ const DrawerLeft = (props) => {
   return (
     <>
       <Drawer title="Accueil" placement='left' width={200} onClose={onClose} open={props.isDrawerOpen} className={styles.main} >
-        <p>Produits </p>
-        <p>Ventes </p>
-        <p>Statistiques </p>
-        <p onClick={() => router.push('/admin')} >Admin </p>
+        <p onClick={() => router.push('/products')} > Products </p>
+        <p onClick={() => router.push('/sales')} > Sales </p>
+        <p onClick={() => router.push('/statistics')} > Statistics </p>
+        <p onClick={() => router.push('/admin')} > Admin </p>
       </Drawer>
     </>
   );
