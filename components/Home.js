@@ -1,16 +1,17 @@
 import styles from '../styles/Home.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faBell, faChevronDown, faWatchmanMonitoring } from '@fortawesome/free-solid-svg-icons';
-import DrawerLeft from './DrawerLeft';
+import LastSales from './LastSales';
 
-import React, { useState } from 'react';
 
 function Home() {
 
-  
+
   return (
+    <main>
       <h1>Welcome</h1>
+      <LastSales />
+    </main>
   )
+
 }
 
 export default Home;
