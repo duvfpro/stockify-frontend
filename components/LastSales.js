@@ -26,7 +26,7 @@ function LastSales () {
 
     const [displayProducts, setDisplayProducts] = useState([])
 
-    const columns = [
+    const columns = [  // Schema du tableau
         {
           title: 'Product',
           width: 120,
@@ -59,7 +59,7 @@ function LastSales () {
       ];
     
 
-    useEffect(() => {
+    useEffect(() => { // Affiche la liste des produits vendus aujourd'hui
         fetch('http://localhost:3000/products/allProducts')
         .then(response => response.json())
         .then(data => {
@@ -69,10 +69,8 @@ function LastSales () {
             let sold = products.soldAt;
             let soldToday = sold.some(e => e.date === date)
             return soldToday;
-           
         });
-        setDisplayProducts(filtre)
-       
+        setDisplayProducts(filtre);
     })
     }, []);
     console.log(displayProducts)
