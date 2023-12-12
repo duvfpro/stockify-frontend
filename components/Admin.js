@@ -6,22 +6,21 @@ import { useSelector } from 'react-redux';
 
 
 function Admin() {
-  const [userData, setUserData] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [editedUsername, setEditedUsername] = useState("");
-  const user = useSelector((state) => state.user.value);
+    const [userData, setUserData] = useState([]);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isNewUserModalOpen, setIsNewUserModalOpen] = useState(false);
+    const [refreshData, setRefreshData] = useState(false); // Etat qui sert à recharger le useEffect
 
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!user.token) {
-      router.push('/');
-    }
-  }, [user.token, router]);
+    // Les états pour créer un new user
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
+    const [isAdmin, setIsAdmin] = useState(false);
 
 
-  const columns = [
+
+    const columns = [  // Schema du tableau
     {
       title: 'Username',
       width: 120,
@@ -41,7 +40,7 @@ function Admin() {
       title: 'Edit',
       dataIndex: 'edit',
       width: 120,
-      render: (_, user) => <a className={styles.editButton} onClick={() => openModal(user)}>EDIT</a>,
+      render: (_, user) => <a className={styles.editButton} onClick={() => openEditModal(user)}>EDIT</a>,
     },
   ];
 
@@ -59,40 +58,77 @@ function Admin() {
         }));
         setUserData(formattedData);
 
-      } catch (error) {
-        console.error('Erreur lors du fetch des données : ', error);
-      }
+          } catch (error) {
+            console.error('Erreur lors du fetch des données : ', error);
+          }
+        }; 
+    
+        fetchData();
+      }, [refreshData]);
+
+      
+    const openEditModal = (userData) => {
+        setSelectedUser(userData);
+        setIsEditModalOpen(true);
     };
 
-    fetchData();
-  }, []);
-  const openModal = (userData) => {
-    setSelectedUser(userData);
-    setIsModalOpen(true);
-    console.log(userData.username)
-  };
-
-  const closeModal = () => {
-    setSelectedUser(null);
-    setIsModalOpen(false);
-  };
-
-  const handleSwitchChange = () => {
-    const onChange = (checked) => {
-      console.log(`switch to ${checked}`);
+    const closeEditModal = () => {
+        setSelectedUser(null);
+        setIsEditModalOpen(false);
     };
-  }
+
+    const openNewUserModal = (userData) => {
+        setIsNewUserModalOpen(true);
+    };
+
+    const closeNewUserModal = () => {
+        setIsNewUserModalOpen(false);
+    };
+
+    const handleSwitchChange = () => {
+        setIsAdmin(!isAdmin);
+    };
 
 
-  const handleSaveButton = () => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/users/updateAdmin', {
-          method: 'PUT',
-          headers: { 'Content-type': 'application/json' },
-          body: JSON.stringify({ token: 'qfLgzLRkR1ecjqvwAaPJqOAFa9xupCFh' }),
+    const handleNewUserSaveButton = () => { 
+        fetch('http://localhost:3000/users/addUser', {
+            method: 'POST',
+            headers: {'Content-type': 'application/json'},
+            body: JSON.stringify({username: username, email: email, isAdmin: isAdmin, password: password}),
+        })
+        .then(response => response.json())
+        .then((data) => {
+            setRefreshData(!refreshData); // utilisé dans le useEffect pour recharger la liste des users après suppression
+            closeNewUserModal();
         });
-        const data = await response.json();
+    };
+
+
+    const handleDeleteButton = (emailToDelete) => {
+        const isConfirmed = window.confirm("Are you sure you want to delete this user ?");
+        if (isConfirmed) {
+            fetch(`http://localhost:3000/users/${emailToDelete}`, {
+                method: 'DELETE',
+                headers: {'Content-type': 'application/json'},
+            }) 
+            .then(response => response.json())
+            .then((data) => {
+                setRefreshData(!refreshData); // utilisé dans le useEffect pour recharger la liste des users après suppression
+                closeEditModal();
+            });
+        }; 
+    };
+
+
+    const handleEditSaveButton = () => { // A TERMINER APRES PULL SAM
+        const fetchData = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/users/updateAdmin', {
+                    method: 'PUT',
+                    headers: {'Content-type': 'application/json'},
+                    body: JSON.stringify({token: 'qfLgzLRkR1ecjqvwAaPJqOAFa9xupCFh'}),
+                });
+                const data = await response.json();
 
         console.log(data)
 
@@ -112,28 +148,48 @@ function Admin() {
   };
 
 
-  return (
-    <div>
-      <main className={styles.main}>
-        <h1 className={styles.title}>Page Administrateur</h1>
-        <div className={styles.tableContainer}>
-          <Table dataSource={userData} columns={columns} pagination={false} style={{ overflow: 'auto', maxHeight: '100%' }} />
+    return (
+        <div>
+            <main className={styles.main}>
+                <h1 className={styles.title}>Page Administrateur</h1>
+                <button onClick={() => openNewUserModal()} >
+                    ADD NEW USER
+                </button>
+                {isNewUserModalOpen && (
+                    <Modal title="New User" open={isNewUserModalOpen} onCancel={closeNewUserModal} footer={[
+                      <button onClick={() => handleNewUserSaveButton()}>
+                        Create new User
+                      </button>,
+                    ]}
+                    >
+                    <p>Username <input onChange={(e) => setUsername(e.target.value)} value={username} /> </p>
+                    <p>Email <input onChange={(e) => setEmail(e.target.value)} value={email} /> </p>
+                    <p>Password <input onChange={(e) => setPassword(e.target.value)} value={password} /> </p>
+                    <p>Admin <Switch onChange={handleSwitchChange} size='small' /> </p>
+                  </Modal>
+                )}
+
+                <div className={styles.tableContainer}>
+                    <Table dataSource={userData} columns={columns} pagination={false} style={{ overflow: 'auto', maxHeight: '100%' }}/>
+                </div>
+                {isEditModalOpen && (
+                    <Modal title="User Information" open={isEditModalOpen} onCancel={closeEditModal} footer={[
+                      <button onClick={() => handleEditSaveButton()}>
+                        Save
+                      </button>,
+                    ]}
+                  >
+                    <p> Username <input onChange={(e) => setSelectedUser({ ...selectedUser, username: e.target.value })} value={selectedUser.username} /> </p>
+                    <p>Email <input onChange={(e) => setSelectedUser({ ...selectedUser, email: e.target.value })} value={selectedUser.email} /> </p>
+                    <p>Admin <Switch onChange={handleSwitchChange} size='small' /> </p>
+                    <button onClick={() => handleDeleteButton(selectedUser.email)}>
+                        DELETE USER
+                    </button>
+                  </Modal>
+                )}
+            </main>
         </div>
-        {isModalOpen && (
-          <Modal title="User Information" open={isModalOpen} onCancel={closeModal} footer={[
-            <button key="save" onClick={() => handleSaveButton()}>
-              Save
-            </button>,
-          ]}
-          >
-            <p> Username <input onChange={(e) => setSelectedUser({ ...selectedUser, username: e.target.value })} value={selectedUser.username} /> </p>
-            <p>Email <input onChange={(e) => setSelectedUser({ ...selectedUser, email: e.target.value })} value={selectedUser.email} /> </p>
-            <p>isAdmin <Switch defaultChecked onChange={handleSwitchChange} size='small' /> </p>
-          </Modal>
-        )}
-      </main>
-    </div>
-  );
+    );
 }
 
 export default Admin;
