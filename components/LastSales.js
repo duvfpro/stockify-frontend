@@ -1,30 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Table } from 'antd';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 
-
-  const dataTest = [
-    // {
-    //     key: 'table',
-    //     product: 'Table',
-    //     date: "10/12/2023",
-    //     stock: 23,
-    //     sales: 5,
-    // },
-    // {
-    //     key: 'chaise',
-    //     product: 'chaise',
-    //     date: "08/12/2023",
-    //     stock: 13,
-    //     sales: 2,
-    // },
-
-  ];
 
 
 
 function LastSales () {
 
     const [displayProducts, setDisplayProducts] = useState([])
+    const user = useSelector((state) => state.user.value);
+    const router = useRouter();
+
+    useEffect(() => {
+      if (!user.token) {
+        router.push('/');
+      }
+    }, [user.token, router]);
 
     const columns = [  // Schema du tableau
         {

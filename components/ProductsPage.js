@@ -1,11 +1,19 @@
 import styles from '../styles/ProductsPage.module.css';
 import AddNewProduct from './AddNewProduct';
 import { Modal } from 'antd';
-import React, { useState, useEffect } from 'react';
-
-
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 
 function ProductsPage(props) {
+  const user = useSelector((state) => state.user.value);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user.token) {
+      router.push('/');
+    }
+  }, [user.token, router]);
 
     const [openAddProductModal, setOpenAddProductModal] = useState(false);
 
