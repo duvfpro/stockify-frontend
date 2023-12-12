@@ -54,7 +54,7 @@ function Admin() {
         };
 
         fetchData();
-    }, []);
+    }, [];
 
       
     const openModal = (userData) => {
