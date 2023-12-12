@@ -1,10 +1,15 @@
 import styles from '../styles/Home.module.css';
 import LastSales from './LastSales';
 import AddStock from './AddStock';
-import React, { useState } from 'react';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 
 function Home() {
+
+  const user = useSelector((state) => state.user.value);
+
+  console.log(user)
 
   const [openAddStockModal, setOpenAddStockModal] = useState(false);
 

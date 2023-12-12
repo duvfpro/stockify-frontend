@@ -27,14 +27,14 @@ function App({ Component, pageProps }) {
     }
   };
 
-  const isLoginPage = router.pathname === '/'; // Vérifie si la page actuelle est la page de login
+  const isLoginPage = router.pathname === '/';
 
   return (
     <Provider store={store}>
       <Head>
         <title>Stockify</title>
       </Head>
-      {!isLoginPage && ( // Affiche la barre de navigation sauf sur la page de login
+      {!isLoginPage && (
         <div className={styles.headerBar}>
           <div className={styles.iconsSection}>
             <FontAwesomeIcon icon={faBars} className={styles.iconTop} onClick={() => handleDrawerClick()} />
