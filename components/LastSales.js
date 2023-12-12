@@ -63,7 +63,6 @@ function LastSales () {
         fetch('http://localhost:3000/products/allProducts')
         .then(response => response.json())
         .then(data => {
-            // console.log(data.allProducts)
             const date = new Date().getDate().toString();
             console.log(date)
             let filtre = data.allProducts.filter((products) => {
@@ -75,6 +74,7 @@ function LastSales () {
         setDisplayProducts(filtre);
     })
     }, []);
+
     console.log(displayProducts)
 
 
