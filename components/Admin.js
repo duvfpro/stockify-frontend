@@ -87,6 +87,7 @@ function Admin() {
 
     const handleSwitchChange = () => {
         setIsAdmin(!isAdmin);
+        setSelectedUser({...selectedUser, isAdmin: !isAdmin});
     };
 
 
@@ -121,30 +122,28 @@ function Admin() {
 
 
     const handleEditSaveButton = () => { // A TERMINER APRES PULL SAM
-        const fetchData = async () => {
+        
+        const fetchUserId = async () => {
             try {
-                const response = await fetch('http://localhost:3000/users/updateAdmin', {
-                    method: 'PUT',
-                    headers: {'Content-type': 'application/json'},
-                    body: JSON.stringify({token: 'qfLgzLRkR1ecjqvwAaPJqOAFa9xupCFh'}),
-                });
-                const data = await response.json();
+                console.log(selectedUser);
 
-        console.log(data)
-
-        // const formattedData = data.data.map((user) => ({
-        //     key: user._id,
-        //     username: user.username,
-        //     email: user.email,
-        //     isAdmin: user.isAdmin.toString(),
-        // }));    
-        // setUserData(formattedData);
-
-      } catch (error) {
-        console.error('Erreur lors du fetch des données : ', error);
-      }
-    }
-    fetchData();
+                const response = await fetch(`http://localhost:3000/users/updateUser/${selectedUser.key}`, {
+                            method: 'PUT',
+                            headers: {'Content-type': 'application/json'},
+                            body: JSON.stringify(selectedUser),
+                        });
+                    const data2 = await response.json();
+        
+                console.log("2eme fetch " + data2);
+                setRefreshData(!refreshData);
+                closeEditModal();
+        
+            
+            }catch (error) {
+                console.error('Erreur lors du fetch des données du user: ', error);
+            }
+        }
+        fetchUserId();
   };
 
 
