@@ -51,8 +51,8 @@ function Admin() {
           } catch (error) {
             console.error('Erreur lors du fetch des données : ', error);
           }
-        };
-
+        }; 
+    
         fetchData();
     }, [];
 
