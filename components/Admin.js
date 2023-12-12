@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import styles from '../styles/Admin.module.css';
 import { Table, Modal, Switch } from 'antd';
+import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
 
 
 function Admin() {
@@ -25,10 +27,10 @@ function Admin() {
       dataIndex: 'username',
     },
     {
-        title: 'Email',
-        width: 120,
-        dataIndex: 'email',
-      },
+      title: 'Email',
+      width: 120,
+      dataIndex: 'email',
+    },
     {
       title: 'Admin',
       width: 120,
@@ -42,20 +44,19 @@ function Admin() {
     },
   ];
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/users/allUser');
+        const data = await response.json();
 
-    useEffect(() => {
-        const fetchData = async () => {
-          try {
-            const response = await fetch('http://localhost:3000/users/allUser');
-            const data = await response.json();
-
-            const formattedData = data.data.map((user) => ({
-                key: user._id,
-                username: user.username,
-                email: user.email,
-                isAdmin: user.isAdmin.toString(),
-            }));    
-            setUserData(formattedData);
+        const formattedData = data.data.map((user) => ({
+          key: user._id,
+          username: user.username,
+          email: user.email,
+          isAdmin: user.isAdmin.toString(),
+        }));
+        setUserData(formattedData);
 
           } catch (error) {
             console.error('Erreur lors du fetch des données : ', error);
@@ -129,22 +130,22 @@ function Admin() {
                 });
                 const data = await response.json();
 
-                console.log(data)
-    
-                // const formattedData = data.data.map((user) => ({
-                //     key: user._id,
-                //     username: user.username,
-                //     email: user.email,
-                //     isAdmin: user.isAdmin.toString(),
-                // }));    
-                // setUserData(formattedData);
-    
-              } catch (error) {
-                console.error('Erreur lors du fetch des données : ', error);
-              }
-        }
-        fetchData();
-    };
+        console.log(data)
+
+        // const formattedData = data.data.map((user) => ({
+        //     key: user._id,
+        //     username: user.username,
+        //     email: user.email,
+        //     isAdmin: user.isAdmin.toString(),
+        // }));    
+        // setUserData(formattedData);
+
+      } catch (error) {
+        console.error('Erreur lors du fetch des données : ', error);
+      }
+    }
+    fetchData();
+  };
 
 
     return (
