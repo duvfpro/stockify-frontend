@@ -19,7 +19,7 @@ function ProductsPage(props) {
 
 
     return (
-        <div>
+        <div className={styles.main}>
             <h1>ProductsPage</h1>
             <button className={styles.addProduct} onClick={() => handleAddProductButton() }> ADD NEW PRODUCT </button>
             {openAddProductModal && <AddNewProduct openAddProductModal={openAddProductModal} handleCloseButton={handleCloseButton} /> }
