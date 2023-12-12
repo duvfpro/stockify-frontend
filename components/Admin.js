@@ -8,6 +8,15 @@ function Admin() {
     const [selectedUser, setSelectedUser] = useState(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isNewUserModalOpen, setIsNewUserModalOpen] = useState(false);
+    const [refreshData, setRefreshData] = useState(false); // Etat qui sert à recharger le useEffect
+
+    // Les états pour créer un new user
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
+    const [isAdmin, setIsAdmin] = useState(false);
+
+
 
     const columns = [  // Schema du tableau
     {
@@ -54,7 +63,7 @@ function Admin() {
         }; 
     
         fetchData();
-      }, []);
+      }, [refreshData]);
 
       
     const openEditModal = (userData) => {
@@ -76,38 +85,37 @@ function Admin() {
     };
 
     const handleSwitchChange = () => {
-        const onChange = (checked) => {
-            console.log(`switch to ${checked}`);
-        };
+        setIsAdmin(!isAdmin);
     };
 
 
-    const handleNewUserSaveButton = () => { // A TERMINER APRES PULL SAM
-        fetch('http://localhost/3000/signup', {
+    const handleNewUserSaveButton = () => { 
+        fetch('http://localhost:3000/users/addUser', {
             method: 'POST',
             headers: {'Content-type': 'application/json'},
-            body: JSON.stringify(),
+            body: JSON.stringify({username: username, email: email, isAdmin: isAdmin, password: password}),
         })
         .then(response => response.json())
         .then((data) => {
-            console.log(data);
+            setRefreshData(!refreshData); // utilisé dans le useEffect pour recharger la liste des users après suppression
+            closeNewUserModal();
         });
     };
 
 
-    const handleDeleteButton = () => { // A TERMINER APRES PULL SAM
+    const handleDeleteButton = (emailToDelete) => {
         const isConfirmed = window.confirm("Are you sure you want to delete this user ?");
         if (isConfirmed) {
-            fetch('http://localhost:3000/users', {
+            fetch(`http://localhost:3000/users/${emailToDelete}`, {
                 method: 'DELETE',
                 headers: {'Content-type': 'application/json'},
-                body: JSON.stringify(),
-            })
+            }) 
             .then(response => response.json())
             .then((data) => {
-                console.log(data);
+                setRefreshData(!refreshData); // utilisé dans le useEffect pour recharger la liste des users après suppression
+                closeEditModal();
             });
-        }
+        }; 
     };
 
 
@@ -153,8 +161,9 @@ function Admin() {
                       </button>,
                     ]}
                     >
-                    <p> Username <input  /> </p>
-                    <p>Email <input  /> </p>
+                    <p>Username <input onChange={(e) => setUsername(e.target.value)} value={username} /> </p>
+                    <p>Email <input onChange={(e) => setEmail(e.target.value)} value={email} /> </p>
+                    <p>Password <input onChange={(e) => setPassword(e.target.value)} value={password} /> </p>
                     <p>Admin <Switch onChange={handleSwitchChange} size='small' /> </p>
                   </Modal>
                 )}
@@ -171,8 +180,8 @@ function Admin() {
                   >
                     <p> Username <input onChange={(e) => setSelectedUser({ ...selectedUser, username: e.target.value })} value={selectedUser.username} /> </p>
                     <p>Email <input onChange={(e) => setSelectedUser({ ...selectedUser, email: e.target.value })} value={selectedUser.email} /> </p>
-                    <p>Admin <Switch defaultChecked onChange={handleSwitchChange} size='small' /> </p>
-                    <button onClick={() => handleDeleteButton()}>
+                    <p>Admin <Switch onChange={handleSwitchChange} size='small' /> </p>
+                    <button onClick={() => handleDeleteButton(selectedUser.email)}>
                         DELETE USER
                     </button>
                   </Modal>
