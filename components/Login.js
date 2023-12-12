@@ -6,9 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../reducers/users';
 
 function Login() {
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
   const dispatch = useDispatch();
+
   const router = useRouter();
   const user = useSelector((state) => state.user.value);
 
@@ -28,17 +31,16 @@ function Login() {
         const data = await response.json();
         if (data.result) {
           dispatch(login({ token: data.token, username: data.username }));
-          router.push('/home');
+
         } else {
-          console.error('Authentication failed');
+          console.error('ça marche pas ta mère');
         }
-      } else {
-        console.error('Server error');
       }
     } catch (error) {
       console.error('An error occurred', error);
     }
   };
+
 
   return (
     <div>
@@ -47,7 +49,6 @@ function Login() {
         <div className={styles.container}>
           <h3 className={styles.title}>Sign in</h3>
           <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
-            {/* Prevent the form from being submitted on button click */}
             <input
               type="text"
               name="username"

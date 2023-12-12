@@ -1,3 +1,11 @@
-.main {
-    background-color: bisque;
-}
+/* Drawer.module.css */
+
+/* Ajoutez ces styles pour changer le curseur au survol */
+.drawer-link {
+    cursor: pointer;
+  }
+  
+  .drawer-link:hover {
+    text-decoration: underline; /* Ajoutez cette ligne si vous voulez souligner le texte au survol */
+  }
+  
