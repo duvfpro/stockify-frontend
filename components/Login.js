@@ -30,7 +30,7 @@ function Login() {
       if (response.ok) {
         const data = await response.json();
         if (data.result) {
-          dispatch(login({ token: data.token, username: data.username }));
+          dispatch(login({ token: data.data.token, username: data.data.email }));
 
         } else {
           console.error('ça marche pas ta mère');

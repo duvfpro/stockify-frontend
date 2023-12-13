@@ -102,7 +102,6 @@ function Admin() {
 
  
 
-
   const handleNewUserSaveButton = () => {
     fetch('http://localhost:3000/users/addUser', {
       method: 'POST',

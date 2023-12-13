@@ -66,15 +66,15 @@ function App({ Component, pageProps }) {
       <Component {...pageProps} />
       
       <Modal
-        title="Vertically centered modal dialog"
+        title="Notifications"
         centered
         visible={modal2Open}
         onOk={() => setModal2Open(true)}
         onCancel={() => setModal2Open(false)}
       >
-        <p>some notifications...</p>
-        <p>some notifications...</p>
-        <p>some notifications...</p>
+        <p>category : chaise, product : Mulheir, NewStock : +4 (12)</p>
+        <p>category : chaise, product : Mulheir, NewStock : +3 (8)</p>
+        <p>category : chaise, product : Mulheir, NewStock : -2 (1)</p>
       </Modal>
       </PersistGate>
     </Provider>
