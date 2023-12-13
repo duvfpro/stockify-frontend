@@ -35,7 +35,7 @@ function ProductsPage(props) {
   
     const handleCloseButton = () => {
       setOpenAddProductModal(false);
-    };
+    }; 
 
 
     return (
