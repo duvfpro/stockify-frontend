@@ -36,6 +36,7 @@ function ProductsPage(props) {
   
     const handleCloseButton = () => {
       setOpenAddProductModal(false);
+      setRefreshProducts(!refreshProducts); // c'est sensé rechargé les products mais non...
     }; 
 
     const handleDeleteButton = (name) => {
