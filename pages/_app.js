@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import { useState } from 'react';
 import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faBell, faChevronDown, faWatchmanMonitoring } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/router';
@@ -33,8 +32,6 @@ const persistor = persistStore(store);
 
 
 
-
-
 function App({ Component, pageProps }) {
   const router = useRouter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -52,6 +49,7 @@ function App({ Component, pageProps }) {
 
   return (
     <Provider store={store}>
+      <PersistGate persistor={persistor}>
       <Head>
         <title>Stockify</title>
       </Head>
@@ -81,6 +79,7 @@ function App({ Component, pageProps }) {
         <p>some notifications...</p>
         <p>some notifications...</p>
       </Modal>
+      </PersistGate>
     </Provider>
   );
 }
