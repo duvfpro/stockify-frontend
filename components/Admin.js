@@ -18,10 +18,10 @@ function Admin() {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
-  
-/////////////////////////////////////////
-//             TOKEN USER              //
-/////////////////////////////////////////
+
+  /////////////////////////////////////////
+  //             TOKEN USER              //
+  /////////////////////////////////////////
 
   useEffect(() => {
     if (!user.token) {
@@ -29,9 +29,9 @@ function Admin() {
     }
   }, [user.token, router]);
 
-/////////////////////////////////////////
-//          FORMATING ARRAY            //
-/////////////////////////////////////////
+  /////////////////////////////////////////
+  //          FORMATING ARRAY            //
+  /////////////////////////////////////////
 
   const columns = [
     {
@@ -57,9 +57,9 @@ function Admin() {
     },
   ];
 
-/////////////////////////////////////////
-//         FETCHING ALL USER           //
-/////////////////////////////////////////
+  /////////////////////////////////////////
+  //         FETCHING ALL USER           //
+  /////////////////////////////////////////
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -85,9 +85,9 @@ function Admin() {
     fetchData();
   }, [refreshData]);
 
-/////////////////////////////////////////
-//               EDITION               //
-/////////////////////////////////////////
+  /////////////////////////////////////////
+  //               EDITION               //
+  /////////////////////////////////////////
 
   //OPEN EDITION MODAL
   const openEditModal = (userData) => {
@@ -95,7 +95,7 @@ function Admin() {
     // Update isAdmin when a new user is selected
     // converts the character string userData.isAdmin into a boolean.
     // This should ensure that isAdmin is correctly initialised as a boolean
-    setIsAdmin(userData.isAdmin === 'true'); 
+    setIsAdmin(userData.isAdmin === 'true');
     setIsEditModalOpen(true);
   };
 
@@ -130,21 +130,21 @@ function Admin() {
   const handleEditSaveButton = () => {
     const fetchUserId = async () => {
       try {
-      
+
         const response = await fetch(`http://localhost:3000/users/updateUser/${selectedUser.key}`, {
           method: 'PUT',
           headers: { 'Content-type': 'application/json' },
           body: JSON.stringify({
             // Use the new isAdmin state variable
             // to get instant value of admin
-            isAdmin: isAdmin, 
+            isAdmin: isAdmin,
             username: selectedUser.username,
             email: selectedUser.email,
           }),
         });
-      
+
         const data2 = await response.json();
-      
+
         setRefreshData(!refreshData);
         closeEditModal();
       } catch (error) {
@@ -155,9 +155,9 @@ function Admin() {
     fetchUserId();
   };
 
-/////////////////////////////////////////
-//              NEW USER               //
-/////////////////////////////////////////
+  /////////////////////////////////////////
+  //              NEW USER               //
+  /////////////////////////////////////////
 
   //OPEN NEW USER
   const openNewUserModal = (userData) => {
@@ -168,7 +168,7 @@ function Admin() {
   const closeNewUserModal = () => {
     setIsNewUserModalOpen(false);
   };
-  
+
   // Save New USER
   const handleNewUserSaveButton = () => {
     fetch('http://localhost:3000/users/addUser', {
@@ -183,9 +183,9 @@ function Admin() {
       });
   };
 
-/////////////////////////////////////////
-//               RETURN                //
-/////////////////////////////////////////
+  /////////////////////////////////////////
+  //               RETURN                //
+  /////////////////////////////////////////
 
   return (
     <div>
@@ -207,20 +207,20 @@ function Admin() {
           <p>Username <input onChange={(e) => setUsername(e.target.value)} value={username} /> </p>
           <p>Email <input onChange={(e) => setEmail(e.target.value)} value={email} /> </p>
           <p>Password <input onChange={(e) => setPassword(e.target.value)} value={password} /> </p>
-          <p>Admin <Switch  checked={selectedUser && selectedUser.isAdmin}   onChange={handleEditSwitchChange}  size='small'/> </p>
+          <p>Admin <Switch checked={selectedUser && selectedUser.isAdmin} onChange={handleEditSwitchChange} size='small' /> </p>
         </Modal>
 
         <div className={styles.tableContainer}>
           <Table dataSource={userData} columns={columns} pagination={false} style={{ overflow: 'auto', maxHeight: '100%' }} />
         </div>
         {isEditModalOpen && (
-          <Modal title="User Information" open={isEditModalOpen} onCancel={closeEditModal} 
-          
-          footer={[
-            <button onClick={() => handleEditSaveButton()}>
-              Save
-            </button>,
-          ]}
+          <Modal title="User Information" open={isEditModalOpen} onCancel={closeEditModal}
+
+            footer={[
+              <button onClick={() => handleEditSaveButton()}>
+                Save
+              </button>,
+            ]}
           >
             <p> Username <input onChange={(e) => setSelectedUser({ ...selectedUser, username: e.target.value })} value={selectedUser.username} /> </p>
             <p>Email <input onChange={(e) => setSelectedUser({ ...selectedUser, email: e.target.value })} value={selectedUser.email} /> </p>
