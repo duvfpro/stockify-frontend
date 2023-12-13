@@ -42,9 +42,11 @@ function ProductsPage(props) {
         <div className={styles.main}>
             <h1>ProductsPage</h1>
             <button className={styles.addProduct} onClick={() => handleAddProductButton() }> ADD NEW PRODUCT </button>
-            {openAddProductModal && <AddNewProduct openAddProductModal={openAddProductModal} handleCloseButton={handleCloseButton} /> }
-            {myProducts.map((data2) => {
-        return <Product name={data2.name} stock={data2.stock} category={data2.category[0].name} />;})}
+            {openAddProductModal && 
+              <AddNewProduct openAddProductModal={openAddProductModal} handleCloseButton={handleCloseButton} /> }
+            {myProducts.map((data, i) => {
+              return <Product key={i} name={data.name} stock={data.stock} category={data.category[0].name} />
+              })}
         </div>
     )
 

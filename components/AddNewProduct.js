@@ -8,7 +8,8 @@ function AddNewProduct(props) {
     const [productName, setProductName] = useState('');
     const [productStock, setProductStock] = useState(0);
     const [productImage, setProductImage] = useState(null);
-    const [categoryList, setCategoryList] = useState([]);
+    const [category, setCategory] = useState([]);
+    const [categotyId, setCategoryId] = useState('');
     const [selectedOption, setSelectedOption] = useState(''); // Stock le choix de la catégorie
 
 
@@ -18,23 +19,27 @@ function AddNewProduct(props) {
         .then(data => {
             let categories = [];
             for (let i=0; i<data.allCategories.length; i++) {
-                categories.push(data.allCategories[i].name);
+                categories.push(data.allCategories[i].name)
             };
-            setCategoryList(...categoryList, categories);
+            setCategory(categories);
         });
     }, []);
 
 
     const handleCancel = () => { // Ferme la modal
         setIsOpen(false);
-      };
+    };
 
-    const handleSubmitButton = () => { // A TERMINER
+    const handleSubmitButton = () => { // Manque à pouvoir ajouter du stock à la création et une IMAGE
         fetch('http://localhost:3000/products/newProduct', {
             method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ name:productName, image: productImage }), // a terminer
-            });
+			body: JSON.stringify({ name: productName, image: productImage, stock: 0, category: categotyId }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+            })
     };
 
     const handleNameInputChange = (event) => {
@@ -51,11 +56,19 @@ function AddNewProduct(props) {
 
     const handleImageInputChange = (e) => {
         const file = e.target.files[0];
+        console.log(e.target.file)
         setProductImage(file);
     };
 
-    const handleSelectChange = (event) => { // Gère le choix de la catégorie
-        setSelectedOption(event.target.value);
+    const handleSelectChange = (event) => { // Gère le choix de la catégorie et cherche son ID
+        let catName = event.target.value;
+        setSelectedOption(event.target.value)
+        fetch(`http://localhost:3000/categories/getId/${catName}`)
+        .then(response => response.json())
+        .then(data => {
+            setCategoryId(data.categoryId)
+            // console.log(data.categoryId);
+        })
     };
 
 
@@ -64,12 +77,11 @@ function AddNewProduct(props) {
             <div className={styles.title} > ADD NEW PRODUCT </div>
                 <div className={styles.mainContainer}>
                     <input type="text" onChange={handleNameInputChange} value={productName} placeholder="Product name" required />
-                    <input type="number" onChange={handleStockInputChange} value={productStock} placeholder="Stock" required />
+                    {/* <input type="number" onChange={handleStockInputChange} value={productStock} placeholder="Stock" required /> */}
                     <input type="file" onChange={handleImageInputChange} accept="image/*" />
                     <select onChange={handleSelectChange} >
-                        <option value="" > Select a category </option>
-                        {categoryList.map((option, index) => (
-                        <option key={index} value="categoryList">{categoryList}</option>
+                        {category.map((data, index) => (
+                        <option key={index} value={data}> {data} </option>
                         ))}
                     </select>
                     <button onClick={() => handleSubmitButton()} className={styles.websiteButton} > SUBMIT </button>
