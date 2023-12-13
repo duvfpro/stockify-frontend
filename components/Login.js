@@ -2,7 +2,7 @@ import styles from '../styles/Login.module.css';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-
+import jwt from 'jsonwebtoken';
 import { login } from '../reducers/users';
 
 function Login() {
@@ -24,7 +24,7 @@ function Login() {
       const response = await fetch('http://localhost:3000/users/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password,}),
       });
 
       if (response.ok) {
@@ -41,6 +41,7 @@ function Login() {
     }
   };
 
+  console.log(user.token)
   return (
     <div>
       <main className={styles.main}>
