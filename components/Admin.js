@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import styles from '../styles/Admin.module.css';
 import { Table, Modal, Switch } from 'antd';
-import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 
 
 function Admin() {
@@ -11,14 +11,19 @@ function Admin() {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isNewUserModalOpen, setIsNewUserModalOpen] = useState(false);
     const [refreshData, setRefreshData] = useState(false); // Etat qui sert à recharger le useEffect
-
+    const user = useSelector((state) => state.user.value);
+    const router = useRouter();
     // Les états pour créer un new user
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [isAdmin, setIsAdmin] = useState(false);
 
-
+    useEffect(() => {
+      if (!user.token) {
+        router.push('/');
+      }
+    }, [user.token, router]);
 
     const columns = [  // Schema du tableau
     {
