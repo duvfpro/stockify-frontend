@@ -19,9 +19,10 @@ function AddNewProduct(props) {
         .then(data => {
             let categories = [];
             for (let i=0; i<data.allCategories.length; i++) {
-                categories.push(data.allCategories[i].name)
+                categories.push({name: data.allCategories[i].name, _id: data.allCategories[i]._id})
             };
             setCategory(categories);
+            setCategoryId(categories[0]._id);
         });
     }, []);
 
@@ -39,7 +40,9 @@ function AddNewProduct(props) {
             .then(response => response.json())
             .then(data => {
                 console.log(data)
-            })
+            });
+            props.handleCloseButton();
+            
     };
 
     const handleNameInputChange = (event) => {
@@ -62,13 +65,8 @@ function AddNewProduct(props) {
 
     const handleSelectChange = (event) => { // Gère le choix de la catégorie et cherche son ID
         let catName = event.target.value;
-        setSelectedOption(event.target.value)
-        fetch(`http://localhost:3000/categories/getId/${catName}`)
-        .then(response => response.json())
-        .then(data => {
-            setCategoryId(data.categoryId)
-            // console.log(data.categoryId);
-        })
+        let id=category.find(element => element.name === catName)
+        setCategoryId(id._id);
     };
 
 
@@ -81,7 +79,7 @@ function AddNewProduct(props) {
                     <input type="file" onChange={handleImageInputChange} accept="image/*" />
                     <select onChange={handleSelectChange} >
                         {category.map((data, index) => (
-                        <option key={index} value={data}> {data} </option>
+                        <option key={index} value={data.name}> {data.name} </option>
                         ))}
                     </select>
                     <button onClick={() => handleSubmitButton()} className={styles.websiteButton} > SUBMIT </button>
