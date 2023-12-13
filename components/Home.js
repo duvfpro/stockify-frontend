@@ -24,7 +24,7 @@ function Home() {
     setOpenAddStockModal(false);
   };
 
-  console.log(user)
+  // console.log(user)
   return (
     <main className={styles.main}>
       <h1>Welcome</h1>
