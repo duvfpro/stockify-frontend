@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 function ProductsPage(props) {
 
   const [myProducts, setMyProducts] = useState([]);
+  const [refreshProducts, setRefreshProducts] = useState(false); // recharge les produits après suppression d'un produit
 
   const user = useSelector((state) => state.user.value);
   const router = useRouter();
@@ -25,7 +26,7 @@ function ProductsPage(props) {
     .then(data => {
       setMyProducts(data.allProducts);
     });
-  }, []);
+  }, [refreshProducts]);
 
     const [openAddProductModal, setOpenAddProductModal] = useState(false);
 
@@ -37,6 +38,16 @@ function ProductsPage(props) {
       setOpenAddProductModal(false);
     }; 
 
+    const handleDeleteButton = (name) => {
+      fetch(`http://localhost:3000/products/deleteProduct/${name}`, {
+        method: 'DELETE',
+			  headers: { 'Content-Type': 'application/json' },
+      })
+      .then(data => {
+        setRefreshProducts(!refreshProducts);
+      })
+    }
+
 
     return (
         <div className={styles.main}>
@@ -45,7 +56,7 @@ function ProductsPage(props) {
             {openAddProductModal && 
               <AddNewProduct openAddProductModal={openAddProductModal} handleCloseButton={handleCloseButton} /> }
             {myProducts.map((data, i) => {
-              return <Product key={i} name={data.name} stock={data.stock} category={data.category[0].name} />
+              return <Product key={i} name={data.name} stock={data.stock} category={data.category[0].name} handleDeleteButton={handleDeleteButton} />
               })}
         </div>
     )
