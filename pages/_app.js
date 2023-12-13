@@ -29,9 +29,6 @@ const store = configureStore({
 const persistor = persistStore(store);
 
 
-
-
-
 function App({ Component, pageProps }) {
   const router = useRouter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);

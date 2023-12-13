@@ -1,23 +1,27 @@
 import { useEffect, useState } from 'react';
+
 import styles from '../styles/Admin.module.css';
 import { Table, Modal, Switch } from 'antd';
+
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
-
 
 function Admin() {
   const [userData, setUserData] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isNewUserModalOpen, setIsNewUserModalOpen] = useState(false);
-  const [refreshData, setRefreshData] = useState(false); // Etat qui sert à recharger le useEffect
+  const [refreshData, setRefreshData] = useState(false);
   const user = useSelector((state) => state.user.value);
   const router = useRouter();
-  // Les états pour créer un new user
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
+  
+/////////////////////////////////////////
+//             TOKEN USER              //
+/////////////////////////////////////////
 
   useEffect(() => {
     if (!user.token) {
@@ -25,7 +29,11 @@ function Admin() {
     }
   }, [user.token, router]);
 
-  const columns = [  // Schema du tableau
+/////////////////////////////////////////
+//          FORMATING ARRAY            //
+/////////////////////////////////////////
+
+  const columns = [
     {
       title: 'Username',
       width: 120,
@@ -49,10 +57,16 @@ function Admin() {
     },
   ];
 
+/////////////////////////////////////////
+//         FETCHING ALL USER           //
+/////////////////////////////////////////
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch('http://localhost:3000/users/allUser');
+        if (!response.ok) {
+          throw new Error(`Error : ${response.status}`)
+        }
         const data = await response.json();
 
         const formattedData = data.data.map((user) => ({
@@ -71,48 +85,32 @@ function Admin() {
     fetchData();
   }, [refreshData]);
 
+/////////////////////////////////////////
+//               EDITION               //
+/////////////////////////////////////////
 
+  //OPEN EDITION MODAL
   const openEditModal = (userData) => {
     setSelectedUser(userData);
+    // Update isAdmin when a new user is selected
+    // converts the character string userData.isAdmin into a boolean.
+    // This should ensure that isAdmin is correctly initialised as a boolean
+    setIsAdmin(userData.isAdmin === 'true'); 
     setIsEditModalOpen(true);
   };
 
+  //CLOSE EDITION MODAL
   const closeEditModal = () => {
     setSelectedUser(null);
     setIsEditModalOpen(false);
   };
 
-  const openNewUserModal = (userData) => {
-    setIsNewUserModalOpen(true);
-  };
-
-  const closeNewUserModal = () => {
-    setIsNewUserModalOpen(false);
-  };
-
-  const handleSwitchChange = () => {
-    setIsAdmin(!isAdmin);
-  };
-
+  //Function to swith an user to a admin or not
   const handleEditSwitchChange = () => {
-    setSelectedUser({ ...selectedUser, isAdmin: !isAdmin });
+    setIsAdmin(!isAdmin);
   }
 
-
-  const handleNewUserSaveButton = () => {
-    fetch('http://localhost:3000/users/addUser', {
-      method: 'POST',
-      headers: { 'Content-type': 'application/json' },
-      body: JSON.stringify({ username: username, email: email, isAdmin: isAdmin, password: password }),
-    })
-      .then(response => response.json())
-      .then((data) => {
-        setRefreshData(!refreshData); // utilisé dans le useEffect pour recharger la liste des users après suppression
-        closeNewUserModal();
-      });
-  };
-
-
+  //Delete USER
   const handleDeleteButton = (emailToDelete) => {
     const isConfirmed = window.confirm("Are you sure you want to delete this user ?");
     if (isConfirmed) {
@@ -121,36 +119,73 @@ function Admin() {
         headers: { 'Content-type': 'application/json' },
       })
         .then(response => response.json())
-        .then((data) => {
-          setRefreshData(!refreshData); // utilisé dans le useEffect pour recharger la liste des users après suppression
+        .then(() => {
+          setRefreshData(!refreshData);
           closeEditModal();
         });
     };
   };
 
-
-  const handleEditSaveButton = () => { // A TERMINER CAR ISADMIN NE MARCHE PAS
-
+  //Save USER Modification
+  const handleEditSaveButton = () => {
     const fetchUserId = async () => {
       try {
-        console.log(selectedUser);
+      
         const response = await fetch(`http://localhost:3000/users/updateUser/${selectedUser.key}`, {
           method: 'PUT',
           headers: { 'Content-type': 'application/json' },
-          body: JSON.stringify(selectedUser),
+          body: JSON.stringify({
+            // Use the new isAdmin state variable
+            // to get instant value of admin
+            isAdmin: isAdmin, 
+            username: selectedUser.username,
+            email: selectedUser.email,
+          }),
         });
+      
         const data2 = await response.json();
-
-        console.log("2eme fetch " + data2);
+      
         setRefreshData(!refreshData);
         closeEditModal();
       } catch (error) {
         console.error('Erreur lors du fetch des données du user: ', error);
-      };
+      }
+      console.log(selectedUser);
     };
     fetchUserId();
   };
 
+/////////////////////////////////////////
+//              NEW USER               //
+/////////////////////////////////////////
+
+  //OPEN NEW USER
+  const openNewUserModal = (userData) => {
+    setIsNewUserModalOpen(true);
+  };
+
+  //CLOSE NEW USER
+  const closeNewUserModal = () => {
+    setIsNewUserModalOpen(false);
+  };
+  
+  // Save New USER
+  const handleNewUserSaveButton = () => {
+    fetch('http://localhost:3000/users/addUser', {
+      method: 'POST',
+      headers: { 'Content-type': 'application/json' },
+      body: JSON.stringify({ username: username, email: email, isAdmin: isAdmin, password: password }),
+    })
+      .then(response => response.json())
+      .then(() => {
+        setRefreshData(!refreshData);
+        closeNewUserModal();
+      });
+  };
+
+/////////////////////////////////////////
+//               RETURN                //
+/////////////////////////////////////////
 
   return (
     <div>
@@ -159,25 +194,29 @@ function Admin() {
         <button onClick={() => openNewUserModal()} >
           ADD NEW USER
         </button>
-        {isNewUserModalOpen && (
-          <Modal title="New User" open={isNewUserModalOpen} onCancel={closeNewUserModal} footer={[
-            <button onClick={() => handleNewUserSaveButton()}>
+        <Modal
+          title="New User"
+          open={isNewUserModalOpen}
+          onCancel={closeNewUserModal}
+          footer={[
+            <button key="createUserButton" onClick={handleNewUserSaveButton}>
               Create new User
             </button>,
           ]}
-          >
-            <p>Username <input onChange={(e) => setUsername(e.target.value)} value={username} /> </p>
-            <p>Email <input onChange={(e) => setEmail(e.target.value)} value={email} /> </p>
-            <p>Password <input onChange={(e) => setPassword(e.target.value)} value={password} /> </p>
-            <p>Admin <Switch onChange={handleSwitchChange} size='small' /> </p>
-          </Modal>
-        )}
+        >
+          <p>Username <input onChange={(e) => setUsername(e.target.value)} value={username} /> </p>
+          <p>Email <input onChange={(e) => setEmail(e.target.value)} value={email} /> </p>
+          <p>Password <input onChange={(e) => setPassword(e.target.value)} value={password} /> </p>
+          <p>Admin <Switch  checked={selectedUser && selectedUser.isAdmin}   onChange={handleEditSwitchChange}  size='small'/> </p>
+        </Modal>
 
         <div className={styles.tableContainer}>
           <Table dataSource={userData} columns={columns} pagination={false} style={{ overflow: 'auto', maxHeight: '100%' }} />
         </div>
         {isEditModalOpen && (
-          <Modal title="User Information" open={isEditModalOpen} onCancel={closeEditModal} footer={[
+          <Modal title="User Information" open={isEditModalOpen} onCancel={closeEditModal} 
+          
+          footer={[
             <button onClick={() => handleEditSaveButton()}>
               Save
             </button>,
