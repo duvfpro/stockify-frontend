@@ -87,8 +87,11 @@ function Admin() {
 
     const handleSwitchChange = () => {
         setIsAdmin(!isAdmin);
-        setSelectedUser({...selectedUser, isAdmin: !isAdmin});
     };
+
+    const handleEditSwitchChange = () => {
+        setSelectedUser({...selectedUser, isAdmin: !isAdmin});
+    }
 
 
     const handleNewUserSaveButton = () => { 
@@ -121,12 +124,11 @@ function Admin() {
     };
 
 
-    const handleEditSaveButton = () => { // A TERMINER APRES PULL SAM
+    const handleEditSaveButton = () => { // A TERMINER CAR ISADMIN NE MARCHE PAS
         
         const fetchUserId = async () => {
             try {
                 console.log(selectedUser);
-
                 const response = await fetch(`http://localhost:3000/users/updateUser/${selectedUser.key}`, {
                             method: 'PUT',
                             headers: {'Content-type': 'application/json'},
@@ -137,8 +139,6 @@ function Admin() {
                 console.log("2eme fetch " + data2);
                 setRefreshData(!refreshData);
                 closeEditModal();
-        
-            
             }catch (error) {
                 console.error('Erreur lors du fetch des données du user: ', error);
             }
@@ -180,7 +180,7 @@ function Admin() {
                   >
                     <p> Username <input onChange={(e) => setSelectedUser({ ...selectedUser, username: e.target.value })} value={selectedUser.username} /> </p>
                     <p>Email <input onChange={(e) => setSelectedUser({ ...selectedUser, email: e.target.value })} value={selectedUser.email} /> </p>
-                    <p>Admin <Switch onChange={handleSwitchChange} size='small' /> </p>
+                    <p>Admin <Switch onChange={handleEditSwitchChange} checked={selectedUser.isAdmin} size='small' /> </p>
                     <button onClick={() => handleDeleteButton(selectedUser.email)}>
                         DELETE USER
                     </button>
