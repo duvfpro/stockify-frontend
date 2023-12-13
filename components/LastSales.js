@@ -4,8 +4,6 @@ import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 
 
-
-
 function LastSales () {
 
     const [displayProducts, setDisplayProducts] = useState([])
@@ -55,17 +53,28 @@ function LastSales () {
         fetch('http://localhost:3000/products/allProducts')
         .then(response => response.json())
         .then(data => {
-            const date = new Date().getDate().toString();
-            let filtre = data.allProducts.filter((products) => {
-            let sold = products.soldAt;
-            let soldToday = sold.some(e => (e.date.charAt(5)+e.date.charAt(6)) === date)
-            return soldToday;
-        });
-        setDisplayProducts(filtre);
+          console.log(data.allProducts)
+
+          const currentDate = new Date();
+          const date = currentDate.getDate().toString().padStart(2, '0');
+          const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+          const year = currentDate.getFullYear().toString();
+  
+          const todayDateString = `${year}-${month}-${date}`;
+          // console.log(todayDateString)
+  
+          let filteredProducts = data.allProducts.filter(product => {
+            let soldDates = product.soldAt.map(sale => sale.date);
+            console.log(soldDates)
+            return soldDates.includes(todayDateString);
+          });
+  
+        console.log(filteredProducts)
+        setDisplayProducts(filteredProducts);
     })
     }, []);
 
-
+    
 
     return (
         <Table dataSource={displayProducts} columns={columns} />

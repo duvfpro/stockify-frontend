@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { useState } from 'react';
 import { Provider } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faBell, faChevronDown, faWatchmanMonitoring } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faBell, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/router';
 import { Modal } from 'antd';
 
@@ -58,7 +58,6 @@ function App({ Component, pageProps }) {
           <div className={styles.iconsSection}>
             <FontAwesomeIcon icon={faBell} className={styles.iconTop} onClick={handleBellClick} />
             <FontAwesomeIcon icon={faChevronDown} className={styles.iconTop} />
-            <FontAwesomeIcon icon={faWatchmanMonitoring} className={styles.iconTop} />
           </div>
         </div>
       )}
