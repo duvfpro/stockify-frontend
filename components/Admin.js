@@ -146,8 +146,8 @@ function Admin() {
                 closeEditModal();
             }catch (error) {
                 console.error('Erreur lors du fetch des données du user: ', error);
-            }
-        }
+            };
+        };
         fetchUserId();
   };
 
@@ -185,7 +185,7 @@ function Admin() {
                   >
                     <p> Username <input onChange={(e) => setSelectedUser({ ...selectedUser, username: e.target.value })} value={selectedUser.username} /> </p>
                     <p>Email <input onChange={(e) => setSelectedUser({ ...selectedUser, email: e.target.value })} value={selectedUser.email} /> </p>
-                    <p>Admin <Switch onChange={handleEditSwitchChange} checked={selectedUser.isAdmin} size='small' /> </p>
+                    <p>Admin <Switch onChange={handleEditSwitchChange} defaultChecked={JSON.parse(selectedUser.isAdmin)} size='small' /> </p>
                     <button onClick={() => handleDeleteButton(selectedUser.email)}>
                         DELETE USER
                     </button>

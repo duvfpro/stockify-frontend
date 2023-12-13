@@ -56,10 +56,8 @@ function LastSales () {
         .then(response => response.json())
         .then(data => {
             const date = new Date().getDate().toString();
-            console.log(date)
             let filtre = data.allProducts.filter((products) => {
             let sold = products.soldAt;
-            console.log(sold)
             let soldToday = sold.some(e => (e.date.charAt(5)+e.date.charAt(6)) === date)
             return soldToday;
         });
@@ -67,7 +65,6 @@ function LastSales () {
     })
     }, []);
 
-    console.log(displayProducts)
 
 
     return (
