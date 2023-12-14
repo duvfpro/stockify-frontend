@@ -7,7 +7,8 @@ function AddNewProduct(props) {
 
     const [productName, setProductName] = useState('');
     const [productStock, setProductStock] = useState(0);
-    const [productImage, setProductImage] = useState(null);
+    const [productPrice, setProductPrice] = useState(null);
+    const [productImage, setProductImage] = useState('');
     const [category, setCategory] = useState([]);
     const [categotyId, setCategoryId] = useState('');
     const [selectedOption, setSelectedOption] = useState(''); // Stock le choix de la catégorie
@@ -35,7 +36,7 @@ function AddNewProduct(props) {
         fetch('http://localhost:3000/products/newProduct', {
             method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ name: productName, image: productImage, stock: 0, category: categotyId }),
+			body: JSON.stringify({ name: productName, image: productImage, stock: 0, category: categotyId, price: productPrice }),
             })
             .then(response => response.json())
             .then(data => {
@@ -47,6 +48,7 @@ function AddNewProduct(props) {
     const handleNameInputChange = (event) => {
         setProductName(event.target.value);
     };
+
     const handleStockInputChange = (event) => {
         // Vérifie que c'est bien un nombre
         const isValidInput = /^-?\d*\.?\d*$/.test(event.target.value);
@@ -54,6 +56,14 @@ function AddNewProduct(props) {
         if (isValidInput) {
             setProductStock(event.target.value);
         }
+    };
+
+    const handlePriceInputChange = (event) => {
+        const isValidInput = /^-?\d*\.?\d*$/.test(event.target.value);
+
+        if (isValidInput) {
+            setProductPrice(event.target.value);
+        };
     };
 
     const handleImageInputChange = (e) => {
@@ -75,6 +85,7 @@ function AddNewProduct(props) {
                 <div className={styles.mainContainer}>
                     <input type="text" onChange={handleNameInputChange} value={productName} placeholder="Product name" required />
                     {/* <input type="number" onChange={handleStockInputChange} value={productStock} placeholder="Stock" required /> */}
+                    <input type="number" onChange={handlePriceInputChange} value={productPrice} placeholder="Price" required />
                     <input type="file" onChange={handleImageInputChange} accept="image/*" />
                     <select onChange={handleSelectChange} >
                         {category.map((data, index) => (
