@@ -12,6 +12,7 @@ function ProductsPage(props) {
   const [openAddProductModal, setOpenAddProductModal] = useState(false);
   const [refreshProducts, setRefreshProducts] = useState(false); // recharge les produits après suppression d'un produit
   const [category, setCategory] = useState([]);
+  const [price, setPrice] = useState(null);
   const [categoryId, setCategoryId] = useState('');
   const [categoryName, setCategoryName] = useState('');
 
@@ -75,10 +76,11 @@ function ProductsPage(props) {
       })
     };
 
-    const handleEditButton = (name) => {
+    const handleEditButton = (name, price) => {
       setNameToSave(name);
       setOpenEditModal(true);
       setProductName(name);
+      setPrice(price);
     };
 
     const closeEditModal = () => {
@@ -96,12 +98,21 @@ function ProductsPage(props) {
       setCategoryName(catName);
     };
 
+    const handlePriceInputChange = (event) => {
+      const isValidInput = /^-?\d*\.?\d*$/.test(event.target.value);
+
+      if (isValidInput) {
+          setPrice(event.target.value);
+      };
+  };
+
     const handleSaveButton = () => { 
       fetch(`http://localhost:3000/products/updateMyProduct/${nameToSave}`, {
         method: 'PUT',
 			  headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: productName, category: categoryId })
+        body: JSON.stringify({ name: productName, category: categoryId, price: price })
       });
+      setRefreshProducts(!refreshProducts);
       setOpenEditModal(false);
   };
 
@@ -114,7 +125,7 @@ function ProductsPage(props) {
               <AddNewProduct openAddProductModal={openAddProductModal} handleCloseButton={handleCloseButton} /> }
             {myProducts.map((data, i) => {
               // return <Product key={i} name={data.name} stock={data.stock} category={data.category[0].name} handleDeleteButton={handleDeleteButton} />
-              return <Product key={i} name={data.name} stock={data.stock} handleDeleteButton={handleDeleteButton} handleEditButton={handleEditButton} />
+              return <Product key={i} name={data.name} stock={data.stock} price={data.price} handleDeleteButton={handleDeleteButton} handleEditButton={handleEditButton} />
               })}
 
         <Modal open={openEditModal} onCancel={closeEditModal} footer={null} width={800} height={800}>
@@ -126,6 +137,7 @@ function ProductsPage(props) {
                 <option key={index} value={data.name}> {data.name} </option>
                 ))}
               </select>
+              <input type="number" onChange={handlePriceInputChange} value={price} placeholder="Price" required />
               <button onClick={() => handleSaveButton()} > SUBMIT </button>
             </div>
         </Modal>
