@@ -8,7 +8,7 @@ function Product (props) {
     };
 
     const handleEditButton = () => {
-        props.handleEditButton(props.name, props.price);
+        props.handleEditButton(props.name, props.price, props.category);
     }
 
     return (
