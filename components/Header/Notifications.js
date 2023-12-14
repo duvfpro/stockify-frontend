@@ -1,3 +1,4 @@
+import { SmileOutlined } from '@ant-design/icons';
 import { Button, notification } from 'antd';
 
 const NotificationButton = () => {
@@ -9,6 +10,12 @@ const NotificationButton = () => {
       style: {
         width: 600,
       },
+      icon:(
+        <SmileOutlined
+        style={{
+          color:'#108ee9',
+        }}/>
+      )
     });
   };
 

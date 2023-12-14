@@ -30,6 +30,7 @@ const store = configureStore({
 
 const persistor = persistStore(store);
 
+
 function App({ Component, pageProps }) {
   const router = useRouter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -40,11 +41,28 @@ function App({ Component, pageProps }) {
 
   const isLoginPage = router.pathname === '/';
 
+  const getPageTitle = () => {
+    switch (router.pathname) {
+      case '/admin':
+        return 'Administrateur';
+      case '/home':
+        return 'Stockify';
+      case '/products':
+        return 'Produits';
+      case '/sales':
+        return 'Ventes';
+      case '/statistics':
+        return 'Statistique';
+      default:
+        return 'Stockify';
+    }
+  };
+
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <Head>
-          <title>Stockify</title>
+          <title>{getPageTitle()}</title>
         </Head>
 
         {!isLoginPage && (
@@ -52,11 +70,11 @@ function App({ Component, pageProps }) {
             <div className={styles.iconsSection}>
               <FontAwesomeIcon icon={faBars} className={styles.iconTop} onClick={handleDrawerClick} />
             </div>
+            <h1>{getPageTitle()}</h1>
             <div>
               <NotificationButton />
             </div>
-          </div> 
-          
+          </div>
         )}
         <DrawerLeft isDrawerOpen={isDrawerOpen} handleDrawerClick={handleDrawerClick} />
         <Component {...pageProps} />

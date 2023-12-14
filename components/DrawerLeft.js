@@ -1,6 +1,7 @@
 import styles from '../styles/Header/Drawer.module.css';
 import { Drawer, Button } from 'antd';
-import { PoweroffOutlined,UserOutlined } from '@ant-design/icons';
+import { PoweroffOutlined, UserOutlined } from '@ant-design/icons';
+import Link from 'next/link'; // Importez le composant Link de Next.js
 
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
@@ -17,8 +18,11 @@ const DrawerLeft = (props) => {
   return (
     <>
       <Drawer
-        title="Accueil"
-        onTitleClick={() => router.push('/home')}
+        title={
+          <Link href="/home">
+            <a className={styles['drawer-link']}>Accueil</a>
+          </Link>
+        }
         placement="left"
         width={200}
         onClose={onClose}
@@ -26,11 +30,25 @@ const DrawerLeft = (props) => {
         visible={props.isDrawerOpen}
         className={styles.main}
       >
-        <p className={styles['drawer-link']} onClick={() => router.push('/products')}> Products </p>
-        <p className={styles['drawer-link']} onClick={() => router.push('/sales')}> Sales </p>
-        <p className={styles['drawer-link']} onClick={() => router.push('/statistics')}> Statistics </p>
-        <p className={styles['drawer-link']} onClick={() => router.push('/admin')}> Admin </p>
-        <Button type='link' className={styles['sign-out-button']} onClick={() => { dispatch(logout()); }}>
+        <p className={styles['drawer-link']} onClick={() => router.push('/products')}>
+          Products
+        </p>
+        <p className={styles['drawer-link']} onClick={() => router.push('/sales')}>
+          Sales
+        </p>
+        <p className={styles['drawer-link']} onClick={() => router.push('/statistics')}>
+          Statistics
+        </p>
+        <p className={styles['drawer-link']} onClick={() => router.push('/admin')}>
+          Admin
+        </p>
+        <Button
+          type="link"
+          className={styles['sign-out-button']}
+          onClick={() => {
+            dispatch(logout());
+          }}
+        >
           <PoweroffOutlined /> Sign out
         </Button>
       </Drawer>

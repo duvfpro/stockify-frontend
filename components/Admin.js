@@ -190,7 +190,6 @@ function Admin() {
   return (
     <div>
       <main className={styles.main}>
-        <h1 className={styles.title}>Page Administrateur</h1>
         <button onClick={() => openNewUserModal()} >
           ADD NEW USER
         </button>
