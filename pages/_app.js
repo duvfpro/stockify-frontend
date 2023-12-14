@@ -1,20 +1,22 @@
-import Head from 'next/head';
-import { useState } from 'react';
-import { Provider } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faBaseball } from '@fortawesome/free-solid-svg-icons';
-import { useRouter } from 'next/router';
-
+import styles from '../styles/Header/Navbar.module.css';
 import '../styles/globals.css';
-import DrawerLeft from '../components/DrawerLeft';
-import styles from '../styles/Navbar.module.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+
+import Head from 'next/head';
+
+import { Provider } from 'react-redux';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
 import user from '../reducers/users';
 
 import { persistStore, persistReducer } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 import storage from 'redux-persist/lib/storage';
+
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
+import DrawerLeft from '../components/DrawerLeft';
 import NotificationButton from '../components/Header/Notifications';
 
 const reducers = combineReducers({ user });
