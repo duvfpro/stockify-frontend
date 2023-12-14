@@ -1,24 +1,48 @@
-.main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    height: 90vh;
-    padding: 20px;
+.container {
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-.title {
-    line-height: 1.15;
-    font-size: 2.5rem;
-    margin-bottom: 4rem;
+.searchBar {
+  margin-bottom: 16px;
+  margin-top: 16px;
 }
 
-.tableContainer {
-    max-height: 600px;
-    overflow: auto;
+.customListContainer {
+  max-width: 80%;
+  margin: 0 auto;
+  height: 70vh;
+  overflow-y: auto;
 }
-  
-  .editButton {
-    padding: 5px 10px;
-    cursor: pointer;
-  }
+
+.customListContainer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.customListContainer::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+}
+
+.listItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.editButton {
+  margin-right: 12px;
+}
+
+.modalField {
+  margin-bottom: 16px;
+}
+
+.switchContainer {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.switchField {
+  margin-left: 8px;
+}
