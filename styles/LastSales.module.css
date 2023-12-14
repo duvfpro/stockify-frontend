@@ -1,0 +1,15 @@
+.sales{
+ display: flex;
+ flex-direction: column;
+ align-content: center;
+ width: 100vw;
+}
+
+
+.tableContainer{
+    width: 50vw;
+}
+
+
+
+
