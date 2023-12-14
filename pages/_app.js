@@ -56,6 +56,7 @@ function App({ Component, pageProps }) {
               <NotificationButton />
             </div>
           </div> 
+          
         )}
         <DrawerLeft isDrawerOpen={isDrawerOpen} handleDrawerClick={handleDrawerClick} />
         <Component {...pageProps} />
