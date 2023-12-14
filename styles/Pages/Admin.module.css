@@ -17,10 +17,7 @@
     max-height: 600px;
     overflow: auto;
 }
-
-
   
-  /* Ajoutez ce style pour le bouton "edit" */
   .editButton {
     padding: 5px 10px;
     cursor: pointer;

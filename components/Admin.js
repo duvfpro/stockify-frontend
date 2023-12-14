@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import styles from '../styles/Admin.module.css';
+import styles from '../styles/Pages/Admin.module.css';
 import { Table, Modal, Switch } from 'antd';
 
 import { useSelector } from 'react-redux';

@@ -53,6 +53,8 @@ function App({ Component, pageProps }) {
         return 'Ventes';
       case '/statistics':
         return 'Statistique';
+      case '/categories':
+        return 'Categories';
       default:
         return 'Stockify';
     }
@@ -70,7 +72,7 @@ function App({ Component, pageProps }) {
             <div className={styles.iconsSection}>
               <FontAwesomeIcon icon={faBars} className={styles.iconTop} onClick={handleDrawerClick} />
             </div>
-            <h1>{getPageTitle()}</h1>
+            <h3>{getPageTitle()}</h3>
             <div>
               <NotificationButton />
             </div>
