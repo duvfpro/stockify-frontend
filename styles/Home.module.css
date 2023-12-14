@@ -4,4 +4,12 @@
     align-items: center;
     min-height: 100vh;
   }
+
+  .productButton{
+    width: 45vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
   
