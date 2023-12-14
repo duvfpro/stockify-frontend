@@ -1,11 +1,20 @@
-/* Drawer.module.css */
-
-/* Ajoutez ces styles pour changer le curseur au survol */
 .drawer-link {
-    cursor: pointer;
-  }
-  
-  .drawer-link:hover {
-    text-decoration: underline; /* Ajoutez cette ligne si vous voulez souligner le texte au survol */
-  }
-  
+  cursor: pointer;
+}
+
+.drawer-link:hover {
+  text-decoration: underline;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  height: 100%; 
+}
+
+.sign-out-button {
+  margin-top: auto;
+  position:absolute;
+  bottom: 10px;
+  cursor: pointer;
+}

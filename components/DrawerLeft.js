@@ -30,8 +30,7 @@ const DrawerLeft = (props) => {
         <p className={styles['drawer-link']} onClick={() => router.push('/sales')}> Sales </p>
         <p className={styles['drawer-link']} onClick={() => router.push('/statistics')}> Statistics </p>
         <p className={styles['drawer-link']} onClick={() => router.push('/admin')}> Admin </p>
-        <button className={styles['sign-out-button']} onClick={() => { dispatch(logout()); }}>Sign out</button>
-
+        <p className={styles['sign-out-button']} onClick={() => { dispatch(logout()); }}>Sign out</p>
       </Drawer>
     </>
   );
