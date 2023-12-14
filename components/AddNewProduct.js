@@ -41,8 +41,7 @@ function AddNewProduct(props) {
             .then(data => {
                 console.log(data)
             });
-            props.handleCloseButton();
-            
+            props.handleCloseButton(); 
     };
 
     const handleNameInputChange = (event) => {
