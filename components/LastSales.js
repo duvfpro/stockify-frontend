@@ -1,104 +1,120 @@
-import React, { useEffect, useState } from 'react';
-import { Table } from 'antd';
-import { useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
+import React, { useEffect, useState } from "react";
+import { Table } from "antd";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import styles from "../styles/LastSales.module.css";
 
+function LastSales() {
+  const [displayProducts, setDisplayProducts] = useState([]);
+  const user = useSelector((state) => state.user.value);
+  const router = useRouter();
 
-function LastSales () {
+  useEffect(() => {
+    if (!user.token) {
+      router.push("/");
+    }
+  }, [user.token, router]);
 
-    const [displayProducts, setDisplayProducts] = useState([])
-    const user = useSelector((state) => state.user.value);
-    const router = useRouter();
+  const columns = [
+    // Schema du tableau
+    {
+      title: "Product",
+      width: 120,
+      dataIndex: "product",
+      sorter: true,
+    },
+    {
+      title: "Category",
+      width: 120,
+      dataIndex: "category",
+      sorter: true,
+    },
+    {
+      title: "Date",
+      width: 120,
+      dataIndex: "date",
+    },
+    {
+      title: "Stock left",
+      dataIndex: "stock",
+      width: 120,
+      sorter: true,
+    },
+    {
+      title: "Number of sales",
+      dataIndex: "sales",
+      width: 120,
+      sorter: true,
+    },
+    {
+      title: "Quantity Sold",
+      dataIndex: "quantitySold",
+      width: 120,
+      sorter: true,
+    },
+  ];
 
-    useEffect(() => {
-      if (!user.token) {
-        router.push('/');
-      }
-    }, [user.token, router]);
+  useEffect(() => {
+    // Affiche la liste des produits vendus aujourd'hui
+    fetch("http://localhost:3000/products/allProducts")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data.allProducts);
 
-    const columns = [  // Schema du tableau
-        {
-          title: 'Product',
-          width: 120,
-          dataIndex: 'product',
-          sorter: true,
-        },
-        {
-            title: 'Category',
-            width: 120,
-            dataIndex: 'category',
-            sorter: true,
-          },
-        {
-          title: 'Date',
-          width: 120,
-          dataIndex: 'date',
-        },
-        {
-          title: 'Stock left',
-          dataIndex: 'stock',
-          width: 120,
-          sorter: true,
-        },
-        {
-            title: 'Number of sales',
-            dataIndex: 'sales',
-            width: 120,
-            sorter: true,
-          },
-          {
-            title: 'Quantity Sold',
-            dataIndex: 'quantitySold',
-            width: 120,
-            sorter: true,
-        },
-      ];
-    
+        const currentDate = new Date();
+        const date = currentDate.getDate().toString().padStart(2, "0");
+        const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+        const year = currentDate.getFullYear().toString();
 
-    useEffect(() => { // Affiche la liste des produits vendus aujourd'hui
-        fetch('http://localhost:3000/products/allProducts')
-        .then(response => response.json())
-        .then(data => {
-          console.log(data.allProducts)
+        const todayDateString = `${year}-${month}-${date}`;
+        // console.log(todayDateString)
 
-          const currentDate = new Date();
-          const date = currentDate.getDate().toString().padStart(2, '0');
-          const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-          const year = currentDate.getFullYear().toString();
-  
-          const todayDateString = `${year}-${month}-${date}`;
-          // console.log(todayDateString)
-  
-          let filteredProducts = data.allProducts.filter(product => {
-            let soldDates = product.soldAt.map(sale => sale.date.split('T')[0]);
-            console.log(soldDates)
-            return soldDates.includes(todayDateString);
-          });
+        let filteredProducts = data.allProducts.filter((product) => {
+          let soldDates = product.soldAt.map((sale) => sale.date.split("T")[0]);
+          console.log(soldDates);
+          return soldDates.includes(todayDateString);
+        });
 
-          let formattedData = filteredProducts.map(product => ({
-            key: product._id,
-            product: product.name,
-            category: product.category[0]?.name || 'N/A', // Assume que le produit a une seule catégorie
-            date: todayDateString, 
-            stock: product.stock,
-            quantitySold: product.soldAt.reduce((total, sale) => total + sale.quantity, 0),
-            sales: product.soldAt.length,
+        let formattedData = filteredProducts.map((product) => ({
+          key: product._id,
+          product: product.name,
+          category: product.category[0]?.name || "N/A", // Assume que le produit a une seule catégorie
+          date: todayDateString,
+          stock: product.stock,
+          quantitySold: product.soldAt.reduce(
+            (total, sale) => total + sale.quantity,
+            0
+          ),
+          sales: product.soldAt.length,
         }));
 
-       
-  
-        console.log(formattedData)
+        console.log(formattedData);
         setDisplayProducts(formattedData);
-    })
-    }, []);
-
+      });
+  }, []);
+  const tableStyle = {
+   
+    backgroundColor: '#213F62',
+    border: '2px solid #000',
     
+   
+  };
 
-    return (
-        <Table dataSource={displayProducts} columns={columns} />
 
-
-    )
-};
+  return (
+    <div className={styles.sales}>
+      <div className={styles.tableContainer}>
+        <Table
+          className={styles.Table}
+          dataSource={displayProducts}
+          columns={columns}
+          pagination={{ pageSize: 10 }}
+          size="large"
+          style={tableStyle}
+        />
+      </div>
+    </div>
+  );
+}
 
 export default LastSales;

@@ -46,7 +46,10 @@ function Home() {
           SALE PRODUCTS
         </button>
       </div>
-      <LastSales />
+      <div className={styles.sale}>
+          <LastSales  />
+      </div>
+      
       {openAddStockModal && (
         <AddStock
           openAddStockModal={openAddStockModal}

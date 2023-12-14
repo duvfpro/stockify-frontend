@@ -15,9 +15,11 @@ function SalesPage() {
       }, [user.token, router]);
     
     return (
-        <div>
+        <div className={styles.main}>
             <h1>SalesPage</h1>
-            <LastSales/>
+            <div className={styles.sales}>
+              <LastSales/>
+            </div>
         </div>
     )
 

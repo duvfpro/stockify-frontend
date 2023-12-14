@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100vh;
+    height: 100vh;
   }
 
   .productButton{
@@ -12,4 +12,22 @@
     justify-content: space-between;
     margin-bottom: 10px;
   }
+  .sale{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50vw;
+  }
   
+  .ant-table-row {
+    background-color: steelblue;
+  
+  }
+  .ant-table-thead{
+    background-color: black;
+  
+  }
+  .LastSales_tableContainer__M76O7{
+    border: 2px solid #000;
+    background-color: #323A57;
+  }
