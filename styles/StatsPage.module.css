@@ -17,16 +17,46 @@
 }
 
 .filterContainer{
-  height: 10vh;
+
   width: 100%;
   display: flex;
   justify-content: space-around;
 }
+.filterArea{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
+.filterByTemp{
+  display: flex;
+}
+
+.filterByTemp>p{
+  margin-right: 30px;
+}
+
+.filterByObject{
+  display: flex;
+  
+}
+
+.filterByObject>p{
+  margin-right: 30px;
+}
+
+.renderByObject{
+  display: flex;
+  margin-top: 30px;
+}
+
+.renderByObject>p{
+  margin-right: 30px;
+}
 
 
 .statsContainer{
-  height: 90vh;
+
   width: 100%;
   display: flex;
   flex-direction: column;
