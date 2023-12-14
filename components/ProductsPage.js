@@ -124,8 +124,8 @@ function ProductsPage(props) {
             {openAddProductModal && 
               <AddNewProduct openAddProductModal={openAddProductModal} handleCloseButton={handleCloseButton} /> }
             {myProducts.map((data, i) => {
-              return <Product key={i} name={data.name} stock={data.stock} price={data.price} category={data.category[0].name} handleDeleteButton={handleDeleteButton} />
-              // return <Product key={i} name={data.name} stock={data.stock} price={data.price} handleDeleteButton={handleDeleteButton} handleEditButton={handleEditButton} />
+              // return <Product key={i} name={data.name} stock={data.stock} price={data.price} category={data.category[0].name} handleDeleteButton={handleDeleteButton} />
+              return <Product key={i} name={data.name} stock={data.stock} price={data.price} handleDeleteButton={handleDeleteButton} handleEditButton={handleEditButton} />
               })}
 
         <Modal open={openEditModal} onCancel={closeEditModal} footer={null} width={800} height={800}>
