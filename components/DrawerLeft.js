@@ -27,6 +27,7 @@ const DrawerLeft = (props) => {
         className={styles.main}
       >
         <p className={styles['drawer-link']} onClick={() => router.push('/products')}> Products </p>
+        <p className={styles['drawer-link']} onClick={() => router.push('/categories')}> Categories </p>
         <p className={styles['drawer-link']} onClick={() => router.push('/sales')}> Sales </p>
         <p className={styles['drawer-link']} onClick={() => router.push('/statistics')}> Statistics </p>
         <p className={styles['drawer-link']} onClick={() => router.push('/admin')}> Admin </p>
