@@ -46,6 +46,12 @@ function LastSales () {
             width: 120,
             sorter: true,
           },
+          {
+            title: 'Quantity Sold',
+            dataIndex: 'quantitySold',
+            width: 120,
+            sorter: true,
+        },
       ];
     
 
@@ -64,13 +70,25 @@ function LastSales () {
           // console.log(todayDateString)
   
           let filteredProducts = data.allProducts.filter(product => {
-            let soldDates = product.soldAt.map(sale => sale.date);
+            let soldDates = product.soldAt.map(sale => sale.date.split('T')[0]);
             console.log(soldDates)
             return soldDates.includes(todayDateString);
           });
+
+          let formattedData = filteredProducts.map(product => ({
+            key: product._id,
+            product: product.name,
+            category: product.category[0]?.name || 'N/A', // Assume que le produit a une seule catégorie
+            date: todayDateString, 
+            stock: product.stock,
+            quantitySold: product.soldAt.reduce((total, sale) => total + sale.quantity, 0),
+            sales: product.soldAt.length,
+        }));
+
+       
   
-        console.log(filteredProducts)
-        setDisplayProducts(filteredProducts);
+        console.log(formattedData)
+        setDisplayProducts(formattedData);
     })
     }, []);
 
@@ -78,6 +96,8 @@ function LastSales () {
 
     return (
         <Table dataSource={displayProducts} columns={columns} />
+
+
     )
 };
 
