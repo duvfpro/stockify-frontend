@@ -12,6 +12,7 @@
   .iconTop {
     font-size: 1rem;
     cursor: pointer;
+    color: #fff;
   }
   
   .iconTop:hover {

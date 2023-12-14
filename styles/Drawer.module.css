@@ -1,5 +1,13 @@
 /* Drawer.module.css */
 
+.ant-drawer-content-wrapper{
+  background-color: #000 !important;
+}
+
+.Drawer_drawer-link__BiCZP{
+  color: #000 !important;
+}
+
 /* Ajoutez ces styles pour changer le curseur au survol */
 .drawer-link {
     cursor: pointer;

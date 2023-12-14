@@ -1,3 +1,12 @@
 .productContainer {
+    background-color: #323A57;
+    width: 60%;
+    margin: 10px;
+    padding: 10px;
     border: 1px solid black;
+    border-radius: 15px;
+}
+
+.productContainer>button{
+    margin-right: 15px;
 }
