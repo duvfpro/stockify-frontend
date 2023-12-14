@@ -16,7 +16,7 @@ import storage from 'redux-persist/lib/storage';
 
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-import DrawerLeft from '../components/DrawerLeft';
+import DrawerLeft from '../components/Header/DrawerLeft';
 import NotificationButton from '../components/Header/Notifications';
 
 const reducers = combineReducers({ user });

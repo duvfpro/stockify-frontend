@@ -1,11 +1,11 @@
-import styles from '../styles/Header/Drawer.module.css';
+import styles from '../../styles/Header/Drawer.module.css';
 import { Drawer, Button } from 'antd';
 import { PoweroffOutlined, UserOutlined } from '@ant-design/icons';
 import Link from 'next/link'; // Importez le composant Link de Next.js
 
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
-import { logout } from '../reducers/users';
+import { logout } from '../../reducers/users';
 
 const DrawerLeft = (props) => {
   const dispatch = useDispatch();
@@ -39,7 +39,9 @@ const DrawerLeft = (props) => {
         <p className={styles['drawer-link']} onClick={() => router.push('/statistics')}>
           Statistics
         </p>
-        <p className={styles['drawer-link']} onClick={() => router.push('/categories')}> Categories </p>
+        <p className={styles['drawer-link']} onClick={() => router.push('/categories')}>
+          Categorie
+        </p>
         <p className={styles['drawer-link']} onClick={() => router.push('/admin')}>
           Admin
         </p>
