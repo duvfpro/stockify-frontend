@@ -2,6 +2,7 @@ import styles from '../styles/SalesPage.module.css';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
+import LastSales from './LastSales';
 
 function SalesPage() {
     const router = useRouter();
@@ -14,7 +15,11 @@ function SalesPage() {
       }, [user.token, router]);
     
     return (
-        <div>
+        <div className={styles.main}>
+            <h1>SalesPage</h1>
+            <div className={styles.sales}>
+              <LastSales/>
+            </div>
         </div>
     )
 

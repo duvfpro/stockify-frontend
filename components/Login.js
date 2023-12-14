@@ -2,7 +2,6 @@ import styles from '../styles/Login.module.css';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-import jwt from 'jsonwebtoken';
 import { login } from '../reducers/users';
 
 function Login() {
@@ -30,7 +29,7 @@ function Login() {
       if (response.ok) {
         const data = await response.json();
         if (data.result) {
-          dispatch(login({ token: data.data.token, username: data.data.email }));
+          dispatch(login({ token: data.token, username: data.email , payload:data.payload}));
 
         } else {
           console.error('ça marche pas ta mère');
@@ -41,6 +40,7 @@ function Login() {
     }
   };
 
+  console.log(user.payload)
   console.log(user.token)
   return (
     <div>

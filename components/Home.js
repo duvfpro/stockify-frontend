@@ -1,12 +1,10 @@
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
-import styles from '../styles/Home.module.css';
-import LastSales from './LastSales';
-import AddStock from './AddStock';
-import Sale from './Sale';
-
-
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import styles from "../styles/Home.module.css";
+import LastSales from "./LastSales";
+import AddStock from "./AddStock";
+import Sale from "./Sale";
 
 function Home() {
   const user = useSelector((state) => state.user.value);
@@ -14,10 +12,9 @@ function Home() {
   const [openAddStockModal, setOpenAddStockModal] = useState(false);
   const [openSaleModal, setSaleModal] = useState(false);
 
-
   useEffect(() => {
     if (!user.token) {
-      router.push('/');
+      router.push("/");
     }
   }, [user.token, router]);
 
@@ -37,15 +34,34 @@ function Home() {
   return (
     <main className={styles.main}>
       <h1>Welcome</h1>
-      <button className={styles.addProduct} onClick={handleAddStockButtonClick}>
-        ADD STOCK
-      </button>
-      <button onClick={handleSaleButtonClick}>
-        SALE PRODUCTS
-      </button>
-      <LastSales />
-      {openAddStockModal && <AddStock openAddStockModal={openAddStockModal} handleCloseButton={handleCloseButton} />}
-      {openSaleModal && <Sale openSaleModal={openSaleModal} handleCloseButton={handleCloseButton} />}
+      <div className={styles.productButton}>
+        <button
+          className={styles.addProduct}
+          onClick={handleAddStockButtonClick}
+        >
+          ADD STOCK
+        </button>
+
+        <button className={styles.saleProduct} onClick={handleSaleButtonClick}>
+          SALE PRODUCTS
+        </button>
+      </div>
+      <div className={styles.sale}>
+          <LastSales  />
+      </div>
+      
+      {openAddStockModal && (
+        <AddStock
+          openAddStockModal={openAddStockModal}
+          handleCloseButton={handleCloseButton}
+        />
+      )}
+      {openSaleModal && (
+        <Sale
+          openSaleModal={openSaleModal}
+          handleCloseButton={handleCloseButton}
+        />
+      )}
     </main>
   );
 }
