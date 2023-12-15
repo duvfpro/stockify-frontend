@@ -1,19 +1,23 @@
-import React, { useEffect, useState } from "react";
 import { Table } from "antd";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import styles from "../styles/LastSales.module.css";
+import { useState,useEffect } from "react";
 
-function LastSales() {
+function LastSales({refresh}) {
   const [displayProducts, setDisplayProducts] = useState([]);
   const user = useSelector((state) => state.user.value);
   const router = useRouter();
+ 
+
+  
 
   useEffect(() => {
     if (!user.token) {
       router.push("/");
     }
   }, [user.token, router]);
+ 
 
   const columns = [
     // Schema du tableau
@@ -35,7 +39,7 @@ function LastSales() {
       dataIndex: "date",
     },
     {
-      title: "Stock left",
+      title: "current Stock ",
       dataIndex: "stock",
       width: 120,
       sorter: true,
@@ -56,6 +60,7 @@ function LastSales() {
 
   useEffect(() => {
     // Affiche la liste des produits vendus aujourd'hui
+    console.log("LastSales useEffect triggered");
     fetch("http://localhost:3000/products/allProducts")
       .then((response) => response.json())
       .then((data) => {
@@ -75,31 +80,47 @@ function LastSales() {
           return soldDates.includes(todayDateString);
         });
 
-        let formattedData = filteredProducts.map((product) => ({
-          key: product._id,
-          product: product.name,
-          category: product.category[0]?.name || "N/A", // Assume que le produit a une seule catégorie
-          date: todayDateString,
-          stock: product.stock,
-          quantitySold: product.soldAt.reduce(
-            (total, sale) => total + sale.quantity,
-            0
-          ),
-          sales: product.soldAt.length,
-        }));
+        let formattedData = filteredProducts.map((product,index) => {
 
-        console.log(formattedData);
+          const history = [
+            ...product.soldAt.map((sale) => ({
+              type: "vendu le",
+              quantity: sale.quantity,
+              date: new Date(sale.date).toLocaleString(),
+            })),
+            ...product.restockAt.map((restock) => ({
+              type: "restock le",
+              quantity: restock.quantity,
+              date: new Date(restock.date).toLocaleString(),
+            })),
+          ];
+  
+          return {
+            key: index,
+            product: product.name,
+            category: product.category[0]?.name || "N/A",
+            date: todayDateString,
+            stock: product.stock,
+            quantitySold: product.soldAt.reduce(
+              (total, sale) => total + sale.quantity,
+              0
+            ),
+            sales: product.soldAt.length,
+            history: history,
+          };
+        
+        });
+        
+        // console.log(formattedData);
         setDisplayProducts(formattedData);
       });
-  }, []);
+  }, [refresh]);
   const tableStyle = {
    
     backgroundColor: '#213F62',
     border: '2px solid #000',
     
-   
   };
-
 
   return (
     <div className={styles.sales}>
@@ -111,6 +132,18 @@ function LastSales() {
           pagination={{ pageSize: 10 }}
           size="large"
           style={tableStyle}
+          expandable={{
+            expandedRowRender: (record) => (
+              <ul>
+                {record.history.map((operation, index) => (
+                  <li key={index}>
+                    {`${operation.type} ${operation.quantity} on ${operation.date}`}
+                  </li>
+                ))}
+              </ul>
+            ),
+            rowExpandable: (record) => record.history.length > 0,
+          }}
         />
       </div>
     </div>
