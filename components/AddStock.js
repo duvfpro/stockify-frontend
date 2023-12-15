@@ -4,11 +4,12 @@ import React, { useState, useEffect } from 'react';
 
 
 function AddStock(props) {
-
+    console.log("refreshLastSale prop in AddStock:", props.refreshLastSale);
+    console.log("handle close button called",props.handleCloseButton)
     const [selectedOption, setSelectedOption] = useState(''); // Pour récupérer le produit choisie par le user
     const [productList, setProductList] = useState([]);
     const [stockToAdd, setStockToAdd] = useState([]);
-
+    
 
     useEffect(() => { // Fetch la liste des produit pour le menu déroulant
         fetch('http://localhost:3000/products/allProducts')
@@ -36,6 +37,7 @@ function AddStock(props) {
         .then(response => response.json())
         .then(data => {
             props.handleCloseButton();
+            window.location.reload();
         })
     };
 

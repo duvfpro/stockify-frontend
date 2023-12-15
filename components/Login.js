@@ -1,83 +1,115 @@
-import styles from '../styles/Login.module.css';
+import styles from '../styles/Pages/Login.module.css';
+import { Button, Form, Input } from 'antd';
 
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { login } from '../reducers/users';
 
-function Login() {
+const Login = () => {
+    const router = useRouter();
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.user);
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  const dispatch = useDispatch();
-
-  const router = useRouter();
-  const user = useSelector((state) => state.user.value);
-
-  if (user.token) {
-    router.push('/home');
-  }
-
-  const handleSubmit = async () => {
-    try {
-      const response = await fetch('http://localhost:3000/users/signin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password,}),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        if (data.result) {
-          dispatch(login({ token: data.token, username: data.username , isAdmin:data.isAdmin}));
-
-        } else {
-          console.error('ça marche pas ta mère');
-        }
-      }
-    } catch (error) {
-      console.error('An error occurred', error);
+    if (user.token) {
+        router.push('/home');
     }
-  };
 
-  return (
-    <div>
-      <main className={styles.main}>
-        <h1 className={styles.stockifyTitle}>Stockify</h1>
-        <div className={styles.container}>
-          <h3 className={styles.title}>Sign in</h3>
+    const handleSubmit = async (values) => {
+        try {
+            const response = await fetch('http://localhost:3000/users/signin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: values.username,
+                    password: values.password,
+                }),
+            });
 
-          
-          <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
-            <input
-              type="text"
-              name="username"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <button type="button" onClick={handleSubmit}>
-              Se connecter
-            </button>
-            <p className={styles.forgotPassword} onClick={() => console.log('Forgot Password Clicked')}>
-              Forgot Password?
-            </p>
-          </form>
+            if (response.ok) {
+                const data = await response.json();
+                if (data.result && data.token) {
+                    dispatch(login({
+                        username: data.username,
+                        token: data.token,
+                        isAdmin: data.isAdmin,
+                    }));
+                    router.push('/home');
+                } else {
+                    console.error('Sign-in failed: notif mauvaise connection', data.error);
+                }
+            }
+        } catch (error) {
+            console.error('Error during sign-in:', error);
+        }
+    };
+
+    const handleSubmitFailed = (errorInfo) => {
+        console.log('Failed: Bug formulaire', errorInfo);
+    };
+
+    return (
+        <div className={styles.outerContainer}>
+            <h1 className={styles.title}>Stockify</h1>
+            <div className={styles.centeredContainer}>
+                <Form
+                    className={styles.loginForm}
+                    name="basic"
+                    labelCol={{
+                        span: 8,
+                    }}
+                    wrapperCol={{
+                        span: 16,
+                    }}
+                    initialValues={{
+                        remember: true,
+                    }}
+                    onFinish={handleSubmit}
+                    onFinishFailed={handleSubmitFailed}
+                    autoComplete="off"
+                >
+                    <Form.Item
+                        className={styles.loginFormFormItem}
+                        label="Username"
+                        name="username"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your username!',
+                            },
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        className={styles.loginFormFormItem}
+                        label="Password"
+                        name="password"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your password!',
+                            },
+                        ]}
+                    >
+                        <Input.Password />
+                    </Form.Item>
+                    <Form.Item
+                        className={styles.loginFormButton}
+                        wrapperCol={{
+                            span: 24,
+                        }}
+                    >
+                        <Button type="primary" htmlType="submit">
+                            Sign In
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </div>
         </div>
-      </main>
-    </div>
-  );
-}
+    );
+};
 
 export default Login;

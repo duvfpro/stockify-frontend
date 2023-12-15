@@ -16,6 +16,8 @@
   justify-content: center;
 }
 
+
+
 .filterContainer{
 
   width: 100%;
@@ -23,9 +25,12 @@
   justify-content: space-around;
 }
 .filterArea{
+  margin-top: 30px;
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
 .filterByTemp{
@@ -56,11 +61,34 @@
 
 
 .statsContainer{
-
   width: 100%;
+  margin-top: 30px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
 }
 
+.firstChart{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 300px;
+  margin: 30px;
+}
+
+.secondChart{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 300px;
+  margin: 30px;
+}
+
+.thirdChart{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 300px;
+  margin: 30px;
+}
