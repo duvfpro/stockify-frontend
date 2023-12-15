@@ -1,7 +1,9 @@
 import styles from '../styles/Login.module.css';
+
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { login } from '../reducers/users';
 
 function Login() {
@@ -46,6 +48,8 @@ function Login() {
         <h1 className={styles.stockifyTitle}>Stockify</h1>
         <div className={styles.container}>
           <h3 className={styles.title}>Sign in</h3>
+
+          
           <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
             <input
               type="text"
