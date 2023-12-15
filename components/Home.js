@@ -31,6 +31,7 @@ function Home() {
     setSaleModal(false);
   };
 
+
   return (
     <main className={styles.main}>
       <h1>Welcome</h1>

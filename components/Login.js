@@ -29,7 +29,7 @@ function Login() {
       if (response.ok) {
         const data = await response.json();
         if (data.result) {
-          dispatch(login({ token: data.token, username: data.email , payload:data.payload}));
+          dispatch(login({ token: data.token, username: data.username , isAdmin:data.isAdmin}));
 
         } else {
           console.error('ça marche pas ta mère');
@@ -40,8 +40,6 @@ function Login() {
     }
   };
 
-  console.log(user.payload)
-  console.log(user.token)
   return (
     <div>
       <main className={styles.main}>
