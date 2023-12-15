@@ -8,7 +8,7 @@ function AddNewProduct(props) {
     const [productName, setProductName] = useState('');
     const [productStock, setProductStock] = useState(0);
     const [productPrice, setProductPrice] = useState(null);
-    const [productImage, setProductImage] = useState('');
+    const [productImage, setProductImage] = useState(null);
     const [category, setCategory] = useState([]);
     const [categotyId, setCategoryId] = useState('');
     const [selectedOption, setSelectedOption] = useState(''); // Stock le choix de la catégorie
@@ -33,10 +33,18 @@ function AddNewProduct(props) {
     };
 
     const handleSubmitButton = () => { // Manque à pouvoir ajouter du stock à la création et une IMAGE
-        fetch('http://localhost:3000/products/newProduct', {
+
+        const formData = new FormData();
+            formData.append('photoFromFront', productImage);
+            formData.append('name', productName);
+            formData.append('stock', 0);
+            formData.append('category', categotyId);
+            formData.append('price', productPrice); 
+
+        fetch('http://localhost:3000/products/newProductWithImage', {
             method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ name: productName, image: productImage, stock: 0, category: categotyId, price: productPrice }),
+            body: formData,
+			// body: JSON.stringify({ name: productName, image: productImage, stock: 0, category: categotyId, price: productPrice }),
             })
             .then(response => response.json())
             .then(data => {
@@ -68,7 +76,6 @@ function AddNewProduct(props) {
 
     const handleImageInputChange = (e) => {
         const file = e.target.files[0];
-        console.log(e)
         setProductImage(file);
     };
     
@@ -87,7 +94,7 @@ function AddNewProduct(props) {
                     <input type="text" onChange={handleNameInputChange} value={productName} placeholder="Product name" required />
                     {/* <input type="number" onChange={handleStockInputChange} value={productStock} placeholder="Stock" required /> */}
                     <input type="number" onChange={handlePriceInputChange} value={productPrice} placeholder="Price" required />
-                    <input type="file" onChange={handleImageInputChange} accept="image/*" />
+                    <input type="file" onChange={handleImageInputChange} value={productImage} accept="image/*" />
                     <select onChange={handleSelectChange} >
                         {category.map((data, index) => (
                         <option key={index} value={data.name}> {data.name} </option>

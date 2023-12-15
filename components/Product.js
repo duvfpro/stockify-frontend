@@ -14,6 +14,7 @@ function Product (props) {
     return (
     <div className={styles.productContainer} >
         <h3 className={styles.nomProduit}>Produit: {props.name}</h3>
+        <img src={props.image} alt={props.name} />
         <p className={styles.stock}>Stock: {props.stock}</p>
         <p className={styles.price}>Price: {props.price}</p>
         <p className={styles.category}>Category: {props.category}</p>
