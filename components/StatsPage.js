@@ -51,9 +51,9 @@ function StatsPage() {
     setDate(value);
   };
   
-  /////////////////////////////////////////
-  //     FETCHING ALL CATÉGORIES         //
-  /////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //     FETCHING ALL CATÉGORIES         /////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   const [category, setCategory] = useState([]);
   const [categoryId, setCategoryId] = useState('all'); // Set initial categoryId to 'all'
@@ -61,6 +61,11 @@ function StatsPage() {
 
   const [dataLoaded, setDataLoaded] = useState(false);
 
+  const [chartData, setChartData] = useState([]);
+  const [secondChartData, setSecondChartData] = useState([]); // Nouvel état pour le graphique de stock
+  const [restockChartData, setRestockChartData] = useState([]); // Nouvel état pour le graphique de réapprovisionnement
+  const [isLoading, setIsLoading] = useState(true);
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -79,8 +84,15 @@ function StatsPage() {
             product.category.some(category => category._id === categoryId)
           );
         }
-        const transformedData = transformData(filteredProducts);
-        setChartData({...transformedData});
+        const transformedDataSell = transformDataSell(filteredProducts);
+        setChartData({...transformedDataSell});
+
+        const transformedDataStock = transformDataStock(filteredProducts);
+        setSecondChartData({...transformedDataStock});
+
+        const transformedDataRestock = transformDataRestock(filteredProducts);
+        setRestockChartData({...transformedDataRestock});
+  
         setIsLoading(false);
         setDataLoaded(true); // Les données sont chargées
       } catch (error) {
@@ -93,29 +105,14 @@ function StatsPage() {
     fetchData();
   }, [filter, categoryId, timeFilter]); // Ajoutez categoryId à la liste des dépendances
 
-  const handleSelectChange = async (event) => { // Rendre la fonction asynchrone
-    let catName = event.target.value;
-    let id;
-    if (catName === 'all') {
-      id = 'all'; // Set id to 'all' when 'All categories' is selected
-    } else {
-      id = category.find(element => element.name === catName);
-      if (!id) {
-        console.error(`No category found with name ${catName}`);
-        return;
-      }
-    }
-    setCategoryId(id._id); // Mettez à jour l'ID de catégorie sélectionné
-  }
+
+
 
   /////////////////////////////////////////
   //     FETCHING ALL SELLS PRODUCTS     //
   /////////////////////////////////////////
-
-  const [chartData, setChartData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   
-  function transformData(products) {
+  function transformDataSell(products) {
     if (!products || products.length === 0) {
       return {
         labels: [],
@@ -175,6 +172,150 @@ function StatsPage() {
       datasets: datasets,
     };
   }
+
+  function transformDataStock(products) {
+    if (!products || products.length === 0) {
+      return {
+        labels: [],
+        datasets: [],
+      };
+    }
+  
+    let salesByCategoryAndDate = {};
+  
+    for (const product of products) {
+      const categoriesOrProducts = filter === 'categories' ? product.category : [product];
+      for (const categoryOrProduct of categoriesOrProducts) {
+        for (const sale of product.soldAt) {
+          const date = new Date(sale.date);
+          let key;
+          switch (timeFilter) {
+            case 'day':
+              key = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+              break;
+            case 'week':
+              // Utilisez la date du premier jour de la semaine
+              const firstDayOfWeek = date.getDate() - date.getDay();
+              const weekStart = new Date(date.setDate(firstDayOfWeek));
+              key = `${weekStart.getFullYear()}-W${Math.floor(weekStart.getDate() / 7) + 1}`;
+              break;
+            case 'month':
+              key = `${date.getFullYear()}-${date.getMonth() + 1}`;
+              break;
+            default:
+              key = date.toISOString();
+          }
+  
+          const name = filter === 'categories' ? categoryOrProduct.name : categoryOrProduct.name;
+          if (!salesByCategoryAndDate[name]) {
+            salesByCategoryAndDate[name] = {};
+          }
+  
+          if (!salesByCategoryAndDate[name][key]) {
+            salesByCategoryAndDate[name][key] = 0;
+          }
+  
+          salesByCategoryAndDate[name][key] += sale.quantity;
+        }
+        // Ajoutez le stock du produit à la dernière date de vente
+        if (product.soldAt.length > 0) {
+          const lastSaleDate = new Date(product.soldAt[product.soldAt.length - 1].date);
+          let lastKey;
+          switch (timeFilter) {
+            case 'day':
+              lastKey = `${lastSaleDate.getFullYear()}-${lastSaleDate.getMonth() + 1}-${lastSaleDate.getDate()}`;
+              break;
+            case 'week':
+              const firstDayOfWeek = lastSaleDate.getDate() - lastSaleDate.getDay();
+              const weekStart = new Date(lastSaleDate.setDate(firstDayOfWeek));
+              lastKey = `${weekStart.getFullYear()}-W${Math.floor(weekStart.getDate() / 7) + 1}`;
+              break;
+            case 'month':
+              lastKey = `${lastSaleDate.getFullYear()}-${lastSaleDate.getMonth() + 1}`;
+              break;
+            default:
+              lastKey = lastSaleDate.toISOString();
+          }
+          salesByCategoryAndDate[categoryOrProduct.name][lastKey] += product.stock;
+        }
+      }
+    }
+  
+    // Get all unique dates
+    const allDates = [...new Set([].concat(...Object.values(salesByCategoryAndDate).map(Object.keys)))].sort();
+  
+    const datasets = Object.entries(salesByCategoryAndDate).map(([categoryOrProductName, sales]) => ({
+      label: categoryOrProductName,
+      data: allDates.map(date => sales[date] || 0),
+    }));
+  
+    return {
+      labels: allDates,
+      datasets: datasets,
+    };
+  }
+
+
+  function transformDataRestock(products) {
+    if (!products || products.length === 0) {
+      return {
+        labels: [],
+        datasets: [],
+      };
+    }
+  
+    let restocksByCategoryAndDate = {};
+  
+    for (const product of products) {
+      const categoriesOrProducts = filter === 'categories' ? product.category : [product];
+      for (const categoryOrProduct of categoriesOrProducts) {
+        for (const restock of product.restockAt) {
+          const date = new Date(restock.date);
+          let key;
+          switch (timeFilter) {
+            case 'day':
+              key = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+              break;
+            case 'week':
+              const firstDayOfWeek = date.getDate() - date.getDay();
+              const weekStart = new Date(date.setDate(firstDayOfWeek));
+              key = `${weekStart.getFullYear()}-W${Math.floor(weekStart.getDate() / 7) + 1}`;
+              break;
+            case 'month':
+              key = `${date.getFullYear()}-${date.getMonth() + 1}`;
+              break;
+            default:
+              key = date.toISOString();
+          }
+  
+          const name = filter === 'categories' ? categoryOrProduct.name : categoryOrProduct.name;
+          if (!restocksByCategoryAndDate[name]) {
+            restocksByCategoryAndDate[name] = {};
+          }
+  
+          if (!restocksByCategoryAndDate[name][key]) {
+            restocksByCategoryAndDate[name][key] = 0;
+          }
+  
+          restocksByCategoryAndDate[name][key] += restock.quantity;
+        }
+      }
+    }
+  
+    const allDates = [...new Set([].concat(...Object.values(restocksByCategoryAndDate).map(Object.keys)))].sort();
+  
+    const datasets = Object.entries(restocksByCategoryAndDate).map(([categoryOrProductName, restocks]) => ({
+      label: categoryOrProductName,
+      data: allDates.map(date => restocks[date] || 0),
+    }));
+  
+    return {
+      labels: allDates,
+      datasets: datasets,
+    };
+  }
+
+
  
   function BarChart({ chartData }) {
 
@@ -214,20 +355,25 @@ function StatsPage() {
           </div>
         </div>
         <div className={styles.renderFilterArea}>
-          <div className={styles.renderByTemp}>
+          {/* <div className={styles.renderByTemp}>
             {timeFilter === 'day' && <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridDay" />}
             {timeFilter === 'week' && <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridWeek" />}
             {timeFilter === 'month' && <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridMonth" />}
-          </div>
+          </div> */}
         </div>
       </div>
       <div className={styles.statsContainer}>
         <div className={styles.firstChart}>
-          <h2>First Chart</h2>
-          {!isLoading && <BarChart chartData={chartData} />}
+          <h2>Statistiques des Ventes</h2>
+          {!isLoading && <BarChart className={styles.firstChartCl} chartData={chartData} />}
         </div>
         <div className={styles.secondChart}>
-          <h2>Second Chart</h2>
+          <h2>Statistiques des Stocks en cours</h2>
+          {!isLoading && <BarChart className={styles.secondChartCl} chartData={secondChartData} />}
+        </div>
+        <div className={styles.thirdChart}>
+          <h2>Statistiques des Réapprovisions</h2>
+          {!isLoading && <BarChart className={styles.thirdChartCl} chartData={restockChartData} />}
         </div>
       </div>
     </div>
