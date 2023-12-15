@@ -310,7 +310,9 @@ const Admin = () => {
     );
   }
   else{
-    return null;
+    return (<div>
+      <h1>This page is not allowed to intern</h1>
+    </div>);
   }
   
 };

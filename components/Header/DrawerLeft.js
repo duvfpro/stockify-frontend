@@ -50,6 +50,8 @@ const DrawerLeft = (props) => {
           className={styles['sign-out-button']}
           onClick={() => {
             dispatch(logout());
+            onClose();
+
           }}
         >
           <PoweroffOutlined /> Sign out
