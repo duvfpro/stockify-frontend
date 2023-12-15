@@ -8,7 +8,7 @@ function AddNewProduct(props) {
     const [productName, setProductName] = useState('');
     const [productStock, setProductStock] = useState(0);
     const [productPrice, setProductPrice] = useState(null);
-    const [productImage, setProductImage] = useState('');
+    const [productImage, setProductImage] = useState("http://localhost:3000/stockpic.jpg");
     const [category, setCategory] = useState([]);
     const [categotyId, setCategoryId] = useState('');
     const [selectedOption, setSelectedOption] = useState(''); // Stock le choix de la catégorie
@@ -33,17 +33,39 @@ function AddNewProduct(props) {
     };
 
     const handleSubmitButton = () => { // Manque à pouvoir ajouter du stock à la création et une IMAGE
-        fetch('http://localhost:3000/products/newProduct', {
+
+        if(productImage === "http://localhost:3000/stockpic.jpg") {
+            fetch('http://localhost:3000/products/newProduct', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: productName, image: productImage, stock: productStock, category: categotyId, price: productPrice }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                });
+                props.handleCloseButton(); 
+        } 
+        else {
+            const formData = new FormData();
+            formData.append('photoFromFront', productImage);
+            formData.append('name', productName);
+            formData.append('stock', productStock);
+            formData.append('category', categotyId);
+            formData.append('price', productPrice); 
+
+        fetch('http://localhost:3000/products/newProductWithImage', {
             method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ name: productName, image: productImage, stock: 0, category: categotyId, price: productPrice }),
+            body: formData,
             })
             .then(response => response.json())
             .then(data => {
                 console.log(data)
             });
             props.handleCloseButton(); 
+        }
     };
+
 
     const handleNameInputChange = (event) => {
         setProductName(event.target.value);
@@ -68,9 +90,9 @@ function AddNewProduct(props) {
 
     const handleImageInputChange = (e) => {
         const file = e.target.files[0];
-        console.log(e.target.file)
         setProductImage(file);
     };
+    
 
     const handleSelectChange = (event) => { // Gère le choix de la catégorie et cherche son ID
         let catName = event.target.value;
@@ -84,7 +106,7 @@ function AddNewProduct(props) {
             <div className={styles.title} > ADD NEW PRODUCT </div>
                 <div className={styles.mainContainer}>
                     <input type="text" onChange={handleNameInputChange} value={productName} placeholder="Product name" required />
-                    {/* <input type="number" onChange={handleStockInputChange} value={productStock} placeholder="Stock" required /> */}
+                    <input type="number" onChange={handleStockInputChange} value={productStock} placeholder="Stock" required />
                     <input type="number" onChange={handlePriceInputChange} value={productPrice} placeholder="Price" required />
                     <input type="file" onChange={handleImageInputChange} accept="image/*" />
                     <select onChange={handleSelectChange} >

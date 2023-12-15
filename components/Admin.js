@@ -175,138 +175,146 @@ const Admin = () => {
     }
   };
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.searchBar}>
-        <Search
-          placeholder="Search users..."
-          allowClear
-          onSearch={handleSearch}
-          style={{ marginBottom: 16, marginTop: 16 }}
-        />
-        <Button type="primary" onClick={handleCreateUserClick}>
-          Create User
-        </Button>
-      </div>
-      <div className={styles.customListContainer}>
-        <List
-          dataSource={filteredData}
-          pagination={{
-            position: 'bottom',
-            align: 'center',
-          }}
-          renderItem={(item) => (
-            <List.Item className={styles.listItem}>
-              <List.Item.Meta
-                avatar={
-                  <Avatar src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${item.key}`} />
-                }
-                title={`${item.username}`}
-                description={`Email: ${item.email}, isAdmin: ${item.isAdmin}`}
-              />
-              <Button type="primary" className={styles.editButton} onClick={() => handleEditClick(item.key)}>
-                Edit
-              </Button>
-            </List.Item>
-          )}
-        />
-      </div>
-      {selectedUser && (
-        <Modal
-          title={`User information`}
-          visible={modalVisible}
-          onCancel={handleModalClose}
-          footer={[
-            <Button key="delete" type="primary" danger onClick={handleDeleteUser}>
-              Delete
-            </Button>,
-            <Button key="save" type="primary" onClick={handleSaveChanges}>
-              Save Changes
-            </Button>,
-          ]}
-        >
-          <div className={styles.modalField}>
-            <label htmlFor="editedUsername">Username:</label>
-            <Input
-              id="editedUsername"
-              value={editedUsername}
-              onChange={(e) => setEditedUsername(e.target.value)}
-            />
-          </div>
-          <div className={styles.modalField}>
-            <label htmlFor="editedEmail">Email:</label>
-            <Input
-              id="editedEmail"
-              value={editedEmail}
-              onChange={(e) => setEditedEmail(e.target.value)}
-            />
-          </div>
-          <div className={styles.switchContainer}>
-            <label htmlFor="editedIsAdmin">isAdmin:</label>
-            <div className={styles.switchField}>
-              <Switch
-                id="editedIsAdmin"
-                checked={editedIsAdmin}
-                onChange={(checked) => setEditedIsAdmin(checked)}
+  if (user.isAdmin) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.searchBar}>
+          <Search
+            placeholder="Search users..."
+            allowClear
+            onSearch={handleSearch}
+            style={{ marginBottom: 16, marginTop: 16 }}
+          />
+          <Button type="primary" onClick={handleCreateUserClick}>
+            Create User
+          </Button>
+        </div>
+        <div className={styles.customListContainer}>
+          <List
+            dataSource={filteredData}
+            pagination={{
+              position: 'bottom',
+              align: 'center',
+            }}
+            renderItem={(item) => (
+              <List.Item className={styles.listItem}>
+                <List.Item.Meta
+                  avatar={
+                    <Avatar src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${item.key}`} />
+                  }
+                  title={`${item.username}`}
+                  description={`Email: ${item.email}, isAdmin: ${item.isAdmin}`}
+                />
+                <Button type="primary" className={styles.editButton} onClick={() => handleEditClick(item.key)}>
+                  Edit
+                </Button>
+              </List.Item>
+            )}
+          />
+        </div>
+        {selectedUser && (
+          <Modal
+            title={`User information`}
+            visible={modalVisible}
+            onCancel={handleModalClose}
+            footer={[
+              <Button key="delete" type="primary" danger onClick={handleDeleteUser}>
+                Delete
+              </Button>,
+              <Button key="save" type="primary" onClick={handleSaveChanges}>
+                Save Changes
+              </Button>,
+            ]}
+          >
+            <div className={styles.modalField}>
+              <label htmlFor="editedUsername">Username:</label>
+              <Input
+                id="editedUsername"
+                value={editedUsername}
+                onChange={(e) => setEditedUsername(e.target.value)}
               />
             </div>
-          </div>
-        </Modal>
-      )}
-      {createUserModalVisible && (
-        <Modal
-          title={`Create User`}
-          visible={createUserModalVisible}
-          onCancel={handleCreateUserModalClose}
-          footer={[
-            <Button key="cancel" onClick={handleCreateUserModalClose}>
-              Cancel
-            </Button>,
-            <Button key="create" type="primary" onClick={handleCreateUser}>
-              Create
-            </Button>,
-          ]}
-        >
-          <div className={styles.modalField}>
-            <label htmlFor="editedUsername">Username:</label>
-            <Input
-              id="editedUsername"
-              value={editedUsername}
-              onChange={(e) => setEditedUsername(e.target.value)}
-            />
-          </div>
-          <div className={styles.modalField}>
-            <label htmlFor="editedEmail">Email:</label>
-            <Input
-              id="editedEmail"
-              value={editedEmail}
-              onChange={(e) => setEditedEmail(e.target.value)}
-            />
-          </div>
-          <div className={styles.modalField}>
-            <label htmlFor="createUserPassword">Password:</label>
-            <Input
-              id="createUserPassword"
-              type="password"
-              value={createUserPassword}
-              onChange={(e) => setCreateUserPassword(e.target.value)}
-            />
-          </div>
-          <div className={styles.switchContainer}>
-            <label htmlFor="editedIsAdmin">isAdmin:</label>
-            <div className={styles.switchField}>
-              <Switch
-                id="editedIsAdmin"
-                checked={editedIsAdmin}
-                onChange={(checked) => setEditedIsAdmin(checked)}
+            <div className={styles.modalField}>
+              <label htmlFor="editedEmail">Email:</label>
+              <Input
+                id="editedEmail"
+                value={editedEmail}
+                onChange={(e) => setEditedEmail(e.target.value)}
               />
             </div>
-          </div>
-        </Modal>
-      )}
+            <div className={styles.switchContainer}>
+              <label htmlFor="editedIsAdmin">isAdmin:</label>
+              <div className={styles.switchField}>
+                <Switch
+                  id="editedIsAdmin"
+                  checked={editedIsAdmin}
+                  onChange={(checked) => setEditedIsAdmin(checked)}
+                />
+              </div>
+            </div>
+          </Modal>
+        )}
+        {createUserModalVisible && (
+          <Modal
+            title={`Create User`}
+            visible={createUserModalVisible}
+            onCancel={handleCreateUserModalClose}
+            footer={[
+              <Button key="cancel" onClick={handleCreateUserModalClose}>
+                Cancel
+              </Button>,
+              <Button key="create" type="primary" onClick={handleCreateUser}>
+                Create
+              </Button>,
+            ]}
+          >
+            <div className={styles.modalField}>
+              <label htmlFor="editedUsername">Username:</label>
+              <Input
+                id="editedUsername"
+                value={editedUsername}
+                onChange={(e) => setEditedUsername(e.target.value)}
+              />
+            </div>
+            <div className={styles.modalField}>
+              <label htmlFor="editedEmail">Email:</label>
+              <Input
+                id="editedEmail"
+                value={editedEmail}
+                onChange={(e) => setEditedEmail(e.target.value)}
+              />
+            </div>
+            <div className={styles.modalField}>
+              <label htmlFor="createUserPassword">Password:</label>
+              <Input
+                id="createUserPassword"
+                type="password"
+                value={createUserPassword}
+                onChange={(e) => setCreateUserPassword(e.target.value)}
+              />
+            </div>
+            <div className={styles.switchContainer}>
+              <label htmlFor="editedIsAdmin">isAdmin:</label>
+              <div className={styles.switchField}>
+                <Switch
+                  id="editedIsAdmin"
+                  checked={editedIsAdmin}
+                  onChange={(checked) => setEditedIsAdmin(checked)}
+                />
+              </div>
+            </div>
+          </Modal>
+        )}
 
-    </div>
-  );
+      </div>
+    );
+  }
+  else{
+    return (<div>
+      <h1>This page is not allowed to intern</h1>
+    </div>);
+  }
+  
 };
 
 export default Admin;
