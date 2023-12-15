@@ -106,7 +106,7 @@ const handlePriceInputChange = (event) => {
 const handleSaveButton = () => { 
   fetch(`http://localhost:3000/products/updateMyProduct/${nameToSave}`, {
     method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name: productName, category: categoryId, price: price })
   });
   setRefreshProducts(!refreshProducts);
@@ -120,7 +120,7 @@ const handleSaveButton = () => {
             {openAddProductModal && 
               <AddNewProduct openAddProductModal={openAddProductModal} handleCloseButton={handleCloseButton} /> }
             {myProducts.map((data, i) => {
-              return <Product key={i} name={data.name} stock={data.stock} price={data.price} category={data.category[0].name} handleDeleteButton={handleDeleteButton} handleEditButton={handleEditButton} />
+              return <Product key={i} name={data.name} stock={data.stock} price={data.price} category={data.category[0].name} image={data.image} handleDeleteButton={handleDeleteButton} handleEditButton={handleEditButton} />
             })}
 
           <Modal open={openEditModal} onCancel={closeEditModal} footer={null} width={800} height={800}>
