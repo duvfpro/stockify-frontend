@@ -1,4 +1,9 @@
+.Navbar_headerBar__nAzn_{
+  background-color: #fff !important;
+}
+
 .headerBar {
+  background-color: #fff;
   color: #000;
   display: flex;
   flex-direction: row;
