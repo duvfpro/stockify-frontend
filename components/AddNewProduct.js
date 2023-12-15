@@ -102,20 +102,24 @@ function AddNewProduct(props) {
 
 
     return (
-        <Modal open={props.openAddProductModal} onCancel={props.handleCloseButton} footer={null} width={800} height={800}>
-            <div className={styles.title} > ADD NEW PRODUCT </div>
-                <div className={styles.mainContainer}>
-                    <input type="text" onChange={handleNameInputChange} value={productName} placeholder="Product name" required />
-                    <input type="number" onChange={handleStockInputChange} value={productStock} placeholder="Stock" required />
-                    <input type="number" onChange={handlePriceInputChange} value={productPrice} placeholder="Price" required />
-                    <input type="file" onChange={handleImageInputChange} accept="image/*" />
-                    <select onChange={handleSelectChange} >
-                        {category.map((data, index) => (
-                        <option key={index} value={data.name}> {data.name} </option>
-                        ))}
-                    </select>
-                    <button onClick={() => handleSubmitButton()} className={styles.websiteButton} > SUBMIT </button>
+        <Modal open={props.openAddProductModal} onCancel={props.handleCloseButton} footer={null} width={450} height={900}>
+            <div className={styles.allContainer} >
+                <div className={styles.title} > ADD NEW PRODUCT </div>
+                    <div className={styles.mainContainer}>
+                        <input className={styles.inputField} type="text" onChange={handleNameInputChange} value={productName} placeholder="Product name" required />
+                        <input className={styles.inputField} type="number" onChange={handleStockInputChange} value={productStock} placeholder="Stock" required />
+                        <input className={styles.inputField} type="number" onChange={handlePriceInputChange} value={productPrice} placeholder="Price" required />
+                        <select className={styles.inputField} onChange={handleSelectChange} >
+                            {category.map((data, index) => (
+                            <option key={index} value={data.name}> {data.name} </option>
+                            ))}
+                        </select>                        
+                        <input className={styles.imageField} type="file" onChange={handleImageInputChange} accept="image/*" />
+
+                        <button onClick={() => handleSubmitButton()} className={styles.websiteButton} > SUBMIT </button>
                 </div>
+            </div>
+
         </Modal>
     );
 

@@ -111,36 +111,40 @@ function Categories() {
 
 
         return (
-            <div>
-                <div key={data._id} className={styles.categoryContainer}>
-                    <h3 className={styles.categoryname}>Category: {data.name} </h3>
-                    <button className={styles.edit} onClick={handleEditButton}> EDIT </button>
-                    <button className={styles.delete} onClick={() => handleDeleteButton(data.name, data._id)}> DELETE </button>
-
-                    <Modal open={openEditModal} onCancel={closeEditModal} footer={null} width={800} height={800}>
-                        <div className={styles.title}> UPDATE {data.name} ({data._id}) </div>
-                        <div className={styles.mainContainer}>
-                            <input type="text" onChange={handleNameInputChange} value={categoryName} placeholder="New Category name" />
-                            <button onClick={() => handleSaveButton(data.name, data._id)}> SUBMIT </button>
+                <div>                
+                    <div key={data._id} >
+                        <div className={styles.categoryContainer}>
+                            <h3 className={styles.categoryname}> {data.name.toUpperCase()} </h3>
+                            <div className={styles.buttonsContainer} >
+                                <button className={styles.edit} onClick={handleEditButton}> EDIT </button>
+                                <button className={styles.delete} onClick={() => handleDeleteButton(data.name, data._id)}> DELETE </button>
+                            </div>
                         </div>
-                    </Modal>
-
+                        
+                        <Modal open={openEditModal} onCancel={closeEditModal} footer={null} width={800} height={800}>
+                            <div className={styles.title}> UPDATE {data.name} ({data._id}) </div>
+                            <div className={styles.mainContainer}>
+                                <input type="text" onChange={handleNameInputChange} value={categoryName} placeholder="New Category name" />
+                                <button onClick={() => handleSaveButton(data.name, data._id)}> SUBMIT </button>
+                            </div>
+                        </Modal>
+                    </div>
                 </div>
-            </div>
-
         );
     };
 
     return (
-        <div>
+        <div className={styles.allContainer} >
             <button className={styles.addButton} onClick={() => addNewCategory()}> ADD NEW CATEGORY </button>
-            {categoriesTab.map((data) => {
-                if (data.name === "NoAssign") {
-                    return null;
-                } else {
-                    return <CategoryItem key={data._id} data={data} />;
-                }
-            })}
+            <div classname={styles.main}>
+                {categoriesTab.map((data) => {
+                    if (data.name === "NoAssign") {
+                        return null;
+                    } else {
+                        return <CategoryItem key={data._id} data={data} />;
+                    }
+                })}
+        </div>
 
             <Modal open={openNewCatModal} onCancel={closeNewCatModal} footer={null} width={800} height={800}>
                 <div className={styles.title}> ADD NEW CATEGORY </div>
