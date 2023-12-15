@@ -11,6 +11,13 @@ function Home() {
   const router = useRouter();
   const [openAddStockModal, setOpenAddStockModal] = useState(false);
   const [openSaleModal, setSaleModal] = useState(false);
+  const [refresh,setRefresh] = useState(false)
+  
+  const refreshLastSale = () =>{
+    console.log("refreshLastSale called");
+    setRefresh(prevRefresh => !prevRefresh)
+  }
+
 
   useEffect(() => {
     if (!user.token) {
@@ -48,13 +55,15 @@ function Home() {
         </button>
       </div>
       <div className={styles.sale}>
-          <LastSales  />
+          <LastSales refresh={refresh}   />
       </div>
       
       {openAddStockModal && (
         <AddStock
           openAddStockModal={openAddStockModal}
           handleCloseButton={handleCloseButton}
+          refreshLastSale ={refreshLastSale}
+          refresh={refresh}
         />
       )}
       {openSaleModal && (
