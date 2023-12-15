@@ -1,3 +1,51 @@
 .productContainer {
-    border: 1px solid black;
+    display: flex;
+    justify-content: space-around;
+    border: 1px solid white;
+    width: 45%;
+    height: 8rem;
+    display: flex;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    border-radius: 1rem;
+    background-color: #323A57;
+}
+
+.nomProduit {
+    color: white;
+}
+
+.nameAndImageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.image {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 1rem;
+}
+
+.infoContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.stockAndPrice {
+    display: flex;
+    flex-direction: row;
+}
+
+.stock {
+    margin-right: 3rem;
+}
+
+
+.buttonsContainer {
+    display: flex;
+    flex-direction: column;
 }

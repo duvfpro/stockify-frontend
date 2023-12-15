@@ -2,7 +2,7 @@ import styles from '../styles/ProductsPage.module.css';
 import AddNewProduct from './AddNewProduct';
 import Product from './Product';
 import FilterCascader from './Tools/FilterCascader';
-import { Modal } from 'antd';
+import { Modal, Button } from 'antd';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
@@ -134,18 +134,23 @@ const handleSaveButton = () => {
   setOpenEditModal(false);
   };
 
+
     return (
       <div className={styles.main}>
-            <h1>ProductsPage</h1>
-
-            <FilterCascader/>
-            
-            <button className={styles.addProduct} onClick={() => handleAddProductButton() }> ADD NEW PRODUCT </button>
-            {openAddProductModal && 
-              <AddNewProduct openAddProductModal={openAddProductModal} handleCloseButton={handleCloseButton} /> }
+        <div className={styles.filterContainer} >
+          <FilterCascader />
+          <FilterCascader />
+          <FilterCascader />
+        </div>   
+        <Button type="primary" onClick={() => handleAddProductButton()} className={styles.addProductButton} > ADD NEW PRODUCT </Button>
+        <div className={styles.productsContainer}>
+          {openAddProductModal && 
+          <AddNewProduct openAddProductModal={openAddProductModal} handleCloseButton={handleCloseButton} /> }
             {myProducts.map((data, i) => {
-              return <Product key={i} name={data.name} stock={data.stock} price={data.price} category={data.category[0].name} image={data.image} handleDeleteButton={handleDeleteButton} handleEditButton={handleEditButton} />
+            return <Product key={i} name={data.name} stock={data.stock} price={data.price} category={data.category[0].name} image={data.image} handleDeleteButton={handleDeleteButton} handleEditButton={handleEditButton} />
             })}
+
+      </div>
 
           <Modal open={openEditModal} onCancel={closeEditModal} footer={null} width={800} height={800}>
               <div className={styles.title} > UPDATE PRODUCT </div>
