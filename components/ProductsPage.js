@@ -114,30 +114,29 @@ const handleSaveButton = () => {
   };
 
     return (
-        <div className={styles.main}>
+      <div className={styles.main}>
             <h1>ProductsPage</h1>
             <button className={styles.addProduct} onClick={() => handleAddProductButton() }> ADD NEW PRODUCT </button>
             {openAddProductModal && 
               <AddNewProduct openAddProductModal={openAddProductModal} handleCloseButton={handleCloseButton} /> }
             {myProducts.map((data, i) => {
-              // return <Product key={i} name={data.name} stock={data.stock} price={data.price} category={data.category[0].name} handleDeleteButton={handleDeleteButton} />
-              return <Product key={i} name={data.name} stock={data.stock} price={data.price} handleDeleteButton={handleDeleteButton} handleEditButton={handleEditButton} />
-              })}
+              return <Product key={i} name={data.name} stock={data.stock} price={data.price} category={data.category[0].name} handleDeleteButton={handleDeleteButton} handleEditButton={handleEditButton} />
+            })}
 
-    <Modal open={openEditModal} onCancel={closeEditModal} footer={null} width={800} height={800}>
-        <div className={styles.title} > UPDATE PRODUCT </div>
-        <div className={styles.mainContainer}>
-          <input type="text" onChange={handleNameInputChange} value={productName} placeholder="Product name" />
-          <select onChange={handleSelectChange} >
-            {category.map((data, index) => (
-            <option key={index} value={data.name}> {data.name} </option>
-            ))}
-          </select>
-          <input type="number" onChange={handlePriceInputChange} value={price} placeholder="Price" required />
-          <button onClick={() => handleSaveButton()} > SUBMIT </button>
-        </div>
-    </Modal>
-    </div>
+          <Modal open={openEditModal} onCancel={closeEditModal} footer={null} width={800} height={800}>
+              <div className={styles.title} > UPDATE PRODUCT </div>
+              <div className={styles.mainContainer}>
+                <input type="text" onChange={handleNameInputChange} value={productName} placeholder="Product name" />
+                <select onChange={handleSelectChange} >
+                  {category.map((data, index) => (
+                  <option key={index} value={data.name}> {data.name} </option>
+                  ))}
+                </select>
+                <input type="number" onChange={handlePriceInputChange} value={price} placeholder="Price" required />
+                <button onClick={() => handleSaveButton()} > SUBMIT </button>
+              </div>
+          </Modal>
+      </div>
 )
 };
 

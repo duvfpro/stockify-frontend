@@ -68,9 +68,10 @@ function AddNewProduct(props) {
 
     const handleImageInputChange = (e) => {
         const file = e.target.files[0];
-        console.log(e.target.file)
+        console.log(e)
         setProductImage(file);
     };
+    
 
     const handleSelectChange = (event) => { // Gère le choix de la catégorie et cherche son ID
         let catName = event.target.value;
