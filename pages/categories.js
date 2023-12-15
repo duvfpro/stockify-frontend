@@ -10,6 +10,6 @@ function MyCategories() {
       <Categories />
     </>
   );
-}
+} 
 
 export default MyCategories;
