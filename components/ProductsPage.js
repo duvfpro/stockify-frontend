@@ -66,7 +66,7 @@ const handleCloseButton = () => {
 const handleDeleteButton = (name) => {
   fetch(`http://localhost:3000/products/deleteProduct/${name}`, {
     method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json' },
   })
   .then(data => {
     setRefreshProducts(!refreshProducts);
