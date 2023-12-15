@@ -50,62 +50,64 @@ const Login = () => {
     };
 
     return (
-        <div className={styles.centeredContainer}>
-            <h1>Stockify</h1>
-            <Form
-                className={styles.loginForm}
-                name="basic"
-                labelCol={{
-                    span: 8,
-                }}
-                wrapperCol={{
-                    span: 16,
-                }}
-                initialValues={{
-                    remember: true,
-                }}
-                onFinish={handleSubmit}
-                onFinishFailed={handleSubmitFailed}
-                autoComplete="off"
-            >
-                <Form.Item
-                    className={styles.loginFormFormItem}
-                    label="Username"
-                    name="username"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your username!',
-                        },
-                    ]}
-                >
-                    <Input />
-                </Form.Item>
-
-                <Form.Item
-                    className={styles.loginFormFormItem}
-                    label="Password"
-                    name="password"
-                    rules={[
-                        {
-                            required: true,
-                            message: 'Please input your password!',
-                        },
-                    ]}
-                >
-                    <Input.Password />
-                </Form.Item>
-                <Form.Item
-                    className={styles.loginFormButton}
-                    wrapperCol={{
-                        span: 24,
+        <div className={styles.outerContainer}>
+            <h1 className={styles.title}>Stockify</h1>
+            <div className={styles.centeredContainer}>
+                <Form
+                    className={styles.loginForm}
+                    name="basic"
+                    labelCol={{
+                        span: 8,
                     }}
+                    wrapperCol={{
+                        span: 16,
+                    }}
+                    initialValues={{
+                        remember: true,
+                    }}
+                    onFinish={handleSubmit}
+                    onFinishFailed={handleSubmitFailed}
+                    autoComplete="off"
                 >
-                    <Button type="primary" htmlType="submit">
-                        Sign In
-                    </Button>
-                </Form.Item>
-            </Form>
+                    <Form.Item
+                        className={styles.loginFormFormItem}
+                        label="Username"
+                        name="username"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your username!',
+                            },
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        className={styles.loginFormFormItem}
+                        label="Password"
+                        name="password"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your password!',
+                            },
+                        ]}
+                    >
+                        <Input.Password />
+                    </Form.Item>
+                    <Form.Item
+                        className={styles.loginFormButton}
+                        wrapperCol={{
+                            span: 24,
+                        }}
+                    >
+                        <Button type="primary" htmlType="submit">
+                            Sign In
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </div>
         </div>
     );
 };
