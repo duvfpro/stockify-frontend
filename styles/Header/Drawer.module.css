@@ -18,3 +18,12 @@
   bottom: 10px;
   cursor: pointer;
 }
+
+
+.ant-drawer-content-wrapper{
+  background-color: #000 !important;
+}
+
+.Drawer_drawer-link__BiCZP{
+  color: #000 !important;
+}
