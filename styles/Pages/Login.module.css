@@ -1,5 +1,3 @@
-/* Test.module.css */
-
 .centeredContainer {
     display: flex;
     flex-direction: column;
@@ -12,7 +10,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 400px; /* Ajustez la largeur du formulaire selon vos préférences */
+    max-width: 400px;
     margin-top: 16px;
   }
   
@@ -30,6 +28,6 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center; /* Centrer verticalement le contenu du bouton */
+    align-items: center;
   }
   
