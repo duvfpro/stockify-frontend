@@ -7,40 +7,32 @@ import AddStock from "./AddStock";
 import Sale from "./Sale";
 import { Table } from "antd";
 
+import stateService from "./stateService";
+
 function Home() {
   const user = useSelector((state) => state.user.value);
   const router = useRouter();
   const [openAddStockModal, setOpenAddStockModal] = useState(false);
   const [openSaleModal, setSaleModal] = useState(false);
-  const [refresh,setRefresh] = useState(false)
+  const [refresh, setRefresh] = useState(false);
   const [displayProducts, setDisplayProducts] = useState([]);
 
-
-  const refreshLastSale = () =>{
+  const refreshLastSale = () => {
     console.log("refreshLastSale called");
-    setRefresh(prevRefresh => !prevRefresh)
-  }
-
-
-  useEffect(() => {
-    if (!user.token) {
-      router.push("/");
-    }
-  }, [user.token, router]);
-
-  
-  // const user = useSelector((state) => state.user.value);
-  // const router = useRouter();
- 
-
-  
+    setRefresh((prevRefresh) => !prevRefresh);
+  };
 
   useEffect(() => {
     if (!user.token) {
       router.push("/");
     }
   }, [user.token, router]);
- 
+
+  useEffect(() => {
+    if (!user.token) {
+      router.push("/");
+    }
+  }, [user.token, router]);
 
   const columns = [
     // Schema du tableau
@@ -81,9 +73,10 @@ function Home() {
     },
   ];
 
+  stateService.setColumns(columns);
   useEffect(() => {
     // Affiche la liste des produits vendus aujourd'hui
-    console.log("LastSales useEffect triggered");
+
     fetch("http://localhost:3000/products/allProducts")
       .then((response) => response.json())
       .then((data) => {
@@ -103,21 +96,27 @@ function Home() {
           return soldDates.includes(todayDateString);
         });
 
-        let formattedData = filteredProducts.map((product,index) => {
-
+        let formattedData = filteredProducts.map((product, index) => {
+          console.log("checkin", product);
           const history = [
-            product.soldAt.map((sale) => ({
-              type: "vendu le",
-              quantity: sale.quantity,
-              date: new Date(sale.date).toLocaleString(),
-            })),
-            product.restockAt.map((restock) => ({
-              type: "restock le",
-              quantity: restock.quantity,
-              date: new Date(restock.date).toLocaleString(),
-            })),
+            product.soldAt
+              ? product.soldAt.map((sale) => ({
+                  type: "vendu ",
+                  quantity: sale.quantity,
+                  date: new Date(sale.date).toLocaleString(),
+                }))
+              : [],
+            product.restockAt
+              ? product.restockAt.map((restock) => ({
+                  type: "restock ",
+                  quantity: restock.quantity,
+                  date: new Date(restock.date).toLocaleString(),
+                }))
+              : [],
           ];
-  
+             
+          // console.log("Formatted Data for Product", product.name, ":", history);
+
           return {
             key: index,
             product: product.name,
@@ -131,20 +130,22 @@ function Home() {
             sales: product.soldAt.length,
             history: history,
           };
-        
         });
-        
         // console.log(formattedData);
         setDisplayProducts(formattedData);
+        stateService.setDisplayProducts(formattedData);
+        console.log(displayProducts);
       });
   }, [refresh]);
-  const tableStyle = {
-   
-    backgroundColor: '#213F62',
-    border: '2px solid #000',
-    
-  };
 
+  useEffect(() => {
+    console.log("Display Products:", displayProducts);
+  }, [displayProducts]);
+
+  const tableStyle = {
+    backgroundColor: "#213F62",
+    border: "2px solid #000",
+  };
 
   const handleAddStockButtonClick = () => {
     setOpenAddStockModal(true);
@@ -158,7 +159,6 @@ function Home() {
     setOpenAddStockModal(false);
     setSaleModal(false);
   };
-
 
   return (
     <main className={styles.main}>
@@ -176,37 +176,43 @@ function Home() {
         </button>
       </div>
       <div className={styles.sale}>
-      <div className={styles.sales}>
-      <div className={styles.tableContainer}>
-        <Table
-          className={styles.Table}
-          dataSource={displayProducts}
-          columns={columns}
-          pagination={{ pageSize: 10 }}
-          size="large"
-          style={tableStyle}
-          expandable={{
-            expandedRowRender: (record) => (
-              <ul>
-                {record.history.map((operation, index) => (
-                  <li key={index}>
-                    {`${operation.type} ${operation.quantity} on ${operation.date}`}
-                  </li>
-                ))}
-              </ul>
-            ),
-            rowExpandable: (record) => record.history.length > 0,
-          }}
-        />
+        <div className={styles.sales}>
+          <div className={styles.tableContainer}>
+            <Table
+              className={styles.Table}
+              dataSource={displayProducts}
+              columns={columns}
+              pagination={{ pageSize: 10 }}
+              size="large"
+              style={tableStyle}
+              expandable={{
+                expandedRowRender: (record) => (
+                  <ul>
+                  {record.history.map((operationGroup, groupIndex) => (
+                    <li key={groupIndex}>
+                      {operationGroup.map((operation, operationIndex) => (
+                        <p key={operationIndex}>
+                          {operation.type && operation.quantity && operation.date
+                            ? `${operation.type} ${operation.quantity} le ${operation.date}`
+                            : "Invalid operation data"}
+                        </p>
+                      ))}
+                    </li>
+                  ))}
+                </ul>
+                ),
+                rowExpandable: (record) => record.history.length > 0,
+              }}
+            />
+          </div>
+        </div>
       </div>
-    </div>
-      </div>
-      
+
       {openAddStockModal && (
         <AddStock
           openAddStockModal={openAddStockModal}
           handleCloseButton={handleCloseButton}
-          refreshLastSale ={refreshLastSale}
+          refreshLastSale={refreshLastSale}
           refresh={refresh}
         />
       )}
@@ -214,6 +220,7 @@ function Home() {
         <Sale
           openSaleModal={openSaleModal}
           handleCloseButton={handleCloseButton}
+          refreshLastSale={refreshLastSale}
         />
       )}
     </main>
