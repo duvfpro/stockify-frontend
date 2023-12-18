@@ -120,7 +120,7 @@ function StatsPage() {
           filter,
           timeFilter
         );
-        setSecondChartData({ ...transformedDataStock });cd back
+        setSecondChartData({ ...transformedDataStock });
 
         // Transform data for restock chart
         const transformedDataRestock = transformDataRestock(
