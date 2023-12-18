@@ -17,7 +17,6 @@ Chart.register(CategoryScale);
 import Chart from "chart.js/auto";
 // Importe l'adaptateur date-fns pour Chart.js pour la gestion des dates.
 import "chartjs-adapter-date-fns"; 
-
 // Importe le composant Bar de react-chartjs-2 pour la création de graphiques à barres.
 import { Bar } from "react-chartjs-2"; 
 // Importe le composant Line de react-chartjs-2 pour la création de graphiques linéaires.
@@ -57,11 +56,6 @@ function StatsPage() {
   // RENDERING BY TIME
   // State for date, default is current date
   const [date, setDate] = useState(new Date());
-
-  // // Function to handle changes in date
-  // const handleDateChange = (value) => {
-  //   setDate(value);
-  // };
 
   // FETCHING ALL DATA
   // State for category filter, default is 'all'
@@ -131,9 +125,10 @@ function StatsPage() {
         const transformedDataStock = transformDataStock(
           filteredProducts,
           filter,
-          timeFilter
+          timeFilter,
         );
         setSecondChartData({ ...transformedDataStock });
+      
 
         // Transform data for restock chart
         const transformedDataRestock = transformDataRestock(
@@ -190,9 +185,6 @@ function StatsPage() {
     } else {
       return <p>No data available for the chart.</p>;
     }
-
-    // Render the bar chart
-    return <Bar data={chartData} />;
   }
 
   // If data is not loaded, show a loading indicator
@@ -208,7 +200,7 @@ function StatsPage() {
       return <p>Pas de données disponibles pour le graphique.</p>;
     }
     //return <Line data={chartData} />;
-  }
+  } 
 
   return (
     <div className={styles.mainContainer}>
@@ -238,12 +230,6 @@ function StatsPage() {
         </div>
       </div>
       <div className={styles.statsContainer}>
-        <div className={styles.firstChart}>
-          <h2>Statistiques des Ventes</h2>
-          {!isLoading && (
-            <BarChart className={styles.firstChartCl} chartData={chartData} />
-          )}
-        </div>
         <div className={styles.secondChart}>
           <h2>Statistiques des Stocks en cours</h2>
           {!isLoading && (
@@ -262,9 +248,17 @@ function StatsPage() {
             />
           )}
         </div>
+        <div className={styles.firstChart}>
+          <h2>Statistiques des Ventes</h2>
+          {!isLoading && (
+            <BarChart className={styles.firstChartCl} chartData={chartData} />
+          )}
+        </div>
       </div>
       <div className={styles.chartByP}>
-        <h2>Statistiques par Produits</h2>
+        <div className={styles.chartByPTitle}>
+          <h2>Statistiques par Produits</h2>
+        </div>
         <div>
           <div className={styles.filters}>
             <div className={styles.filterByTemp}>

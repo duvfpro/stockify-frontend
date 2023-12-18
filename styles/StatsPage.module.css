@@ -103,9 +103,15 @@
   margin-bottom: 60px;
   display: flex;
   flex-direction: column;
+  
   justify-content: space-between;
   height: auto;
   width: 60%;
+}
+
+.chartByPTitle{
+
+  text-align: center;
 }
 
 .filters{
