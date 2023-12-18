@@ -20,15 +20,15 @@ function Product (props) {
         <div className={styles.infoContainer} >
             <div className={styles.stockAndPrice} >
                 <p className={styles.stock}>{props.stock} products in stock</p>
-                <p className={styles.price}>Price: ${props.price}</p>
+                <p className={styles.text}>Price: ${props.price}</p>
             </div>
            
-            <p className={styles.category}>Category: {props.category}</p>
+            <p className={styles.text}>Category: {props.category}</p>
         </div>
 
         <div className={styles.buttonsContainer} >
-            <button className={styles.edit} onClick={() => handleEditButton()} > EDIT </button>
-            <button className={styles.delete} onClick={() => handleDeleteButton()} > DELETE </button>           
+            <button className={styles.button} onClick={() => handleEditButton()} > EDIT </button>
+            <button className={styles.button} onClick={() => handleDeleteButton()} > DELETE </button>           
         </div>
 
     </div>

@@ -116,8 +116,8 @@ function Categories() {
                         <div className={styles.categoryContainer}>
                             <h3 className={styles.categoryname}> {data.name.toUpperCase()} </h3>
                             <div className={styles.buttonsContainer} >
-                                <button className={styles.edit} onClick={handleEditButton}> EDIT </button>
-                                <button className={styles.delete} onClick={() => handleDeleteButton(data.name, data._id)}> DELETE </button>
+                                <button className={styles.button} onClick={handleEditButton}> EDIT </button>
+                                <button className={styles.button} onClick={() => handleDeleteButton(data.name, data._id)}> DELETE </button>
                             </div>
                         </div>
                         
@@ -135,7 +135,7 @@ function Categories() {
 
     return (
         <div className={styles.allContainer} >
-            <button className={styles.addButton} onClick={() => addNewCategory()}> ADD NEW CATEGORY </button>
+            <button className={styles.button} onClick={() => addNewCategory()}> ADD NEW CATEGORY </button>
             <div classname={styles.main}>
                 {categoriesTab.map((data) => {
                     if (data.name === "NoAssign") {
@@ -147,11 +147,14 @@ function Categories() {
         </div>
 
             <Modal open={openNewCatModal} onCancel={closeNewCatModal} footer={null} width={800} height={800}>
-                <div className={styles.title}> ADD NEW CATEGORY </div>
-                <div className={styles.mainContainer}>
+                <div className={styles.modalContainer}>
+                    <div className={styles.title}> ADD NEW CATEGORY </div>
+                    <div className={styles.mainContainer}>
                     <input type="text" onChange={handleNewNameInputChange} value={newCategoryName} placeholder="Category name" />
                     <button onClick={() => handleNewSaveButton()}> SUBMIT </button>
                 </div>
+                </div>
+                
             </Modal>
 
         </div>
