@@ -41,7 +41,7 @@ function ProductsPage(props) {
       .then(data => {
         setMyProducts(data.allProducts);
       });
-    }, 500);
+    }, 2000);
   }, [refreshProducts]);
 
   useEffect(() => { // fetch toutes les catégories pour le menu déroulant de la modal
