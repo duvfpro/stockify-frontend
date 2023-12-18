@@ -37,7 +37,8 @@ function AddStock(props) {
         .then(response => response.json())
         .then(data => {
             props.handleCloseButton();
-            window.location.reload();
+            props.refreshLastSale()
+            // window.location.reload()
         })
     };
 
