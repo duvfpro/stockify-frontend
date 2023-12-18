@@ -1,5 +1,6 @@
 .productContainer {
     display: flex;
+    flex-direction: column;
     justify-content: space-around;
     border: 1px solid white;
     width: 45%;
