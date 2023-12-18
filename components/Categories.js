@@ -2,14 +2,12 @@ import styles from '../styles/Categories.module.css';
 import React, { useState, useEffect } from 'react';
 import { Modal } from 'antd';
 
-
 function Categories() {
 
     const [categoriesTab, setCategoriesTab] = useState([]);
     const [refreshProducts, setRefreshProducts] = useState([]);
     const [openNewCatModal, setOpenNewCatModal] = useState(false);
     const [newCategoryName, setNewCategoryName] = useState('');
-
 
     useEffect(() => {
         fetch('http://localhost:3000/categories/allCategories')
@@ -45,8 +43,6 @@ function Categories() {
             closeNewCatModal();
         })
     };
-
-
 
     const CategoryItem = ({ data }) => { // Thank you chat GPT
         const [openEditModal, setOpenEditModal] = useState(false);
@@ -111,45 +107,44 @@ function Categories() {
 
 
         return (
-            <div>
-                <div key={data._id} className={styles.categoryContainer}>
-                    <h3 className={styles.categoryname}>Category: {data.name} </h3>
-                    <button className={styles.edit} onClick={handleEditButton}> EDIT </button>
-                    <button className={styles.delete} onClick={() => handleDeleteButton(data.name, data._id)}> DELETE </button>
+            <div key={data._id} className={styles.categoryContainer}>
+                <h3 className={styles.categoryname}>Category: {data.name} </h3>
+                <button className={styles.edit} onClick={handleEditButton}> EDIT </button>
+                <button className={styles.deleteBtn} onClick={() => handleDeleteButton(data.name, data._id)}> DELETE </button>
 
-                    <Modal open={openEditModal} onCancel={closeEditModal} footer={null} width={800} height={800}>
-                        <div className={styles.title}> UPDATE {data.name} ({data._id}) </div>
-                        <div className={styles.mainContainer}>
-                            <input type="text" onChange={handleNameInputChange} value={categoryName} placeholder="New Category name" />
-                            <button onClick={() => handleSaveButton(data.name, data._id)}> SUBMIT </button>
-                        </div>
-                    </Modal>
-
-                </div>
+                <Modal open={openEditModal} onCancel={closeEditModal} footer={null} width={800} height={800}>
+                    <div className={styles.titleEditMod}> UPDATE {data.name} ({data._id}) </div>
+                    <div className={styles.mainEditModContainer}>
+                        <input type="text" onChange={handleNameInputChange} value={categoryName} placeholder="New Category name" />
+                        <button onClick={() => handleSaveButton(data.name, data._id)}> SUBMIT </button>
+                    </div>
+                </Modal>
             </div>
-
         );
     };
 
     return (
-        <div>
-            <button className={styles.addButton} onClick={() => addNewCategory()}> ADD NEW CATEGORY </button>
-            {categoriesTab.map((data) => {
-                if (data.name === "NoAssign") {
-                    return null;
-                } else {
-                    return <CategoryItem key={data._id} data={data} />;
-                }
-            })}
-
-            <Modal open={openNewCatModal} onCancel={closeNewCatModal} footer={null} width={800} height={800}>
-                <div className={styles.title}> ADD NEW CATEGORY </div>
-                <div className={styles.mainContainer}>
-                    <input type="text" onChange={handleNewNameInputChange} value={newCategoryName} placeholder="Category name" />
-                    <button onClick={() => handleNewSaveButton()}> SUBMIT </button>
-                </div>
-            </Modal>
-
+        <div className={styles.mainCatContainer}>
+            <div className={styles.title}>
+                <button className={styles.addButton} onClick={() => addNewCategory()}> ADD NEW CATEGORY </button>
+            </div>
+            <div className={styles.cardMapContainer}>
+                {categoriesTab.map((data) => {
+                    if (data.name === "NoAssign") {
+                        return null;
+                    } else {
+                        return <CategoryItem key={data._id} data={data} />;
+                    }
+                })}
+                
+                <Modal open={openNewCatModal} onCancel={closeNewCatModal} footer={null} width={800} height={800}>
+                    <div className={styles.addBtnCat}> ADD NEW CATEGORY </div>
+                    <div className={styles.mainNewCatContainer}>
+                        <input type="text" className={styles.inputNewCat} onChange={handleNewNameInputChange} value={newCategoryName} placeholder="Category name" />
+                        <button onClick={() => handleNewSaveButton()}> SUBMIT </button>
+                    </div>
+                </Modal>
+            </div>
         </div>
     );
 }

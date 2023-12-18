@@ -1,0 +1,57 @@
+.mainCatContainer{
+    background-color: #171821;
+    display: flex;
+    flex-direction: column;
+    
+    align-items: center;
+    justify-content: center;
+}
+
+.cardMapContainer{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.categoryContainer{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    width: 300px;
+    background-color: #323A57;
+    padding: 20px;
+    margin: 30px;
+    border-radius: 15px;
+}
+
+.mainNewCatContainer{
+    display: flex;
+    flex-direction:column;
+}
+
+.inputNewCat{
+    margin: 10px;
+    padding: auto;
+    width: 97%;
+}
+
+.addBtnCat{
+    margin: 20px;
+}
+
+.deleteBtn{
+    background-color: red  ;
+}
+
+.mainEditModContainer{
+    display: flex;
+    flex-direction:column;
+    justify-content: flex-end;
+    height: 130px;
+}
+
+.mainEditModContainer>input{
+    margin: 10px;
+    padding: auto;  
+    width: 97%;
+}
