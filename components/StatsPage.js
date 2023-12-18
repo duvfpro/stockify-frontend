@@ -39,7 +39,7 @@ function StatsPage() {
 
   const handleTimeSelectChange = (event) => {
     setTimeFilter(event.target.value);
-  };
+  };  
 
   /////////////////////////////////////////
   //          RENDERING BY TIME          //
@@ -51,158 +51,284 @@ function StatsPage() {
     setDate(value);
   };
   
-  /////////////////////////////////////////
-  //     FETCHING ALL CATÉGORIES         //
-  /////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //     FETCHING ALL CATÉGORIES         /////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   const [category, setCategory] = useState([]);
-  const [categoryId, setCategoryId] = useState('');
+  const [categoryId, setCategoryId] = useState('all'); // Set initial categoryId to 'all'
   const [filter, setFilter] = useState('categories'); // Ajout d'un état pour le filtre
 
-useEffect(() => { 
-  fetch('http://localhost:3000/categories/allCategories')
-    .then(response => response.json())
-    .then(data => {
-      setCategory(data.allCategories);
-      setCategoryId('all');
+  const [dataLoaded, setDataLoaded] = useState(false);
 
-      // Une fois que nous avons l'ID de la catégorie, nous pouvons obtenir tous les produits
-      fetch("http://localhost:3000/products/allProducts")
-        .then((response) => response.json())
-        .then((data) => {
-          const transformedData = transformData(data.allProducts);
-          setChartData(transformedData);
-          setIsLoading(false); // Les données sont chargées
-        })
-        .catch((error) => {
-          console.error(error);
-          setIsLoading(false); // Une erreur s'est produite
-        });
-    });
-}, [filter, categoryId]); // Ajoutez filter et categoryId comme dépendances
+  const [chartData, setChartData] = useState([]);
+  const [secondChartData, setSecondChartData] = useState([]); // Nouvel état pour le graphique de stock
+  const [restockChartData, setRestockChartData] = useState([]); // Nouvel état pour le graphique de réapprovisionnement
+  const [isLoading, setIsLoading] = useState(true);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const responseCategories = await fetch('http://localhost:3000/categories/allCategories');
+        const dataCategories = await responseCategories.json();
+        setCategory(dataCategories.allCategories);
+  
+        const responseProducts = await fetch("http://localhost:3000/products/allProducts");
+        const dataProducts = await responseProducts.json();
+  
+        let filteredProducts;
+        if (categoryId === 'all') {
+          filteredProducts = dataProducts.allProducts;
+        } else {
+          filteredProducts = dataProducts.allProducts.filter(product =>
+            product.category.some(category => category._id === categoryId)
+          );
+        }
+        const transformedDataSell = transformDataSell(filteredProducts);
+        setChartData({...transformedDataSell});
 
+        const transformedDataStock = transformDataStock(filteredProducts);
+        setSecondChartData({...transformedDataStock});
 
-const handleSelectChange = (event) => { 
-  let catName = event.target.value;
-  let id;
-  if (catName === 'all') {
-    setCategoryId('all');
-    fetch("http://localhost:3000/products/allProducts")
-      .then((response) => response.json())
-      .then((data) => {
-        const transformedData = transformData(data.allProducts);
-        setChartData(transformedData);
-        setIsLoading(false); // Les données sont chargées
-      })
-      .catch((error) => {
+        const transformedDataRestock = transformDataRestock(filteredProducts);
+        setRestockChartData({...transformedDataRestock});
+  
+        setIsLoading(false);
+        setDataLoaded(true); // Les données sont chargées
+      } catch (error) {
         console.error(error);
-        setIsLoading(false); // Une erreur s'est produite
-      });
-  } else {
-    id = category.find(element => element.name === catName);
-    setCategoryId(id._id);
-    fetch(`http://localhost:3000/products/category/${id._id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        const transformedData = transformData(data.allProducts);
-        setChartData(transformedData);
-        setIsLoading(false); // Les données sont chargées
-      })
-      .catch((error) => {
-        console.error(error);
-        setIsLoading(false); // Une erreur s'est produite
-      });
-  }
-};
+        setIsLoading(false);
+        setDataLoaded(true); // Une erreur s'est produite
+      }
+    };
+  
+    fetchData();
+  }, [filter, categoryId, timeFilter]); // Ajoutez categoryId à la liste des dépendances
+
 
 
 
   /////////////////////////////////////////
   //     FETCHING ALL SELLS PRODUCTS     //
   /////////////////////////////////////////
-
-  const [chartData, setChartData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   
-
-  function transformData(products) {
-    if (!Array.isArray(products)) {
+  function transformDataSell(products) {
+    if (!products || products.length === 0) {
       return {
         labels: [],
         datasets: [],
       };
     }
   
-    if (filter === 'categories') {
-      let filteredProducts;
-      if (categoryId === 'all') {
-        // Si l'utilisateur a sélectionné "Toutes les catégories", incluez tous les produits
-        filteredProducts = products;
-      } else {
-        // Sinon, filtrez les produits pour n'inclure que ceux de la catégorie sélectionnée
-        filteredProducts = products.filter(product =>
-          product.category.some(category => category._id === categoryId)
-        );
-      }
+    let salesByCategoryAndDate = {};
   
-      // Créez un objet pour stocker le total vendu par catégorie
-      const totalsByCategory = {};
-  
-      // Parcourez chaque produit
-      for (const product of filteredProducts) {
-        // Parcourez chaque catégorie du produit
-        for (const category of product.category) {
-          // Si la catégorie n'est pas encore dans l'objet, ajoutez-la
-          if (!totalsByCategory[category.name]) {
-            totalsByCategory[category.name] = 0;
+    for (const product of products) {
+      const categoriesOrProducts = filter === 'categories' ? product.category : [product];
+      for (const categoryOrProduct of categoriesOrProducts) {
+        for (const sale of product.soldAt) {
+          const date = new Date(sale.date);
+          let key;
+          switch (timeFilter) {
+            case 'day':
+              key = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+              break;
+            case 'week':
+              // Utilisez la date du premier jour de la semaine
+              const firstDayOfWeek = date.getDate() - date.getDay();
+              const weekStart = new Date(date.setDate(firstDayOfWeek));
+              key = `${weekStart.getFullYear()}-W${Math.floor(weekStart.getDate() / 7) + 1}`;
+              break;
+            case 'month':
+              key = `${date.getFullYear()}-${date.getMonth() + 1}`;
+              break;
+            default:
+              key = date.toISOString();
           }
   
-          // Ajoutez la quantité vendue à la catégorie
-          for (const sale of product.soldAt) {
-            totalsByCategory[category.name] += sale.quantity;
+          const name = filter === 'categories' ? categoryOrProduct.name : categoryOrProduct.name;
+          if (!salesByCategoryAndDate[name]) {
+            salesByCategoryAndDate[name] = {};
           }
+  
+          if (!salesByCategoryAndDate[name][key]) {
+            salesByCategoryAndDate[name][key] = 0;
+          }
+  
+          salesByCategoryAndDate[name][key] += sale.quantity;
         }
       }
-  
-      // Transformez l'objet en deux tableaux pour Chart.js
-      const labels = Object.keys(totalsByCategory);
-      const data = Object.values(totalsByCategory);
-  
-      return {
-        labels: labels,
-        datasets: [
-          {
-            label: "Produits vendus",
-            data: data,
-          },
-        ],
-      };
-    } else {
-      // Logique pour afficher les produits vendus
-      return {
-        labels: products.map((product) => product.name),
-        datasets: [
-          {
-            label: "Produits vendus",
-            data: products.map((product) =>
-              product.soldAt?.length > 0
-                ? product.soldAt.reduce((total, sale) => total + sale.quantity, 0)
-                : 0
-            ),
-          },
-        ],
-      };
     }
-  }
   
+    // Get all unique dates
+    const allDates = [...new Set([].concat(...Object.values(salesByCategoryAndDate).map(Object.keys)))].sort();
   
-  function BarChart({ chartData }) {
-    return <Bar data={chartData} />;
+    const datasets = Object.entries(salesByCategoryAndDate).map(([categoryOrProductName, sales]) => ({
+      label: categoryOrProductName,
+      data: allDates.map(date => sales[date] || 0),
+    }));
+  
+    return {
+      labels: allDates,
+      datasets: datasets,
+    };
   }
 
-  /////////////////////////////////////////
-  //     FETCHING ALL SELLS PRODUCTS     //
-  /////////////////////////////////////////
+  function transformDataStock(products) {
+    if (!products || products.length === 0) {
+      return {
+        labels: [],
+        datasets: [],
+      };
+    }
+  
+    let salesByCategoryAndDate = {};
+  
+    for (const product of products) {
+      const categoriesOrProducts = filter === 'categories' ? product.category : [product];
+      for (const categoryOrProduct of categoriesOrProducts) {
+        for (const sale of product.soldAt) {
+          const date = new Date(sale.date);
+          let key;
+          switch (timeFilter) {
+            case 'day':
+              key = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+              break;
+            case 'week':
+              // Utilisez la date du premier jour de la semaine
+              const firstDayOfWeek = date.getDate() - date.getDay();
+              const weekStart = new Date(date.setDate(firstDayOfWeek));
+              key = `${weekStart.getFullYear()}-W${Math.floor(weekStart.getDate() / 7) + 1}`;
+              break;
+            case 'month':
+              key = `${date.getFullYear()}-${date.getMonth() + 1}`;
+              break;
+            default:
+              key = date.toISOString();
+          }
+  
+          const name = filter === 'categories' ? categoryOrProduct.name : categoryOrProduct.name;
+          if (!salesByCategoryAndDate[name]) {
+            salesByCategoryAndDate[name] = {};
+          }
+  
+          if (!salesByCategoryAndDate[name][key]) {
+            salesByCategoryAndDate[name][key] = 0;
+          }
+  
+          salesByCategoryAndDate[name][key] += sale.quantity;
+        }
+        // Ajoutez le stock du produit à la dernière date de vente
+        if (product.soldAt.length > 0) {
+          const lastSaleDate = new Date(product.soldAt[product.soldAt.length - 1].date);
+          let lastKey;
+          switch (timeFilter) {
+            case 'day':
+              lastKey = `${lastSaleDate.getFullYear()}-${lastSaleDate.getMonth() + 1}-${lastSaleDate.getDate()}`;
+              break;
+            case 'week':
+              const firstDayOfWeek = lastSaleDate.getDate() - lastSaleDate.getDay();
+              const weekStart = new Date(lastSaleDate.setDate(firstDayOfWeek));
+              lastKey = `${weekStart.getFullYear()}-W${Math.floor(weekStart.getDate() / 7) + 1}`;
+              break;
+            case 'month':
+              lastKey = `${lastSaleDate.getFullYear()}-${lastSaleDate.getMonth() + 1}`;
+              break;
+            default:
+              lastKey = lastSaleDate.toISOString();
+          }
+          salesByCategoryAndDate[categoryOrProduct.name][lastKey] += product.stock;
+        }
+      }
+    }
+  
+    // Get all unique dates
+    const allDates = [...new Set([].concat(...Object.values(salesByCategoryAndDate).map(Object.keys)))].sort();
+  
+    const datasets = Object.entries(salesByCategoryAndDate).map(([categoryOrProductName, sales]) => ({
+      label: categoryOrProductName,
+      data: allDates.map(date => sales[date] || 0),
+    }));
+  
+    return {
+      labels: allDates,
+      datasets: datasets,
+    };
+  }
+
+
+  function transformDataRestock(products) {
+    if (!products || products.length === 0) {
+      return {
+        labels: [],
+        datasets: [],
+      };
+    }
+  
+    let restocksByCategoryAndDate = {};
+  
+    for (const product of products) {
+      const categoriesOrProducts = filter === 'categories' ? product.category : [product];
+      for (const categoryOrProduct of categoriesOrProducts) {
+        for (const restock of product.restockAt) {
+          const date = new Date(restock.date);
+          let key;
+          switch (timeFilter) {
+            case 'day':
+              key = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+              break;
+            case 'week':
+              const firstDayOfWeek = date.getDate() - date.getDay();
+              const weekStart = new Date(date.setDate(firstDayOfWeek));
+              key = `${weekStart.getFullYear()}-W${Math.floor(weekStart.getDate() / 7) + 1}`;
+              break;
+            case 'month':
+              key = `${date.getFullYear()}-${date.getMonth() + 1}`;
+              break;
+            default:
+              key = date.toISOString();
+          }
+  
+          const name = filter === 'categories' ? categoryOrProduct.name : categoryOrProduct.name;
+          if (!restocksByCategoryAndDate[name]) {
+            restocksByCategoryAndDate[name] = {};
+          }
+  
+          if (!restocksByCategoryAndDate[name][key]) {
+            restocksByCategoryAndDate[name][key] = 0;
+          }
+  
+          restocksByCategoryAndDate[name][key] += restock.quantity;
+        }
+      }
+    }
+  
+    const allDates = [...new Set([].concat(...Object.values(restocksByCategoryAndDate).map(Object.keys)))].sort();
+  
+    const datasets = Object.entries(restocksByCategoryAndDate).map(([categoryOrProductName, restocks]) => ({
+      label: categoryOrProductName,
+      data: allDates.map(date => restocks[date] || 0),
+    }));
+  
+    return {
+      labels: allDates,
+      datasets: datasets,
+    };
+  }
+
+
+ 
+  function BarChart({ chartData }) {
+
+    if (chartData.labels.length === 0) {
+      return <p>Aucun produit trouvé pour cette catégorie.</p>;
+    }
+  
+    return <Bar data={chartData} />;
+  }
+  
+  if (!dataLoaded) {
+    return <div>Loading...</div>; // Vous pouvez rendre un spinner de chargement ou un autre indicateur de chargement ici
+  }
 
   return (
     <div className={styles.mainContainer}>
@@ -229,32 +355,25 @@ const handleSelectChange = (event) => {
           </div>
         </div>
         <div className={styles.renderFilterArea}>
-          <div className={styles.renderByTemp}>
+          {/* <div className={styles.renderByTemp}>
             {timeFilter === 'day' && <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridDay" />}
             {timeFilter === 'week' && <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridWeek" />}
             {timeFilter === 'month' && <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridMonth" />}
-          </div>
-          <div className={styles.renderByObject}>
-            <p>Render by Object</p>
-            {filter === 'categories' && category.length > 0 && (
-              <select onChange={handleSelectChange} >
-                <option value="all">Toutes les catégories</option> {/* Nouvelle option */}
-                {category.map((data, index) => (
-                  <option key={index} value={data.name}> {data.name} </option>
-                ))}
-              </select>
-            )}
-            {filter === 'products' && <p>Produits</p>}
-          </div>
+          </div> */}
         </div>
       </div>
       <div className={styles.statsContainer}>
         <div className={styles.firstChart}>
-          <h2>First Chart</h2>
-          {!isLoading && <BarChart chartData={chartData} />}
+          <h2>Statistiques des Ventes</h2>
+          {!isLoading && <BarChart className={styles.firstChartCl} chartData={chartData} />}
         </div>
         <div className={styles.secondChart}>
-          <h2>Second Chart</h2>
+          <h2>Statistiques des Stocks en cours</h2>
+          {!isLoading && <BarChart className={styles.secondChartCl} chartData={secondChartData} />}
+        </div>
+        <div className={styles.thirdChart}>
+          <h2>Statistiques des Réapprovisions</h2>
+          {!isLoading && <BarChart className={styles.thirdChartCl} chartData={restockChartData} />}
         </div>
       </div>
     </div>

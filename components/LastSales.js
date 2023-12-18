@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 // import React, { useEffect, useState } from "react";
 // import { Table } from "antd";
 // import { useSelector } from "react-redux";
 // import { useRouter } from "next/router";
 // import styles from "../styles/LastSales.module.css";
+=======
+import { Table } from "antd";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import styles from "../styles/LastSales.module.css";
+import { useState,useEffect } from "react";
+>>>>>>> 5a805c079f24fdeffe484adc4e61d720faec4400
 
 // function LastSales({refresh}) {
 //   const [displayProducts, setDisplayProducts] = useState([]);
@@ -122,6 +130,7 @@
     
 //   };
 
+<<<<<<< HEAD
 
 //   return (
 //     <div className={styles.sales}>
@@ -152,3 +161,34 @@
 // }
 
 // export default LastSales;
+=======
+  return (
+    <div className={styles.sales}>
+      <div className={styles.tableContainer}>
+        <Table
+          className={styles.Table}
+          dataSource={displayProducts}
+          columns={columns}
+          pagination={{ pageSize: 10 }}
+          size="large"
+          style={tableStyle}
+          expandable={{
+            expandedRowRender: (record) => (
+              <ul>
+                {record.history.map((operation, index) => (
+                  <li key={index}>
+                    {`${operation.type} ${operation.quantity} on ${operation.date}`}
+                  </li>
+                ))}
+              </ul>
+            ),
+            rowExpandable: (record) => record.history.length > 0,
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+export default LastSales;
+>>>>>>> 5a805c079f24fdeffe484adc4e61d720faec4400
