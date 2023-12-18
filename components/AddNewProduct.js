@@ -121,7 +121,6 @@ function AddNewProduct(props) {
                         <label htmlFor="fileInput" className={styles.customFileInput}>
                               {selectedFile ? selectedFile.name : 'Choose an image'}
                         </label>
-                        {/* Afficher le nom du fichier après qu'il a été choisi */}
                         {selectedFile && (
                          <p className={styles.noFile} >No file selected {selectedFile.name}</p>
                         )}

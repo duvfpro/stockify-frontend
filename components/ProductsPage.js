@@ -23,10 +23,15 @@ function ProductsPage(props) {
   const [productName, setProductName] = useState('');
   const [openEditModal, setOpenEditModal] = useState(false);
 
+  const [selectedFilters, setSelectedFilters] = useState([]); // pour stocker les filtres
+  const [triggerSortByStock, setTriggerSortByStock] = useState(false);
+
   const user = useSelector((state) => state.user.value);
   const router = useRouter();
 
   const [nameToSave, setNameToSave] = useState('');
+
+  console.log(selectedFilters)
 
   useEffect(() => {
     if (!user.token) {
@@ -34,15 +39,52 @@ function ProductsPage(props) {
     }
   }, [user.token, router]);
 
-  useEffect(() => { // Affiche la liste de tous nos produits
-    setTimeout(() => {
-       fetch('http://localhost:3000/products/allProducts')
-      .then(response => response.json())
-      .then(data => {
-        setMyProducts(data.allProducts);
-      });
-    }, 2000);
-  }, [refreshProducts]);
+  // useEffect(() => { // Affiche la liste de tous nos produits
+  //   setTimeout(() => {
+  //      fetch('http://localhost:3000/products/allProducts')
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       setMyProducts(data.allProducts);
+  //     });
+  //   }, 500);
+  // }, [refreshProducts]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setTimeout(async () => {
+        const response = await fetch('http://localhost:3000/products/allProducts');
+        const data = await response.json();
+        let productTab = [];
+        for(let i=0; i<selectedFilters.length; i++ ) {
+          for(let j=0; j<data.allProducts.length; j++) {
+            if(selectedFilters[i] == data.allProducts[j].category[0].name) {
+              productTab.push(data.allProducts[j]);
+            }
+          }
+        }
+        if(JSON.stringify(productTab) === JSON.stringify([])) { // = s'il ny a pas de filtre
+          if(triggerSortByStock) { // = si le bouton trie par stock est activé
+            setMyProducts(data.allProducts.sort(compareByStock));
+          } else {
+            setMyProducts(data.allProducts);
+          }
+        } else {
+          if(triggerSortByStock) { // = si le bouton trie par stock est activé
+            setMyProducts(productTab.sort(compareByStock));
+          } else {
+            setMyProducts(productTab);
+          }     
+        }
+        }, 1000)
+
+      } catch (error) {
+        console.error('Erreur lors de la récupération des produits :', error);
+      }
+    };
+    fetchData();
+  }, [refreshProducts, selectedFilters, triggerSortByStock]);
+  
 
   useEffect(() => { // fetch toutes les catégories pour le menu déroulant de la modal
     fetch('http://localhost:3000/categories/allCategories')
@@ -61,6 +103,22 @@ function ProductsPage(props) {
 const handleAddProductButton = () => {
   setOpenAddProductModal(true);
 };
+
+function compareByStock(a, b) {
+  if (a.stock < b.stock) {
+    return -1;
+  }
+  if (a.stock > b.stock) {
+    return 1;
+  }
+  return 0;
+}
+
+const handleTriStockButton = () => {
+  setTriggerSortByStock(!triggerSortByStock);
+  // productsArray.sort(compareByStock);
+};
+
   
 const handleCloseButton = () => {
   setOpenAddProductModal(false);
@@ -124,7 +182,8 @@ const handleImageInputChange = (e) => {
 };
 
 
-const handleSaveButton = () => { 
+const handleSaveButton = () => {
+ 
   fetch(`http://localhost:3000/products/updateMyProduct/${nameToSave}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -135,13 +194,17 @@ const handleSaveButton = () => {
   };
 
 
+  const handleFilterChange = (selectedFilters) => {
+    setSelectedFilters(selectedFilters);
+  }
+
+
     return (
       <div className={styles.main}>
         <div className={styles.filterContainer} >
-          <FilterCascader />
-          <FilterCascader />
-          <FilterCascader />
+          <FilterCascader handleFilterChange={handleFilterChange} />
         </div>   
+        <Button type="primary" onClick={() => handleTriStockButton()} className={styles.addProductButton} > Tri stock croissant </Button>
         <Button type="primary" onClick={() => handleAddProductButton()} className={styles.addProductButton} > ADD NEW PRODUCT </Button>
         <div className={styles.productsContainer}>
           {openAddProductModal && 
