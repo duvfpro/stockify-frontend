@@ -1,51 +1,20 @@
 .productContainer {
-    display: flex;
-    justify-content: space-around;
-    border: 1px solid white;
-    width: 45%;
-    height: 8rem;
-    display: flex;
-    margin-left: 1.5rem;
-    margin-right: 1.5rem;
-    border-radius: 1rem;
     background-color: #323A57;
-}
-
-.nomProduit {
-    color: white;
-}
-
-.nameAndImageContainer {
+    width: auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
-}
-
-.image {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 1rem;
-}
-
-.infoContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 15px;
 }
 
 
-.stockAndPrice {
-    display: flex;
-    flex-direction: row;
+.productContainer>button{
+    margin-right: 15px;
 }
 
-.stock {
-    margin-right: 3rem;
-}
-
-
-.buttonsContainer {
-    display: flex;
-    flex-direction: column;
-}
+.deleteBtn{
+    background-color: red;
+  }
