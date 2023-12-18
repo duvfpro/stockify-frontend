@@ -39,6 +39,7 @@ function App({ Component, pageProps }) {
     setIsDrawerOpen(!isDrawerOpen);
   };
 
+
   const isLoginPage = router.pathname === '/';
 
   const getPageTitle = () => {

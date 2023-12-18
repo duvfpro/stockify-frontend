@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import styles from "../styles/Home.module.css";
-// import LastSales from "./LastSales";
 import AddStock from "./AddStock";
 import Sale from "./Sale";
 import { Table } from "antd";
 
-import stateService from "./stateService";
+
 
 function Home() {
   const user = useSelector((state) => state.user.value);
@@ -18,7 +17,7 @@ function Home() {
   const [displayProducts, setDisplayProducts] = useState([]);
 
   const refreshLastSale = () => {
-    console.log("refreshLastSale called");
+
     setRefresh((prevRefresh) => !prevRefresh);
   };
 
@@ -73,14 +72,13 @@ function Home() {
     },
   ];
 
-  stateService.setColumns(columns);
+  
   useEffect(() => {
     // Affiche la liste des produits vendus aujourd'hui
 
     fetch("http://localhost:3000/products/allProducts")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data.allProducts);
 
         const currentDate = new Date();
         const date = currentDate.getDate().toString().padStart(2, "0");
@@ -88,16 +86,13 @@ function Home() {
         const year = currentDate.getFullYear().toString();
 
         const todayDateString = `${year}-${month}-${date}`;
-        // console.log(todayDateString)
 
         let filteredProducts = data.allProducts.filter((product) => {
           let soldDates = product.soldAt.map((sale) => sale.date.split("T")[0]);
-          console.log(soldDates);
           return soldDates.includes(todayDateString);
         });
 
         let formattedData = filteredProducts.map((product, index) => {
-          console.log("checkin", product);
           const history = [
             product.soldAt
               ? product.soldAt.map((sale) => ({
@@ -114,8 +109,6 @@ function Home() {
                 }))
               : [],
           ];
-             
-          // console.log("Formatted Data for Product", product.name, ":", history);
 
           return {
             key: index,
@@ -131,16 +124,16 @@ function Home() {
             history: history,
           };
         });
-        // console.log(formattedData);
+       
+        
+        
         setDisplayProducts(formattedData);
-        stateService.setDisplayProducts(formattedData);
-        console.log(displayProducts);
+     
+        
       });
   }, [refresh]);
 
-  useEffect(() => {
-    console.log("Display Products:", displayProducts);
-  }, [displayProducts]);
+
 
   const tableStyle = {
     backgroundColor: "#213F62",
