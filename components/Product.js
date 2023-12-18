@@ -13,24 +13,17 @@ function Product (props) {
 
     return (
     <div className={styles.productContainer} >
-        <div className={styles.nameAndImageContainer} >
-        <p className={styles.nomProduit}>{props.name.toUpperCase()}</p>            
-            <img src={props.image} alt={props.name} className={styles.image} />
+        <div className={styles.productContent}>
+            <h3 className={styles.nomProduit}>Produit: {props.name}</h3>
+            <img src={props.image} alt={props.name} />
+            <p className={styles.stock}>Stock: {props.stock}</p>
+            <p className={styles.price}>Price: {props.price}</p>
+            <p className={styles.category}>Category: {props.category}</p>
         </div>
-        <div className={styles.infoContainer} >
-            <div className={styles.stockAndPrice} >
-                <p className={styles.stock}>{props.stock} products in stock</p>
-                <p className={styles.text}>Price: ${props.price}</p>
-            </div>
-           
-            <p className={styles.text}>Category: {props.category}</p>
+        <div className={styles.productBtn}>
+            <button className={styles.edit} onClick={() => handleEditButton()} > EDIT </button>
+            <button className={styles.deleteBtn} onClick={() => handleDeleteButton()} > DELETE </button>
         </div>
-
-        <div className={styles.buttonsContainer} >
-            <button className={styles.button} onClick={() => handleEditButton()} > EDIT </button>
-            <button className={styles.button} onClick={() => handleDeleteButton()} > DELETE </button>           
-        </div>
-
     </div>
     );
 }
