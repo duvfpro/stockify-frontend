@@ -28,12 +28,6 @@ function Home() {
     }
   }, [user.token, router]);
 
-  useEffect(() => {
-    if (!user.token) {
-      router.push("/");
-    }
-  }, [user.token, router]);
-
   const columns = [
     // Schema du tableau
     {
