@@ -202,8 +202,8 @@ const handleSaveButton = () => {
     return (
       <div className={styles.main}>
             <h1>ProductsPage</h1>
-
-            <FilterCascader/>
+            <FilterCascader handleFilterChange={handleFilterChange} />
+            <Button type="primary" onClick={() => handleTriStockButton()} className={styles.addProductButton} > Tri stock croissant </Button>
               <button className={styles.addProduct} onClick={() => handleAddProductButton() }> ADD NEW PRODUCT </button>
             <div className={styles.productCards}>
               {openAddProductModal && 
