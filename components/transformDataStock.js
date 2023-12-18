@@ -87,7 +87,7 @@ function transformDataStock(products, filter, timeFilter) {
       label: categoryOrProductName,
       data: allDates.map(date => sales[date] || 0),
     }));
-  
+
     // Return the chart data
     return {
       labels: allDates,
