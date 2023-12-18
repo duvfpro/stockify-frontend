@@ -78,7 +78,6 @@ const Admin = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data.message);
 
         const updatedUserData = userData.map((user) =>
           user.key === selectedUser.key
@@ -112,7 +111,6 @@ const Admin = () => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log(data.message);
 
           const updatedUserData = userData.filter((user) => user.key !== selectedUser.key);
 
@@ -164,7 +162,6 @@ const Admin = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
 
         fetchData();
 

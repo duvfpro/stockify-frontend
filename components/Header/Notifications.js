@@ -25,7 +25,7 @@ const NotificationButton = () => {
     }
   }
 
-  console.log(dataProducts)
+  console.log(dataProducts.stock)
   
 
   const openNotification = () => {
