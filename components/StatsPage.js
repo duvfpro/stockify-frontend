@@ -1,339 +1,207 @@
-import styles from '../styles/StatsPage.module.css';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
-
-import FullCalendar from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
-
-import { CategoryScale } from 'chart.js';
-Chart.register(CategoryScale);
-import Chart from 'chart.js/auto';
-
 import React from "react";
-import { Bar } from "react-chartjs-2";
+import styles from "../styles/StatsPage.module.css";
+import { useEffect, useState, useRef } from "react";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
-import Category from '../../backend/models/categories';
+import { CategoryScale } from "chart.js";
+Chart.register(CategoryScale);
+import Chart from "chart.js/auto";
+import "chartjs-adapter-date-fns";
+
+import { Bar } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
+
+import transformDataSell from "./transformDataSell";
+import transformDataStock from "./transformDataStock";
+import transformDataRestock from "./transformDataRestock";
+import transformDataByP from "./transformDataByP";
 
 function StatsPage() {
-
+  // Get the router object from the 'next/router' module
   const router = useRouter();
+
+  // Get the current user object from the Redux state
   const user = useSelector((state) => state.user.value);
 
-  /////////////////////////////////////////
-  //             TOKEN USER              //
-  /////////////////////////////////////////
-
+  // USER TOKEN
+  // If the user does not have a token, redirect them to the home page
   useEffect(() => {
-      if (!user.token) {
-        router.push('/');
-      }
-    }, [user.token, router]);
+    if (!user.token) {
+      router.push("/");
+    }
+  }, [user.token, router]);
 
+  // FILTERING BY TIME
+  // State for time filter, default is 'day'
+  const [timeFilter, setTimeFilter] = useState("day");
 
-  /////////////////////////////////////////
-  //          FILTERING BY TIME          //
-  /////////////////////////////////////////
-
-  const [timeFilter, setTimeFilter] = useState('day');
-
+  // Function to handle changes in time selection
   const handleTimeSelectChange = (event) => {
     setTimeFilter(event.target.value);
-  };  
+  };
 
-  /////////////////////////////////////////
-  //          RENDERING BY TIME          //
-  /////////////////////////////////////////
-
+  // RENDERING BY TIME
+  // State for date, default is current date
   const [date, setDate] = useState(new Date());
 
+  // Function to handle changes in date
   const handleDateChange = (value) => {
     setDate(value);
   };
-  
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //     FETCHING ALL CATÉGORIES         /////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  const [category, setCategory] = useState([]);
-  const [categoryId, setCategoryId] = useState('all'); // Set initial categoryId to 'all'
-  const [filter, setFilter] = useState('categories'); // Ajout d'un état pour le filtre
+  // FETCHING ALL DATA
+  // State for category filter, default is 'all'
+  const [categoryState, setCategoryState] = useState({
+    category: [],
+    categoryId: "all",
+  });
 
+  // State for filter, default is 'categories'
+  const [filter, setFilter] = useState("categories");
+
+  // State for data loading status, default is false
   const [dataLoaded, setDataLoaded] = useState(false);
 
+  // State for chart data
   const [chartData, setChartData] = useState([]);
-  const [secondChartData, setSecondChartData] = useState([]); // Nouvel état pour le graphique de stock
-  const [restockChartData, setRestockChartData] = useState([]); // Nouvel état pour le graphique de réapprovisionnement
+  const [secondChartData, setSecondChartData] = useState([]); // New state for stock chart
+  const [restockChartData, setRestockChartData] = useState([]); // New state for restock chart
   const [isLoading, setIsLoading] = useState(true);
-  
+
+  const [products, setProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const chartRef = useRef(null); // Créez une référence ici
+
+  // Fetch data from the server
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responseCategories = await fetch('http://localhost:3000/categories/allCategories');
+        // Fetch all categories
+        const responseCategories = await fetch(
+          "http://localhost:3000/categories/allCategories"
+        );
         const dataCategories = await responseCategories.json();
-        setCategory(dataCategories.allCategories);
-  
-        const responseProducts = await fetch("http://localhost:3000/products/allProducts");
+        // Update the category state with the fetched categories
+        setCategoryState((prevState) => ({
+          ...prevState,
+          category: dataCategories.allCategories,
+        }));
+
+        // Fetch all products
+        const responseProducts = await fetch(
+          "http://localhost:3000/products/allProducts"
+        );
         const dataProducts = await responseProducts.json();
-  
+
+        // Filter products based on selected category
         let filteredProducts;
-        if (categoryId === 'all') {
+        if (categoryState.categoryId === "all") {
           filteredProducts = dataProducts.allProducts;
         } else {
-          filteredProducts = dataProducts.allProducts.filter(product =>
-            product.category.some(category => category._id === categoryId)
+          filteredProducts = dataProducts.allProducts.filter((product) =>
+            product.category.some(
+              (category) => category._id === categoryState.categoryId
+            )
           );
         }
-        const transformedDataSell = transformDataSell(filteredProducts);
-        setChartData({...transformedDataSell});
 
-        const transformedDataStock = transformDataStock(filteredProducts);
-        setSecondChartData({...transformedDataStock});
+        // Transform data for selling chart
+        const transformedDataSell = transformDataSell(
+          filteredProducts,
+          filter,
+          timeFilter
+        );
+        setChartData({ ...transformedDataSell });
 
-        const transformedDataRestock = transformDataRestock(filteredProducts);
-        setRestockChartData({...transformedDataRestock});
-  
+        // Transform data for stock chart
+        const transformedDataStock = transformDataStock(
+          filteredProducts,
+          filter,
+          timeFilter
+        );
+        setSecondChartData({ ...transformedDataStock });cd back
+
+        // Transform data for restock chart
+        const transformedDataRestock = transformDataRestock(
+          filteredProducts,
+          filter,
+          timeFilter
+        );
+        setRestockChartData({ ...transformedDataRestock });
+
         setIsLoading(false);
-        setDataLoaded(true); // Les données sont chargées
+        setDataLoaded(true); // Data has been loaded
       } catch (error) {
         console.error(error);
         setIsLoading(false);
-        setDataLoaded(true); // Une erreur s'est produite
+        setDataLoaded(true); // An error occurred
       }
     };
-  
+
     fetchData();
-  }, [filter, categoryId, timeFilter]); // Ajoutez categoryId à la liste des dépendances
+    // This effect runs when 'filter', 'categoryState.categoryId', or 'timeFilter' changes
+  }, [filter, categoryState.categoryId, timeFilter]);
 
-
-
-
-  /////////////////////////////////////////
-  //     FETCHING ALL SELLS PRODUCTS     //
-  /////////////////////////////////////////
-  
-  function transformDataSell(products) {
-    if (!products || products.length === 0) {
-      return {
-        labels: [],
-        datasets: [],
-      };
-    }
-  
-    let salesByCategoryAndDate = {};
-  
-    for (const product of products) {
-      const categoriesOrProducts = filter === 'categories' ? product.category : [product];
-      for (const categoryOrProduct of categoriesOrProducts) {
-        for (const sale of product.soldAt) {
-          const date = new Date(sale.date);
-          let key;
-          switch (timeFilter) {
-            case 'day':
-              key = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-              break;
-            case 'week':
-              // Utilisez la date du premier jour de la semaine
-              const firstDayOfWeek = date.getDate() - date.getDay();
-              const weekStart = new Date(date.setDate(firstDayOfWeek));
-              key = `${weekStart.getFullYear()}-W${Math.floor(weekStart.getDate() / 7) + 1}`;
-              break;
-            case 'month':
-              key = `${date.getFullYear()}-${date.getMonth() + 1}`;
-              break;
-            default:
-              key = date.toISOString();
-          }
-  
-          const name = filter === 'categories' ? categoryOrProduct.name : categoryOrProduct.name;
-          if (!salesByCategoryAndDate[name]) {
-            salesByCategoryAndDate[name] = {};
-          }
-  
-          if (!salesByCategoryAndDate[name][key]) {
-            salesByCategoryAndDate[name][key] = 0;
-          }
-  
-          salesByCategoryAndDate[name][key] += sale.quantity;
+  useEffect(() => {
+    fetch("http://localhost:3000/products/allProducts")
+      .then((response) => response.json())
+      .then((data) => {
+        setProducts(data.allProducts);
+        if (data.allProducts && data.allProducts.length > 0) {
+          setSelectedProduct(data.allProducts[0]._id);
         }
-      }
-    }
-  
-    // Get all unique dates
-    const allDates = [...new Set([].concat(...Object.values(salesByCategoryAndDate).map(Object.keys)))].sort();
-  
-    const datasets = Object.entries(salesByCategoryAndDate).map(([categoryOrProductName, sales]) => ({
-      label: categoryOrProductName,
-      data: allDates.map(date => sales[date] || 0),
-    }));
-  
-    return {
-      labels: allDates,
-      datasets: datasets,
-    };
-  }
+      });
+  }, []);
 
-  function transformDataStock(products) {
-    if (!products || products.length === 0) {
-      return {
-        labels: [],
-        datasets: [],
-      };
-    }
-  
-    let salesByCategoryAndDate = {};
-  
-    for (const product of products) {
-      const categoriesOrProducts = filter === 'categories' ? product.category : [product];
-      for (const categoryOrProduct of categoriesOrProducts) {
-        for (const sale of product.soldAt) {
-          const date = new Date(sale.date);
-          let key;
-          switch (timeFilter) {
-            case 'day':
-              key = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-              break;
-            case 'week':
-              // Utilisez la date du premier jour de la semaine
-              const firstDayOfWeek = date.getDate() - date.getDay();
-              const weekStart = new Date(date.setDate(firstDayOfWeek));
-              key = `${weekStart.getFullYear()}-W${Math.floor(weekStart.getDate() / 7) + 1}`;
-              break;
-            case 'month':
-              key = `${date.getFullYear()}-${date.getMonth() + 1}`;
-              break;
-            default:
-              key = date.toISOString();
-          }
-  
-          const name = filter === 'categories' ? categoryOrProduct.name : categoryOrProduct.name;
-          if (!salesByCategoryAndDate[name]) {
-            salesByCategoryAndDate[name] = {};
-          }
-  
-          if (!salesByCategoryAndDate[name][key]) {
-            salesByCategoryAndDate[name][key] = 0;
-          }
-  
-          salesByCategoryAndDate[name][key] += sale.quantity;
-        }
-        // Ajoutez le stock du produit à la dernière date de vente
-        if (product.soldAt.length > 0) {
-          const lastSaleDate = new Date(product.soldAt[product.soldAt.length - 1].date);
-          let lastKey;
-          switch (timeFilter) {
-            case 'day':
-              lastKey = `${lastSaleDate.getFullYear()}-${lastSaleDate.getMonth() + 1}-${lastSaleDate.getDate()}`;
-              break;
-            case 'week':
-              const firstDayOfWeek = lastSaleDate.getDate() - lastSaleDate.getDay();
-              const weekStart = new Date(lastSaleDate.setDate(firstDayOfWeek));
-              lastKey = `${weekStart.getFullYear()}-W${Math.floor(weekStart.getDate() / 7) + 1}`;
-              break;
-            case 'month':
-              lastKey = `${lastSaleDate.getFullYear()}-${lastSaleDate.getMonth() + 1}`;
-              break;
-            default:
-              lastKey = lastSaleDate.toISOString();
-          }
-          salesByCategoryAndDate[categoryOrProduct.name][lastKey] += product.stock;
-        }
-      }
-    }
-  
-    // Get all unique dates
-    const allDates = [...new Set([].concat(...Object.values(salesByCategoryAndDate).map(Object.keys)))].sort();
-  
-    const datasets = Object.entries(salesByCategoryAndDate).map(([categoryOrProductName, sales]) => ({
-      label: categoryOrProductName,
-      data: allDates.map(date => sales[date] || 0),
-    }));
-  
-    return {
-      labels: allDates,
-      datasets: datasets,
-    };
-  }
+  const [timeFilterByP, setTimeFilterByP] = useState("day");
+  const [productData, setProductData] = useState(null);
 
+  const handleTimeSelectChangeByP = (event) => {
+    setTimeFilterByP(event.target.value);
+  };
 
-  function transformDataRestock(products) {
-    if (!products || products.length === 0) {
-      return {
-        labels: [],
-        datasets: [],
-      };
+  useEffect(() => {
+    if (products.length > 0 && selectedProduct) {
+      let product = products.find((p) => p._id === selectedProduct);
+      setProductData(transformDataByP(product, timeFilterByP)); // Passez timeFilterByP ici
     }
-  
-    let restocksByCategoryAndDate = {};
-  
-    for (const product of products) {
-      const categoriesOrProducts = filter === 'categories' ? product.category : [product];
-      for (const categoryOrProduct of categoriesOrProducts) {
-        for (const restock of product.restockAt) {
-          const date = new Date(restock.date);
-          let key;
-          switch (timeFilter) {
-            case 'day':
-              key = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-              break;
-            case 'week':
-              const firstDayOfWeek = date.getDate() - date.getDay();
-              const weekStart = new Date(date.setDate(firstDayOfWeek));
-              key = `${weekStart.getFullYear()}-W${Math.floor(weekStart.getDate() / 7) + 1}`;
-              break;
-            case 'month':
-              key = `${date.getFullYear()}-${date.getMonth() + 1}`;
-              break;
-            default:
-              key = date.toISOString();
-          }
-  
-          const name = filter === 'categories' ? categoryOrProduct.name : categoryOrProduct.name;
-          if (!restocksByCategoryAndDate[name]) {
-            restocksByCategoryAndDate[name] = {};
-          }
-  
-          if (!restocksByCategoryAndDate[name][key]) {
-            restocksByCategoryAndDate[name][key] = 0;
-          }
-  
-          restocksByCategoryAndDate[name][key] += restock.quantity;
-        }
-      }
-    }
-  
-    const allDates = [...new Set([].concat(...Object.values(restocksByCategoryAndDate).map(Object.keys)))].sort();
-  
-    const datasets = Object.entries(restocksByCategoryAndDate).map(([categoryOrProductName, restocks]) => ({
-      label: categoryOrProductName,
-      data: allDates.map(date => restocks[date] || 0),
-    }));
-  
-    return {
-      labels: allDates,
-      datasets: datasets,
-    };
-  }
+  }, [products, selectedProduct, timeFilterByP]); // Ajoutez timeFilterByP aux dépendances
 
-
- 
+  // Bar chart component
   function BarChart({ chartData }) {
-
-    if (chartData.labels.length === 0) {
-      return <p>Aucun produit trouvé pour cette catégorie.</p>;
+    // If there are no labels, return a message
+    if (chartData && chartData.datasets) {
+      return <Bar data={chartData} />;
+    } else {
+      return <p>No data available for the chart.</p>;
     }
-  
+
+    // Render the bar chart
     return <Bar data={chartData} />;
   }
-  
+
+  // If data is not loaded, show a loading indicator
   if (!dataLoaded) {
-    return <div>Loading...</div>; // Vous pouvez rendre un spinner de chargement ou un autre indicateur de chargement ici
+    // You can render a loading spinner or another loading indicator here
+    return <div>Loading...</div>;
+  }
+
+  function LineChart({ chartData }) {
+    if (chartData && chartData.datasets) {
+      return <Line data={chartData} />;
+    } else {
+      return <p>Pas de données disponibles pour le graphique.</p>;
+    }
+    return <Line data={chartData} />;
   }
 
   return (
     <div className={styles.mainContainer}>
       <div className={styles.titleContainer}>
-        <h1 className={styles.title}>Bienvenue dans les statistiques de vos Stocks</h1>
+        <h1 className={styles.title}>
+          Bienvenue dans les statistiques de vos Stocks
+        </h1>
       </div>
 
       <div className={styles.filterContainer}>
@@ -354,30 +222,66 @@ function StatsPage() {
             </select>
           </div>
         </div>
-        <div className={styles.renderFilterArea}>
-          {/* <div className={styles.renderByTemp}>
-            {timeFilter === 'day' && <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridDay" />}
-            {timeFilter === 'week' && <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridWeek" />}
-            {timeFilter === 'month' && <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridMonth" />}
-          </div> */}
-        </div>
       </div>
       <div className={styles.statsContainer}>
         <div className={styles.firstChart}>
           <h2>Statistiques des Ventes</h2>
-          {!isLoading && <BarChart className={styles.firstChartCl} chartData={chartData} />}
+          {!isLoading && (
+            <BarChart className={styles.firstChartCl} chartData={chartData} />
+          )}
         </div>
         <div className={styles.secondChart}>
           <h2>Statistiques des Stocks en cours</h2>
-          {!isLoading && <BarChart className={styles.secondChartCl} chartData={secondChartData} />}
+          {!isLoading && (
+            <BarChart
+              className={styles.secondChartCl}
+              chartData={secondChartData}
+            />
+          )}
         </div>
         <div className={styles.thirdChart}>
           <h2>Statistiques des Réapprovisions</h2>
-          {!isLoading && <BarChart className={styles.thirdChartCl} chartData={restockChartData} />}
+          {!isLoading && (
+            <BarChart
+              className={styles.thirdChartCl}
+              chartData={restockChartData}
+            />
+          )}
+        </div>
+      </div>
+      <div className={styles.chartByP}>
+        <h2>Statistiques par Produits</h2>
+        <div>
+          <div className={styles.filters}>
+            <div className={styles.filterByTemp}>
+              <p>Filter by Temps</p>
+              <select onChange={handleTimeSelectChangeByP}>
+                <option value="day">Par Jour</option>
+                <option value="week">Par Semaine</option>
+                <option value="month">Par Mois</option>
+              </select>
+            </div>
+            <div className={styles.filterByObject}>
+              <p>Filter by Object</p>
+              <select
+                value={selectedProduct}
+                onChange={(e) => setSelectedProduct(e.target.value)}
+              >
+                {products.map((product) => (
+                  <option key={product._id} value={product._id}>
+                    {product.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className={styles.chartByProduct}>
+            {!isLoading && <LineChart chartData={productData} />}
+          </div>
         </div>
       </div>
     </div>
-  )
-};
+  );
+}
 
 export default StatsPage;

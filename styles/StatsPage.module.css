@@ -8,15 +8,13 @@
   }
 
 .mainContainer{
-  height: 100vh;
+ 
   width: 100%;
   display:flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-
-
 
 .filterContainer{
 
@@ -59,36 +57,58 @@
   margin-right: 30px;
 }
 
-
 .statsContainer{
   width: 100%;
   margin-top: 30px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
 
 .firstChart{
   display: flex;
+  align-items: center;
   flex-direction: column;
   justify-content: space-between;
-  height: 300px;
+  height: auto;
+  width: 60%;
   margin: 30px;
 }
 
 .secondChart{
   display: flex;
+  align-items: center;
   flex-direction: column;
   justify-content: space-between;
-  height: 300px;
+  height: auto;
+  width: 60%;
   margin: 30px;
 }
 
 .thirdChart{
   display: flex;
+  align-items: center;
   flex-direction: column;
   justify-content: space-between;
-  height: 300px;
+  height: auto;
+  width: 60%;
   margin: 30px;
+}
+
+.thirdChart>h2{
+  margin: 30px
+}
+
+.chartByP{
+  margin-bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: auto;
+  width: 60%;
+}
+
+.filters{
+  display: flex;
+  justify-content: space-around
 }
