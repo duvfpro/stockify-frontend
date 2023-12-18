@@ -10,59 +10,23 @@
     margin-right: 1.5rem;
     border-radius: 1rem;
     background-color: #323A57;
-}
-
-.nomProduit {
-    color: white;
-}
-
-.nameAndImageContainer {
+    width: auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
-}
-
-.image {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 1rem;
-}
-
-.infoContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-
-.stockAndPrice {
-    display: flex;
-    flex-direction: row;
-}
-
-.stock {
-    margin-right: 3rem;
-    color: white;
-}
-
-.text {
-    color: white;
-}
-
-
-.buttonsContainer {
-    display: flex;
-    flex-direction: column;
-}
-
-.button{
-    border: none;
+    justify-content: space-between;
     margin: 10px;
     padding: 15px;
     background-color: #A9DFD8;
     color: #000;
     font-weight: bolder;
     border-radius: 15px;
-    border-color: #000;
+}
+
+
+.productContainer>button{
+    margin-right: 15px;
+}
+
+.deleteBtn{
+    background-color: red;
   }

@@ -26,29 +26,30 @@ const Admin = () => {
     }
   }, [user.token, router]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/users/allUser');
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
-        }
-        const data = await response.json();
-
-        const formattedData = data.data.map((user) => ({
-          key: user._id,
-          username: user.username,
-          email: user.email,
-          isAdmin: user.isAdmin.toString(),
-        }));
-        setUserData(formattedData);
-      } catch (error) {
-        console.error('Erreur lors du fetch des données : ', error);
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/users/allUser');
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
       }
-    };
+      const data = await response.json();
 
+      const formattedData = data.data.map((user) => ({
+        key: user._id,
+        username: user.username,
+        email: user.email,
+        isAdmin: user.isAdmin.toString(),
+      }));
+      setUserData(formattedData);
+    } catch (error) {
+      console.error('Erreur lors du fetch des données : ', error);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
-  }, []);
+  }, [createUserModalVisible]);
+
 
   const handleEditClick = (key) => {
     const userToEdit = userData.find((user) => user.key === key);
@@ -165,8 +166,9 @@ const Admin = () => {
         const data = await response.json();
         console.log(data);
 
+        fetchData();
+
         setCreateUserModalVisible(false);
-        window.location.reload();
       } else {
         throw new Error(`Error: ${response.status}`);
       }
@@ -174,7 +176,6 @@ const Admin = () => {
       console.error('Erreur lors de la création du user: ', error);
     }
   };
-
   if (user.isAdmin) {
     return (
       <div className={styles.container}>
@@ -309,12 +310,12 @@ const Admin = () => {
       </div>
     );
   }
-  else{
+  else {
     return (<div>
       <h1>This page is not allowed to intern</h1>
     </div>);
   }
-  
+
 };
 
 export default Admin;

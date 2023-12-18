@@ -1,21 +1,34 @@
+ // Importe la bibliothèque React.
 import React from "react";
-import styles from "../styles/StatsPage.module.css";
-import { useEffect, useState, useRef } from "react";
-import { useSelector } from "react-redux";
-import { useRouter } from "next/router";
+// Importe les styles CSS pour la page des statistiques.
+import styles from "../styles/StatsPage.module.css"; 
+// Importe les hooks useEffect, useState et useRef de React.
+import { useEffect, useState, useRef } from "react"; 
+// Importe le hook useSelector de Redux pour accéder à l'état du store.
+import { useSelector } from "react-redux"; 
+// Importe le hook useRouter de Next.js pour la gestion des routes.
+import { useRouter } from "next/router"; 
 
+// Importe CategoryScale de Chart.js pour la mise à l'échelle des catégories sur les graphiques.
 import { CategoryScale } from "chart.js";
-Chart.register(CategoryScale);
+// Enregistre CategoryScale pour une utilisation avec Chart.js.
+Chart.register(CategoryScale); 
+// Importe la version automatique de Chart.js qui sélectionne automatiquement le contrôleur de graphique et l'échelle.
 import Chart from "chart.js/auto";
-import "chartjs-adapter-date-fns";
+// Importe l'adaptateur date-fns pour Chart.js pour la gestion des dates.
+import "chartjs-adapter-date-fns"; 
 
-import { Bar } from "react-chartjs-2";
-import { Line } from "react-chartjs-2";
+// Importe le composant Bar de react-chartjs-2 pour la création de graphiques à barres.
+import { Bar } from "react-chartjs-2"; 
+// Importe le composant Line de react-chartjs-2 pour la création de graphiques linéaires.
+import { Line } from "react-chartjs-2"; 
 
+// Importe des fonctions de transformation de données spécifiques.
 import transformDataSell from "./transformDataSell";
 import transformDataStock from "./transformDataStock";
 import transformDataRestock from "./transformDataRestock";
 import transformDataByP from "./transformDataByP";
+
 
 function StatsPage() {
   // Get the router object from the 'next/router' module
@@ -45,10 +58,10 @@ function StatsPage() {
   // State for date, default is current date
   const [date, setDate] = useState(new Date());
 
-  // Function to handle changes in date
-  const handleDateChange = (value) => {
-    setDate(value);
-  };
+  // // Function to handle changes in date
+  // const handleDateChange = (value) => {
+  //   setDate(value);
+  // };
 
   // FETCHING ALL DATA
   // State for category filter, default is 'all'
@@ -164,9 +177,10 @@ function StatsPage() {
   useEffect(() => {
     if (products.length > 0 && selectedProduct) {
       let product = products.find((p) => p._id === selectedProduct);
-      setProductData(transformDataByP(product, timeFilterByP)); // Passez timeFilterByP ici
+      setProductData(transformDataByP(product, timeFilterByP));
     }
-  }, [products, selectedProduct, timeFilterByP]); // Ajoutez timeFilterByP aux dépendances
+    //Dépendances
+  }, [products, selectedProduct, timeFilterByP]);
 
   // Bar chart component
   function BarChart({ chartData }) {
@@ -193,7 +207,7 @@ function StatsPage() {
     } else {
       return <p>Pas de données disponibles pour le graphique.</p>;
     }
-    return <Line data={chartData} />;
+    //return <Line data={chartData} />;
   }
 
   return (

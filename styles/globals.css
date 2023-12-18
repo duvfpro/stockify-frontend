@@ -11,11 +11,57 @@
   box-sizing: border-box;
 }
 
+/* ALL BUTTONS */
+button{
+  border: none;
+  margin: 10px;
+  padding: 15px;
+  background-color: #A9DFD8;
+  color: #000;
+  font-weight: bolder;
+  border-radius: 15px;
+  border-color: #000;
+}
+
+/* ANT BUTTONS */
+.ant-btn, css-dev-only-do-not-override-p7e5j5, ant-btn-primary{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  margin: 10px;
+  padding: 15px 25px 15px 25px;
+  background-color: #A9DFD8;
+  color: #000;
+  font-weight: bolder;
+  border-radius: 15px;
+  border-color: #000;
+}
+
+
+
+ /* RESING FOR ALL IMG */
+ img{
+  max-width: 150px;
+  max-height: 150px;
+}
+
+/* PARTIE HEADER */
+
 .Drawer_drawer-link__BiCZP{
   color: #000 !important;
 }
 
+.ant-select, css-dev-only-do-not-override-p7e5j5, ant-select-multiple, ant-select-show-arrow, ant-select-show-search{
+ width: 60% !important;
+ margin: 10px;
+}
+
+
+/* MODAL */ 
 .ant-modal-content{
+  display: flex;
+  flex-direction: column !important;
   background-color: #323A57 !important;
   color: #fff !important;
 }
@@ -23,6 +69,7 @@
 .ant-modal-body{
   background-color: #323A57;
 }
+
 
 .anticon, anticon-close{
   color: #000 !important;
@@ -44,13 +91,18 @@ p{
   color: #818181;
 }
 
-button{
-  border: none;
-  margin: 10px;
-  padding: 15px;
-  background-color: #A9DFD8;
-  color: #000;
-  font-weight: bolder;
+
+
+/* PRODUCT PAGE */
+/* IMG SIZING */
+.Product_productContainer__W6GOQ>img{
+  max-width: 150px;
+}
+
+/* ADMIN  SECTION */
+/* List Background */
+.ant-list, ant-list-split, ant-list-something-after-last-item, css-dev-only-do-not-override-p7e5j5{
+  padding: 20px;
   border-radius: 15px;
-  border-color: #000;
-} */
+  background-color: #323A57 !important;
+}

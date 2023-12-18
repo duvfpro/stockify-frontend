@@ -1,48 +1,57 @@
-
-.allContainer {
+.mainCatContainer{
+    background-color: #171821;
     display: flex;
     flex-direction: column;
+    
+    align-items: center;
     justify-content: center;
-    align-items: center; 
 }
 
-.categoryContainer {
-    border: 1px solid white;
+.cardMapContainer{
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content:space-around;
-    width: 30rem;
-    height: 8rem;
-    display: flex;
-    margin-top: 1rem;
-    margin-bottom: 2rem;
-    border-radius: 1rem;
-    background-color: #1a247b;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-.buttonsContainer {
+.categoryContainer{
     display: flex;
+    flex-wrap: wrap;
     flex-direction: column;
-}
-
-.button{
-    border: none;
-    margin: 10px;
-    padding: 15px;
-    background-color: #A9DFD8;
-    color: #000;
-    font-weight: bolder;
+    width: 300px;
+    background-color: #323A57;
+    padding: 20px;
+    margin: 30px;
     border-radius: 15px;
-    border-color: #000;
-  }
+}
 
-  .categoryname {
-    color: white;
-  }
-
-  .modalContainer {
+.mainNewCatContainer{
     display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+    flex-direction:column;
+}
+
+.inputNewCat{
+    margin: 10px;
+    padding: auto;
+    width: 97%;
+}
+
+.addBtnCat{
+    margin: 20px;
+}
+
+.deleteBtn{
+    background-color: red  ;
+}
+
+.mainEditModContainer{
+    display: flex;
+    flex-direction:column;
+    justify-content: flex-end;
+    height: 130px;
+}
+
+.mainEditModContainer>input{
+    margin: 10px;
+    padding: auto;  
+    width: 97%;
+}
