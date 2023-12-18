@@ -12,6 +12,8 @@ function AddNewProduct(props) {
     const [category, setCategory] = useState([]);
     const [categotyId, setCategoryId] = useState('');
     const [selectedOption, setSelectedOption] = useState(''); // Stock le choix de la catégorie
+    const [selectedFile, setSelectedFile] = useState(null); // pour le css du bouton de choix d'un fichier
+
 
 
     useEffect(() => { // fetch toutes les catégories pour le menu déroulant de la modal
@@ -113,10 +115,18 @@ function AddNewProduct(props) {
                             {category.map((data, index) => (
                             <option key={index} value={data.name}> {data.name} </option>
                             ))}
-                        </select>                        
-                        <input className={styles.imageField} type="file" onChange={handleImageInputChange} accept="image/*" />
+                        </select>       
 
-                        <button onClick={() => handleSubmitButton()} className={styles.websiteButton} > SUBMIT </button>
+                        <input className={styles.imageField} type="file" onChange={handleImageInputChange} accept="image/*" id="fileInput"/>
+                        <label htmlFor="fileInput" className={styles.customFileInput}>
+                              {selectedFile ? selectedFile.name : 'Choose an image'}
+                        </label>
+                        {/* Afficher le nom du fichier après qu'il a été choisi */}
+                        {selectedFile && (
+                         <p className={styles.noFile} >No file selected {selectedFile.name}</p>
+                        )}
+
+                        <button onClick={() => handleSubmitButton()} className={styles.submitButton} > SUBMIT </button>
                 </div>
             </div>
 
