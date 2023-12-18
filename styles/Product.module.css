@@ -1,26 +1,22 @@
 .productContainer {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    border: 1px solid white;
-    width: 45%;
-    height: 8rem;
-    display: flex;
-    margin-left: 1.5rem;
-    margin-right: 1.5rem;
-    border-radius: 1rem;
     background-color: #323A57;
     width: auto;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: center;
     margin: 10px;
-    padding: 15px;
-    background-color: #A9DFD8;
-    color: #000;
-    font-weight: bolder;
+    padding: 10px;
+    border: 1px solid black;
     border-radius: 15px;
+    transition-duration: 1s;
 }
+
+.productContainer:hover {
+    background-color: black;
+    color: white;
+    border: 2px white solid;
+  }
 
 
 .productContainer>button{
@@ -29,4 +25,33 @@
 
 .deleteBtn{
     background-color: red;
+    cursor: pointer;
   }
+
+  .deleteBtn:hover {
+    color: white;
+  }
+
+.editBtn {
+    cursor:pointer;
+}
+
+.editBtn:hover {
+    color: white;
+  }
+
+
+.productContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.img {
+    border-radius: 25%;
+}
+
+.stock {
+    color: white
+}

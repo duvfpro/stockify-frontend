@@ -2,6 +2,7 @@ import styles from '../styles/ProductsPage.module.css';
 import AddNewProduct from './AddNewProduct';
 import Product from './Product';
 import FilterCascader from './Tools/FilterCascader';
+import FilterStock from './Tools/FilterStock';
 import { Modal, Button } from 'antd';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -24,6 +25,8 @@ function ProductsPage(props) {
   const [openEditModal, setOpenEditModal] = useState(false);
 
   const [selectedFilters, setSelectedFilters] = useState([]); // pour stocker les filtres
+  const [selectedStockFilters, setSelectedStockFilters] = useState([]); // pour stocker les filtres stock
+
   const [triggerSortByStock, setTriggerSortByStock] = useState(false);
 
   const user = useSelector((state) => state.user.value);
@@ -39,15 +42,6 @@ function ProductsPage(props) {
     }
   }, [user.token, router]);
 
-  // useEffect(() => { // Affiche la liste de tous nos produits
-  //   setTimeout(() => {
-  //      fetch('http://localhost:3000/products/allProducts')
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       setMyProducts(data.allProducts);
-  //     });
-  //   }, 500);
-  // }, [refreshProducts]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -126,13 +120,16 @@ const handleCloseButton = () => {
 }; 
 
 const handleDeleteButton = (name) => {
-  fetch(`http://localhost:3000/products/deleteProduct/${name}`, {
-    method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' },
-  })
-  .then(data => {
-    setRefreshProducts(!refreshProducts);
-  })
+  const isConfirmed = window.confirm('Are you sure you want to delete this user?');
+  if(isConfirmed) {
+    fetch(`http://localhost:3000/products/deleteProduct/${name}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then(data => {
+      setRefreshProducts(!refreshProducts);
+    })    
+  }
 };
 
 const handleEditButton = (name, price, category, stock, image) => {
@@ -198,13 +195,20 @@ const handleSaveButton = () => {
     setSelectedFilters(selectedFilters);
   }
 
+  const handleStockFilterChange = (selectedFilters) => {
+    setSelectedStockFilters(selectedFilters)
+  }
+
 
     return (
       <div className={styles.main}>
-            <h1>ProductsPage</h1>
-            <FilterCascader handleFilterChange={handleFilterChange} />
-            <Button type="primary" onClick={() => handleTriStockButton()} className={styles.addProductButton} > Tri stock croissant </Button>
-              <button className={styles.addProduct} onClick={() => handleAddProductButton() }> ADD NEW PRODUCT </button>
+        <div className={styles.filtersContainer}>
+          <FilterCascader handleFilterChange={handleFilterChange} />
+          <FilterStock handleStockFilterChange={handleStockFilterChange} />
+          <Button type="primary" onClick={() => handleTriStockButton()} className={styles.addProductButton} > Tri stock croissant </Button>
+          <button className={styles.addProduct} onClick={() => handleAddProductButton() }> ADD NEW PRODUCT </button>
+        </div>
+
             <div className={styles.productCards}>
               {openAddProductModal && 
                 <AddNewProduct openAddProductModal={openAddProductModal} handleCloseButton={handleCloseButton} /> }
@@ -214,19 +218,31 @@ const handleSaveButton = () => {
             </div>
 
           <Modal className={styles.modalMainContent} open={openEditModal} onCancel={closeEditModal} footer={null} width={800} height={800}>
+              <div className={styles.modalMainContent}>
+                <img src={image} alt={productName} />
               <div className={styles.title} > UPDATE PRODUCT </div>
               <div className={styles.mainContainer}>
-                NAME <input type="text" onChange={handleNameInputChange} value={productName} placeholder="Product name" />
-                <img src={image} alt={productName} />
-                CATEGORY <select onChange={handleSelectChange} >
+                <div>
+                   NAME <input className={styles.inputField} type="text" onChange={handleNameInputChange} value={productName} placeholder="Product name" />
+                </div>
+                <div>
+                  PRICE <input className={styles.inputField} type="number" onChange={handlePriceInputChange} value={price} placeholder="Price" required />
+                </div>
+                <div>
+                  STOCK <input className={styles.inputField} type="number" onChange={handleStockInputChange} value={stock} placeholder="Stock" required />
+                </div>
+                <div>
+                  CATEGORY <select className={styles.inputField} onChange={handleSelectChange} >
                   {category.map((data, index) => (
                   <option key={index} value={data.name}> {data.name} </option>
                   ))}
-                </select>
-                PRICE <input type="number" onChange={handlePriceInputChange} value={price} placeholder="Price" required />
-                STOCK <input type="number" onChange={handleStockInputChange} value={stock} placeholder="Stock" required />
+                  </select>
+                </div>
                 <button onClick={() => handleSaveButton()} > SUBMIT </button>
               </div>
+              </div>
+              
+              
           </Modal>
       </div>
 )
