@@ -18,12 +18,27 @@
   padding: 10px;
 }
 
-  .productCards{
+.productCards{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-  }
+}
 
-  .ProductsPage_productCards__8mvPE{
+.ProductsPage_productCards__8mvPE{
     justify-content: center;
-  }
+}
+
+.filtersContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100vw;
+  height: 4rem;
+}
+
+.myFilters {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 30rem;
+}

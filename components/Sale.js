@@ -1,5 +1,6 @@
 import styles from '../styles/Sale.module.css';
-import { Modal } from 'antd';
+import { Modal, Input, Select, notification } from 'antd';
+import { SmileOutlined } from '@ant-design/icons';
 import React, { useState, useEffect } from 'react';
 
 
@@ -8,7 +9,7 @@ function Sale(props) {
 
     const [selectedOption, setSelectedOption] = useState(''); // Pour récupérer le produit choisie par le user
     const [productList, setProductList] = useState([]);
-    const [sales, setSales] = useState([]);
+    const [sales, setSales] = useState('');
 
 
     useEffect(() => { // Fetch la liste des produit pour le menu déroulant
@@ -17,7 +18,7 @@ function Sale(props) {
         .then(data => {
             let products = [];
             for (let i=0; i<data.allProducts.length; i++) {
-                products.push(data.allProducts[i].name)
+                products.push(data.allProducts[i])
             };
             setProductList(products);
         })
@@ -30,20 +31,25 @@ function Sale(props) {
 
 
     const handleSubmitButton = () => {
-        fetch(`http://localhost:3000/products/sell/${selectedOption}/${sales}`, {
-            method: 'PUT',
-            headers: { 'Content-type': 'application/json' },
-        })
-        .then(response => response.json())
-        .then(data => {
-            props.handleCloseButton();
-            props.refreshLastSale()
-        });
+        if(!sales || !selectedOption) {
+            window.confirm('Empty fields !');
+        } else {
+            fetch(`http://localhost:3000/products/sell/${selectedOption}/${sales}`, {
+                method: 'PUT',
+                headers: { 'Content-type': 'application/json' },
+            })
+            .then(response => response.json())
+            .then(data => {
+                props.handleCloseButton();
+                props.refreshLastSale();
+                openNotification(selectedOption, sales);
+            });
+        }
     };
 
 
     const handleSelectChange = (event) => { // Gère le choix du produit
-        setSelectedOption(event.target.value);
+        setSelectedOption(event);
     };
 
     const handleStockInputChange = (event) => {
@@ -53,6 +59,32 @@ function Sale(props) {
         if (isValidInput) {
             setSales(event.target.value);
         }
+    };
+
+
+    const openNotification = (productName, productStock) => {
+        notification.open({
+          message: 'Products sold',
+          description: (
+            <div>
+              <p>
+                <span style={{ color: 'green', fontWeight: 'bold' }}>{productStock} {productName} sold!</span>.
+              </p>
+            </div>
+          ),
+          className: 'custom-class',
+          duration: 2,
+          style: {
+            width: 600,
+          },
+          icon: (
+            <SmileOutlined
+              style={{
+                color: '#108ee9',
+              }}
+            />
+          ),
+        });
     };
 
     return (
@@ -66,7 +98,7 @@ function Sale(props) {
                     ))}
                 </select>
                 <input type="number" onChange={handleStockInputChange} value={sales} placeholder="Quantity to add" />
-                <button onClick={() => handleSubmitButton()} className={styles.websiteButton} > Submit </button>
+                <button onClick={() => handleSubmitButton()} className={styles.websiteButton} > SUBMIT </button>
             </div>
         </Modal>
     );

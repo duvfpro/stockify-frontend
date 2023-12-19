@@ -34,7 +34,6 @@ function ProductsPage(props) {
 
   const [nameToSave, setNameToSave] = useState('');
 
-  console.log(selectedFilters)
 
   useEffect(() => {
     if (!user.token) {
@@ -54,9 +53,11 @@ function ProductsPage(props) {
           for(let j=0; j<data.allProducts.length; j++) {
             if(selectedFilters[i] == data.allProducts[j].category[0].name) {
               productTab.push(data.allProducts[j]);
+              console.log(productTab)
             }
-          }
+          }          
         }
+
         if(JSON.stringify(productTab) === JSON.stringify([])) { // = s'il ny a pas de filtre
           if(triggerSortByStock == "Stock Ascending") { // = si le bouton trie par stock est activé
             setMyProducts(data.allProducts.sort(compareByStock));
@@ -74,6 +75,7 @@ function ProductsPage(props) {
             setMyProducts(productTab);
           }     
         }
+        // setMyProducts(productTab);
         }, 1000)
 
       } catch (error) {
@@ -124,7 +126,7 @@ const handleCloseButton = () => {
 }; 
 
 const handleDeleteButton = (name) => {
-  const isConfirmed = window.confirm('Are you sure you want to delete this user?');
+  const isConfirmed = window.confirm('Are you sure you want to delete this product?');
   if(isConfirmed) {
     fetch(`http://localhost:3000/products/deleteProduct/${name}`, {
       method: 'DELETE',
@@ -183,15 +185,21 @@ const handleImageInputChange = (e) => {
 };
 
 
-const handleSaveButton = () => {
- 
+const handleSaveButton = () => { 
   fetch(`http://localhost:3000/products/updateMyProduct/${nameToSave}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name: productName, category: categoryId, price: price, stock: stock })
-  });
-  setRefreshProducts(!refreshProducts);
-  setOpenEditModal(false);
+  })
+  .then(response => response.json())
+  .then(data => {
+    if(data.result == false) {
+      window.confirm('Are you sure you want to delete this product?');
+    } else {
+      setRefreshProducts(!refreshProducts);
+      setOpenEditModal(false);
+    }
+  })
   };
 
 
@@ -215,7 +223,6 @@ const handleSaveButton = () => {
             <FilterStock handleStockFilterChange={handleStockFilterChange} />
           </div>
           
-          {/* <Button type="primary" onClick={() => handleTriStockButton()} className={styles.addProductButton} > Tri stock croissant </Button> */}
           <button className={styles.addProduct} onClick={() => handleAddProductButton() }> Add New Product </button>
         </div>
 
