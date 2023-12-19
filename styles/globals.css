@@ -8,23 +8,34 @@ body {
   overflow-x: hidden !important;  
 }
 
-p{
-  color: #818181;
-}
-
 * {
   box-sizing: border-box;
 }
 
-/* ALL BUTTONS */
+p{
+  color: #fff;
+}
+
+/* ALL BUTTONS ****************************************************/
 button{
   border: none;
   margin: 10px;
-  padding: 15px;
-  background-color: #115946;
-  color: #1da584;
+  padding: 8px 20px 8px 20px;
+  background-color: #17745b;
+  color: #22c89e;
   font-weight: bolder;
-  border-radius: 5px;
+  border-radius: 3px;
+  border-color: #000;
+}
+
+button:hover{
+  border: none;
+  margin: 10px;
+  padding: 8px 20px 8px 20px;
+  background-color: #209f7d;
+  color: #29edbc!important;
+  font-weight: bolder;
+  border-radius: 3px;
   border-color: #000;
 }
 
@@ -36,20 +47,40 @@ button{
   border: none;
   margin: 10px;
   padding: 15px 25px 15px 25px;
-  background-color: #115946;
-  color: #1da584;
+  background-color: #17745b;
+  color: #22c89e;
   font-weight: bolder;
-  border-radius: 5px;
+  border-radius: 3px;
   border-color: #000;
 }
 
- /* RESING FOR ALL IMG */
- img{
+/* RESING FOR ALL IMG */
+img{
   width: 120px;
   height: auto;
 }
 
-/* PARTIE HEADER */
+/* DIDICATE COLOR FOR DRAWER **************************/
+.ant-drawer-body>p{
+  color: #000 !important;
+}
+
+/* Home Link */
+.Drawer_drawer-link__o1AYJ{
+  color: #000;
+}
+ /* Home Link Hover*/
+.Drawer_drawer-link__o1AYJ:hover{
+  color: #6b6b6b;
+}
+
+/* LOGIN *************************************/
+/* Labels Form*/
+.ant-form-item-required{
+  color: #fff!important;
+}
+
+/* DRAWER ************************************/
 .Drawer_drawer-link__BiCZP{
   color: #000 !important;
 }
@@ -59,6 +90,14 @@ button{
  margin: 10px;
 }
 
+/* LogOff SVG*/
+.anticon.anticon-poweroff>svg{
+  fill: #1da584!important;
+}
+
+.anticon.anticon-poweroff>svg:hover{
+  fill: #27daad!important;
+}
 
 /* MODAL */ 
 .ant-modal-content{
@@ -104,7 +143,7 @@ button{
 
 /* ADMIN  SECTION ********************************************************************************/
 
-/* ZONE DE RECHERCHE */
+/* SEARCH AREA */
 /* Search Bar */
 .ant-input-affix-wrapper, css-dev-only-do-not-override-p7e5j5{
   margin: 0;
@@ -164,4 +203,3 @@ align-items: center!important;
   justify-content: center!important;
   align-items: center!important;
 }
-

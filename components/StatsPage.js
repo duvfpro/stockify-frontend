@@ -231,12 +231,12 @@ function StatsPage() {
             beginAtZero: true,
             title: {
               display: true,
-              text: yAxisLegend, // Utilisation de la prop pour la légende de l'axe Y
+              text: yAxisLegend, 
             },
           },
-          // ... Autres configurations de l'axe Y
+         
         },
-        // ... Autres options pour le graphique
+        
       }}
     />
       )
