@@ -111,7 +111,7 @@ function AddNewProduct(props) {
     return (
         <Modal open={props.openAddProductModal} onCancel={props.handleCloseButton} footer={null} width={450} height={900}>
             <div className={styles.allContainer} >
-                <div className={styles.title} > ADD NEW PRODUCT </div>
+                <div className={styles.title} > Add New Product </div>
                     <div className={styles.mainContainer}>
                         <input className={styles.inputField} type="text" onChange={handleNameInputChange} value={productName} placeholder="Product name" required />
                         <input className={styles.inputField} type="number" onChange={handleStockInputChange} value={productStock} placeholder="Stock" required />
@@ -130,7 +130,7 @@ function AddNewProduct(props) {
                          <p className={styles.noFile} >No file selected {selectedFile.name}</p>
                         )}
 
-                        <button onClick={() => handleSubmitButton()} className={styles.submitButton} > SUBMIT </button>
+                        <button onClick={() => handleSubmitButton()} className={styles.submitButton} > Submit </button>
                 </div>
             </div>
 

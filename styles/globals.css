@@ -4,7 +4,12 @@ body {
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  overflow-x: hidden !important;  
+}
+
+p{
+  color: #818181;
 }
 
 * {
@@ -16,10 +21,10 @@ button{
   border: none;
   margin: 10px;
   padding: 15px;
-  background-color: #A9DFD8;
-  color: #000;
+  background-color: #115946;
+  color: #1da584;
   font-weight: bolder;
-  border-radius: 15px;
+  border-radius: 5px;
   border-color: #000;
 }
 
@@ -31,14 +36,12 @@ button{
   border: none;
   margin: 10px;
   padding: 15px 25px 15px 25px;
-  background-color: #A9DFD8;
-  color: #000;
+  background-color: #115946;
+  color: #1da584;
   font-weight: bolder;
-  border-radius: 15px;
+  border-radius: 5px;
   border-color: #000;
 }
-
-
 
  /* RESING FOR ALL IMG */
  img{
@@ -47,7 +50,6 @@ button{
 }
 
 /* PARTIE HEADER */
-
 .Drawer_drawer-link__BiCZP{
   color: #000 !important;
 }
@@ -70,7 +72,6 @@ button{
   background-color: #323A57;
 }
 
-
 .anticon, anticon-close{
   color: #000 !important;
 }
@@ -78,6 +79,9 @@ button{
 .anticon, anticon-close, ant-modal-close-icon{
   color: #fff;
 }
+
+
+/* PRODUCT PAGE ************************************************************************************/
 
 .AddNewProduct_mainContainer__iYuHX>input{
   margin: 5px;
@@ -87,22 +91,77 @@ button{
   margin: 5px;
 }
 
-p{
-  color: #818181;
+.ProductsPage_productCards__8mvPE{
+  width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
-
-
-/* PRODUCT PAGE */
-/* IMG SIZING */
+/* IMG SIZING FOR ALL */
 .Product_productContainer__W6GOQ>img{
   max-width: 150px;
 }
 
-/* ADMIN  SECTION */
+/* ADMIN  SECTION ********************************************************************************/
+
+/* ZONE DE RECHERCHE */
+/* Search Bar */
+.ant-input-affix-wrapper, css-dev-only-do-not-override-p7e5j5{
+  margin: 0;
+}
+
+/* Search Bar Logo */
+.ant-btn, css-dev-only-do-not-override-p7e5j5, ant-btn-default, ant-btn-icon-only, ant-input-search-button{
+  margin: 0;
+}
+
+/* DISPLAY AREA */
 /* List Background */
 .ant-list, ant-list-split, ant-list-something-after-last-item, css-dev-only-do-not-override-p7e5j5{
   padding: 20px;
-  border-radius: 15px;
+  border-radius: 5px;
   background-color: #323A57 !important;
 }
+
+/* Title in card Names */
+.ant-list-item-meta-title{
+  color: #fff!important;
+}
+
+/* Informations */
+.ant-list-item-meta-description{
+  color: #fff!important;
+}
+
+/* Page list */
+.ant-pagination, css-dev-only-do-not-override-p7e5j5{
+display: flex!important;
+justify-content: center!important;
+align-items: center!important;
+}
+
+/* Page List Arrow */
+/* PREV Button */
+.ant-pagination-prev, ant-pagination-disabled{
+  margin: 0!important;  
+  display: flex!important;
+  justify-content: center!important;
+  align-items: center!important;
+}
+
+/* Page Number */
+.ant-pagination-item, ant-pagination-item-1 ant-pagination-item-active{
+  margin: 0!important;
+  display: flex!important;
+  justify-content: center!important;
+  align-items: center!important;  
+}
+
+/* NEXT Button */
+.ant-pagination-next, ant-pagination-disabled{
+  margin: 0!important;
+  display: flex!important;
+  justify-content: center!important;
+  align-items: center!important;
+}
+
