@@ -72,8 +72,8 @@ function App({ Component, pageProps }) {
           <div className={styles.headerBar}>
             <div className={styles.iconsSection}>
               <FontAwesomeIcon icon={faBars} className={styles.iconTop} onClick={handleDrawerClick} />
+              <h1 className={styles.mainTitle} >{getPageTitle()}</h1>
             </div>
-            <h3>{getPageTitle()}</h3>
             <div>
               <NotificationButton />
             </div>

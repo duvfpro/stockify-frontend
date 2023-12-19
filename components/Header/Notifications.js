@@ -27,12 +27,15 @@ const NotificationButton = () => {
 
   const checkStockAndNotify = (products) => {
     products.forEach((product) => {
-      const lastProduct = product.soldAt.length - 1;
-      if (product.stock <= 5) {
-        openNotification(product.name, product.stock, product.soldAt[lastProduct].date);
+      if (product && product.stock && product.soldAt && product.soldAt.length > 0) {
+        const lastProduct = product.soldAt.length - 1;
+        if (product.stock <= 5) {
+          openNotification(product.storeName, product.stock, product.soldAt[lastProduct].date);
+        }
       }
     });
   };
+  
 
   const openNotification = (productName, productStock, soldAt) => {
     notification.open({

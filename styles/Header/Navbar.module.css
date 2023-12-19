@@ -1,5 +1,12 @@
 .Navbar_headerBar__nAzn_{
   background-color: #fff !important;
+  display: flex;
+
+}
+
+.mainTitle{
+
+  padding: 0px 0px 0px 50px;
 }
 
 .headerBar {
@@ -14,6 +21,9 @@
   padding-bottom: 2rem;
   border-bottom: 1px solid #e0e0e0;
 }
+
+
+
 .iconTop {
   font-size: 1rem;
   cursor: pointer;
@@ -35,31 +45,3 @@
   color: #000;
 }
 
-
-/* .headerBar {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 95vw;
-  margin: 20px;
-  padding-bottom: 2rem;
-}
-
-.iconTop {
-  font-size: 1rem;
-  cursor: pointer;
-  color: #fff;
-}
-
-.iconTop:hover {
-  opacity: 0.3;
-}
-
-.iconsSection {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 10vw;
-} */

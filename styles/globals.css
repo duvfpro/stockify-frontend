@@ -23,7 +23,7 @@ button{
   margin: 10px;
   padding: 8px 20px 8px 20px;
   background-color: #17745b;
-  color: #22c89e;
+  color: #fff;
   font-weight: bolder;
   border-radius: 3px;
   border-color: #000;
@@ -34,7 +34,7 @@ button:hover{
   margin: 10px;
   padding: 8px 20px 8px 20px;
   background-color: #209f7d;
-  color: #29edbc!important;
+  color: #fff!important;
   font-weight: bolder;
   border-radius: 3px;
   border-color: #000;
@@ -49,7 +49,7 @@ button:hover{
   margin: 10px;
   padding: 15px 25px 15px 25px;
   background-color: #17745b;
-  color: #22c89e;
+  color: #fff;
   font-weight: bolder;
   border-radius: 3px;
   border-color: #000;
@@ -84,7 +84,7 @@ img{
 /* HEADER ********************************************************************************/
 .ant-btn.css-dev-only-do-not-override-p7e5j5.ant-btn-primary:hover{
   background-color: #209f7d;
-  color: #29edbc!important;
+  color: #fff!important;
 }
 
 /* DRAWER ********************************************************************************/
@@ -99,11 +99,11 @@ img{
 
 /* LogOff SVG*/
 .anticon.anticon-poweroff>svg{
-  fill: #1da584!important;
+  fill: #fff!important;
 }
 /* LogOff Hover SVG*/
 .anticon.anticon-poweroff>svg:hover{
-  fill: #27daad!important;
+  fill: #fff!important;
 }
 
 /* MODAL */ 
