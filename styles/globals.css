@@ -45,8 +45,8 @@ button{
 
  /* RESING FOR ALL IMG */
  img{
-  max-width: 150px;
-  max-height: 150px;
+  width: 120px;
+  height: auto;
 }
 
 

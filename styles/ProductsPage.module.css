@@ -1,22 +1,22 @@
 .main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .modalMainContent{
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-  }
+.modalMainContent{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
 
-  .mainContainer{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-  }
+.mainContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
 
   .productCards{
     display: flex;

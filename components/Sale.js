@@ -37,6 +37,7 @@ function Sale(props) {
         .then(response => response.json())
         .then(data => {
             props.handleCloseButton();
+            props.refreshLastSale()
         });
     };
 

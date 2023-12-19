@@ -1,4 +1,3 @@
-/* Drawer.module.css */
 
 .ant-drawer-content-wrapper{
   background-color: #000 !important;
@@ -8,12 +7,11 @@
   color: #000 !important;
 }
 
-/* Ajoutez ces styles pour changer le curseur au survol */
 .drawer-link {
     cursor: pointer;
   }
   
   .drawer-link:hover {
-    text-decoration: underline; /* Ajoutez cette ligne si vous voulez souligner le texte au survol */
+    text-decoration: underline;
   }
   

@@ -2,7 +2,8 @@ import styles from '../styles/ProductsPage.module.css';
 import AddNewProduct from './AddNewProduct';
 import Product from './Product';
 import FilterCascader from './Tools/FilterCascader';
-import { Modal } from 'antd';
+import FilterStock from './Tools/FilterStock';
+import { Modal, Button } from 'antd';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
@@ -23,10 +24,17 @@ function ProductsPage(props) {
   const [productName, setProductName] = useState('');
   const [openEditModal, setOpenEditModal] = useState(false);
 
+  const [selectedFilters, setSelectedFilters] = useState([]); // pour stocker les filtres
+  const [selectedStockFilters, setSelectedStockFilters] = useState(''); // pour stocker les filtres stock
+
+  const [triggerSortByStock, setTriggerSortByStock] = useState(false);
+
   const user = useSelector((state) => state.user.value);
   const router = useRouter();
 
   const [nameToSave, setNameToSave] = useState('');
+
+  console.log(selectedFilters)
 
   useEffect(() => {
     if (!user.token) {
@@ -34,15 +42,47 @@ function ProductsPage(props) {
     }
   }, [user.token, router]);
 
-  useEffect(() => { // Affiche la liste de tous nos produits
-    setTimeout(() => {
-       fetch('http://localhost:3000/products/allProducts')
-      .then(response => response.json())
-      .then(data => {
-        setMyProducts(data.allProducts);
-      });
-    }, 500);
-  }, [refreshProducts]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setTimeout(async () => {
+        const response = await fetch('http://localhost:3000/products/allProducts');
+        const data = await response.json();
+        let productTab = [];
+        for(let i=0; i<selectedFilters.length; i++ ) {
+          for(let j=0; j<data.allProducts.length; j++) {
+            if(selectedFilters[i] == data.allProducts[j].category[0].name) {
+              productTab.push(data.allProducts[j]);
+            }
+          }
+        }
+        if(JSON.stringify(productTab) === JSON.stringify([])) { // = s'il ny a pas de filtre
+          if(triggerSortByStock == "Stock Ascending") { // = si le bouton trie par stock est activé
+            setMyProducts(data.allProducts.sort(compareByStock));
+          } else if(triggerSortByStock == "Stock Descending") {
+            setMyProducts(data.allProducts.sort(compareByStock).reverse());
+          } else {
+            setMyProducts(data.allProducts);
+          }
+        } else {
+          if(triggerSortByStock == "Stock Ascending") { // = si le bouton trie par stock est activé
+            setMyProducts(productTab.sort(compareByStock));
+          } else if(triggerSortByStock == "Stock Descending") {
+            setMyProducts(productTab.sort(compareByStock).reverse());
+          } else {
+            setMyProducts(productTab);
+          }     
+        }
+        }, 1000)
+
+      } catch (error) {
+        console.error('Erreur lors de la récupération des produits :', error);
+      }
+    };
+    fetchData();
+  }, [refreshProducts, selectedFilters, triggerSortByStock]);
+  
 
   useEffect(() => { // fetch toutes les catégories pour le menu déroulant de la modal
     fetch('http://localhost:3000/categories/allCategories')
@@ -61,6 +101,22 @@ function ProductsPage(props) {
 const handleAddProductButton = () => {
   setOpenAddProductModal(true);
 };
+
+function compareByStock(a, b) {
+  if (a.stock < b.stock) {
+    return -1;
+  }
+  if (a.stock > b.stock) {
+    return 1;
+  }
+  return 0;
+}
+
+const handleTriStockButton = () => {
+  setTriggerSortByStock(!triggerSortByStock);
+  // productsArray.sort(compareByStock);
+};
+
   
 const handleCloseButton = () => {
   setOpenAddProductModal(false);
@@ -68,13 +124,16 @@ const handleCloseButton = () => {
 }; 
 
 const handleDeleteButton = (name) => {
-  fetch(`http://localhost:3000/products/deleteProduct/${name}`, {
-    method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' },
-  })
-  .then(data => {
-    setRefreshProducts(!refreshProducts);
-  })
+  const isConfirmed = window.confirm('Are you sure you want to delete this user?');
+  if(isConfirmed) {
+    fetch(`http://localhost:3000/products/deleteProduct/${name}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then(data => {
+      setRefreshProducts(!refreshProducts);
+    })    
+  }
 };
 
 const handleEditButton = (name, price, category, stock, image) => {
@@ -124,7 +183,8 @@ const handleImageInputChange = (e) => {
 };
 
 
-const handleSaveButton = () => { 
+const handleSaveButton = () => {
+ 
   fetch(`http://localhost:3000/products/updateMyProduct/${nameToSave}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -134,12 +194,31 @@ const handleSaveButton = () => {
   setOpenEditModal(false);
   };
 
+
+  const handleFilterChange = (selectedFilters) => {
+    setSelectedFilters(selectedFilters);
+  }
+
+  const handleStockFilterChange = (stockFilterChange) => {
+    setTriggerSortByStock(stockFilterChange);
+
+    // setTriggerSortByStock(!triggerSortByStock);
+    // setSelectedStockFilters(selectedFilters)
+  }
+
+
     return (
       <div className={styles.main}>
-            <h1>ProductsPage</h1>
+        <div className={styles.filtersContainer}>
+          <div className={styles.myFilters}>
+            <FilterCascader handleFilterChange={handleFilterChange} />
+            <FilterStock handleStockFilterChange={handleStockFilterChange} />
+          </div>
+          
+          {/* <Button type="primary" onClick={() => handleTriStockButton()} className={styles.addProductButton} > Tri stock croissant </Button> */}
+          <button className={styles.addProduct} onClick={() => handleAddProductButton() }> ADD NEW PRODUCT </button>
+        </div>
 
-            <FilterCascader/>
-              <button className={styles.addProduct} onClick={() => handleAddProductButton() }> ADD NEW PRODUCT </button>
             <div className={styles.productCards}>
               {openAddProductModal && 
                 <AddNewProduct openAddProductModal={openAddProductModal} handleCloseButton={handleCloseButton} /> }
@@ -149,19 +228,31 @@ const handleSaveButton = () => {
             </div>
 
           <Modal className={styles.modalMainContent} open={openEditModal} onCancel={closeEditModal} footer={null} width={800} height={800}>
+              <div className={styles.modalMainContent}>
+                <img src={image} alt={productName} />
               <div className={styles.title} > UPDATE PRODUCT </div>
               <div className={styles.mainContainer}>
-                NAME <input type="text" onChange={handleNameInputChange} value={productName} placeholder="Product name" />
-                <img src={image} alt={productName} />
-                CATEGORY <select onChange={handleSelectChange} >
+                <div>
+                   NAME <input className={styles.inputField} type="text" onChange={handleNameInputChange} value={productName} placeholder="Product name" />
+                </div>
+                <div>
+                  PRICE <input className={styles.inputField} type="number" onChange={handlePriceInputChange} value={price} placeholder="Price" required />
+                </div>
+                <div>
+                  STOCK <input className={styles.inputField} type="number" onChange={handleStockInputChange} value={stock} placeholder="Stock" required />
+                </div>
+                <div>
+                  CATEGORY <select className={styles.inputField} onChange={handleSelectChange} >
                   {category.map((data, index) => (
                   <option key={index} value={data.name}> {data.name} </option>
                   ))}
-                </select>
-                PRICE <input type="number" onChange={handlePriceInputChange} value={price} placeholder="Price" required />
-                STOCK <input type="number" onChange={handleStockInputChange} value={stock} placeholder="Stock" required />
+                  </select>
+                </div>
                 <button onClick={() => handleSaveButton()} > SUBMIT </button>
               </div>
+              </div>
+              
+              
           </Modal>
       </div>
 )

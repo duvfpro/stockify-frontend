@@ -75,34 +75,37 @@ function Categories() {
         };
 
         const handleDeleteButton = (name, id) => {
-            fetch(`http://localhost:3000/products/productsByCategoryId`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ categoryId: id })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if(data.result==true) {     
-                    for(let i=0; i<data.allProducts.length; i++) {
-                        fetch(`http://localhost:3000/products/updateMyProduct/${data.allProducts[i].name}`, {
-                            method: 'PUT',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ name: data.allProducts.name, category: '657ab87025ea6d64cea475e6' })
-                        })
-                        .then(response => response.json())
-                        .then((data2) => {
-                            console.log(data2)
-                        })
+            const isConfirmed = window.confirm('Are you sure you want to delete this user?');
+            if(isConfirmed) {
+                fetch(`http://localhost:3000/products/productsByCategoryId`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ categoryId: id })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.result==true) {     
+                        for(let i=0; i<data.allProducts.length; i++) {
+                            fetch(`http://localhost:3000/products/updateMyProduct/${data.allProducts[i].name}`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ name: data.allProducts.name, category: '657ab87025ea6d64cea475e6' })
+                            })
+                            .then(response => response.json())
+                            .then((data2) => {
+                                console.log(data2)
+                            })
+                        }
                     }
-                }
-            })
-            .then(fetch(`http://localhost:3000/categories/deleteMyCategory/${name}`, {
-                            method: 'DELETE',
-                            headers: { 'Content-Type': 'application/json' },
-            })
-            .then(() => {
-                setRefreshProducts(!refreshProducts);
-            }))  
+                })
+                .then(fetch(`http://localhost:3000/categories/deleteMyCategory/${name}`, {
+                                method: 'DELETE',
+                                headers: { 'Content-Type': 'application/json' },
+                })
+                .then(() => {
+                    setRefreshProducts(!refreshProducts);
+                }))  
+            }
         };
 
 

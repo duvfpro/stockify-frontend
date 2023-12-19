@@ -1,18 +1,16 @@
-.main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100vw;
-  background-color: #171821;
-  color: #A9DFD8;
-}
+
+  .main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+  }
+
 
 .sales {
   display: flex;
-  width: 50vw;
-  height: 80vh;
+  width: 50%;
+  margin-top: 100px;
 }
 .ant-table-row {
   background-color: steelblue;

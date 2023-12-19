@@ -4,11 +4,18 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: center;
     margin: 10px;
     padding: 10px;
     border: 1px solid black;
     border-radius: 5px;
 }
+
+.productContainer:hover {
+    background-color: black;
+    color: white;
+    border: 2px white solid;
+  }
 
 
 .productContainer>button{
@@ -19,3 +26,31 @@
     background-color: #35221d ;
     color: #e18763;
   }
+
+  .deleteBtn:hover {
+    color: white;
+  }
+
+.editBtn {
+    cursor:pointer;
+}
+
+.editBtn:hover {
+    color: white;
+  }
+
+
+.productContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.img {
+    border-radius: 25%;
+}
+
+.stock {
+    color: white
+}
