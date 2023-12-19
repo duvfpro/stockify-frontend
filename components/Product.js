@@ -25,8 +25,8 @@ function Product (props) {
             <p className={styles.category}>Category: {props.category}</p>
         </div>
         <div className={styles.productBtn}>
-            <button className={styles.editBtn} onClick={() => handleEditButton()} > EDIT </button>
-            <button className={styles.deleteBtn} onClick={() => handleDeleteButton()} > DELETE </button>
+            <button className={styles.editBtn} onClick={() => handleEditButton()} > Edit </button>
+            <button className={styles.deleteBtn} onClick={() => handleDeleteButton()} > Delete </button>
         </div>
     </div>
     );

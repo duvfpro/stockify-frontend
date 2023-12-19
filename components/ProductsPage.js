@@ -216,7 +216,7 @@ const handleSaveButton = () => {
           </div>
           
           {/* <Button type="primary" onClick={() => handleTriStockButton()} className={styles.addProductButton} > Tri stock croissant </Button> */}
-          <button className={styles.addProduct} onClick={() => handleAddProductButton() }> ADD NEW PRODUCT </button>
+          <button className={styles.addProduct} onClick={() => handleAddProductButton() }> Add New Product </button>
         </div>
 
             <div className={styles.productCards}>
@@ -248,7 +248,7 @@ const handleSaveButton = () => {
                   ))}
                   </select>
                 </div>
-                <button onClick={() => handleSaveButton()} > SUBMIT </button>
+                <button onClick={() => handleSaveButton()} > Submit </button>
               </div>
               </div>
               
