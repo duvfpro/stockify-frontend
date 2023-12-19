@@ -151,7 +151,7 @@ function SalesPage() {
             ),
             rowExpandable: (record) => record.history.length > 0,
           }}
-          onChange={handleSorterChange}
+          // onChange={handleSorterChange}
         />
       </div>
     </div>
