@@ -4,17 +4,18 @@
     flex-direction: column;
     align-items: center;
     height: 100%;
+    width: 100%;
   }
 
 
 .sales {
   display: flex;
   width: 50%;
+  height: 50%;
   margin-top: 100px;
 }
 .ant-table-row {
   background-color: steelblue;
-
 }
 .ant-table-thead{
   background-color: black;

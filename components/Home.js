@@ -96,8 +96,8 @@ function Home() {
       .then((data) => {
 
         const currentDate = new Date();
-        const date = currentDate.getDate().toString().padStart(2, "0");
-        const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+        const date = currentDate.getDate().toString();
+        const month = (currentDate.getMonth() + 1).toString();
         const year = currentDate.getFullYear().toString();
 
         const todayDateString = `${year}-${month}-${date}`;
@@ -115,14 +115,14 @@ function Home() {
               ? product.soldAt.map((sale) => ({
                   type: "vendu ",
                   quantity: sale.quantity,
-                  date: new Date(sale.date).toLocaleString(),
+                  date: new Date(sale.date).toLocaleDateString().split('/').reverse().join('/'),
                 }))
               : [],
             product.restockAt
               ? product.restockAt.map((restock) => ({
                   type: "restock ",
                   quantity: restock.quantity,
-                  date: new Date(restock.date).toLocaleString(),
+                  date: new Date(restock.date).toLocaleDateString().split('/').reverse().join('/'),
                 }))
               : [],
           ];

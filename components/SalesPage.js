@@ -85,14 +85,14 @@ function SalesPage() {
               ? product.soldAt.map((sale) => ({
                   type: "vendu ",
                   quantity: sale.quantity,
-                  date: new Date(sale.date).toLocaleString(),
+                  date: new Date(sale.date).toString(),
                 }))
               : [],
             product.restockAt
               ? product.restockAt.map((restock) => ({
                   type: "restock ",
                   quantity: restock.quantity,
-                  date: new Date(restock.date).toLocaleString(),
+                  date: new Date(restock.date).toString(),
                 }))
               : [],
           ];
