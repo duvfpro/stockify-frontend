@@ -13,7 +13,7 @@ import Chart from 'chart.js/auto';
 import React from "react";
 import { Bar } from "react-chartjs-2";
 
-import Category from '../../backend/models/categories';
+
 
 function StatsPage() {
 
