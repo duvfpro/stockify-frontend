@@ -21,5 +21,9 @@
   .productCards{
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
   }
 
+  .ProductsPage_productCards__8mvPE{
+    justify-content: center;
+  }

@@ -7,7 +7,7 @@
     margin: 10px;
     padding: 10px;
     border: 1px solid black;
-    border-radius: 15px;
+    border-radius: 5px;
 }
 
 
@@ -16,5 +16,6 @@
 }
 
 .deleteBtn{
-    background-color: red;
+    background-color: #35221d ;
+    color: #e18763;
   }
