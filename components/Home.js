@@ -113,14 +113,14 @@ function Home() {
           const history = [
             product.soldAt
               ? product.soldAt.map((sale) => ({
-                  type: "vendu ",
+                  type: "sold: ",
                   quantity: sale.quantity,
                   date: new Date(sale.date).toLocaleDateString().split('/').reverse().join('/'),
                 }))
               : [],
             product.restockAt
               ? product.restockAt.map((restock) => ({
-                  type: "restock ",
+                  type: "restock: ",
                   quantity: restock.quantity,
                   date: new Date(restock.date).toLocaleDateString().split('/').reverse().join('/'),
                 }))
@@ -167,14 +167,14 @@ function Home() {
         const history = [
           product.soldAt
             ? product.soldAt.map((sale) => ({
-                type: "vendu ",
+                type: "sold: ",
                 quantity: sale.quantity,
                 date: new Date(sale.date).toLocaleString(),
               }))
             : [],
           product.restockAt
             ? product.restockAt.map((restock) => ({
-                type: "restock ",
+                type: "restock: ",
                 quantity: restock.quantity,
                 date: new Date(restock.date).toLocaleString(),
               }))
@@ -253,12 +253,12 @@ function Home() {
               expandable={{
                 expandedRowRender: (record) => (
                   <ul>
-                  {record.history.map((operationGroup, groupIndex) => (
+                  {(record.history).map((operationGroup, groupIndex) => (
                     <li key={groupIndex}>
                       {operationGroup.map((operation, operationIndex) => (
                         <p key={operationIndex}>
                           {operation.type && operation.quantity && operation.date
-                            ? `${operation.type} ${operation.quantity} le ${operation.date}`
+                            ? `${operation.type} ${operation.quantity} on ${operation.date}`
                             : "Invalid operation data"}
                         </p>
                       ))}
