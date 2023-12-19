@@ -5,6 +5,7 @@ import styles from "../styles/Home.module.css";
 import AddStock from "./AddStock";
 import Sale from "./Sale";
 import { Table } from "antd";
+import FilterDate from './Tools/FilterDate';
 
 
 
@@ -15,6 +16,7 @@ function Home() {
   const [openSaleModal, setSaleModal] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const [displayProducts, setDisplayProducts] = useState([]);
+  const [filter, setFilter] = useState('Today');
 
   const refreshLastSale = () => {
 
@@ -33,13 +35,11 @@ function Home() {
       title: "Product",
       width: 120,
       dataIndex: "product",
-      sorter: true,
     },
     {
       title: "Category",
       width: 120,
       dataIndex: "category",
-      sorter: true,
     },
     {
       title: "Date",
@@ -50,25 +50,46 @@ function Home() {
       title: "current Stock ",
       dataIndex: "stock",
       width: 120,
-      sorter: true,
+      sorter: (a, b) => a.stock - b.stock,
+      sortDirections: ['ascend', 'descend', 'ascend'],
+      defaultSortOrder: 'ascend',
     },
     {
       title: "Number of sales",
       dataIndex: "sales",
       width: 120,
-      sorter: true,
+      sorter: (a, b) => a.sales - b.sales,
+      sortDirections: ['ascend', 'descend', 'ascend'],
+      defaultSortOrder: 'ascend',
     },
     {
       title: "Quantity Sold",
       dataIndex: "quantitySold",
       width: 120,
-      sorter: true,
+      sorter: (a, b) => a.quantitySold - b.quantitySold,
+      sortDirections: ['ascend', 'descend', 'ascend'],
+      defaultSortOrder: 'ascend',
     },
   ];
+
+
+  const calculateWeekRange = () => {
+    const currentDate = new Date();
+    const startOfWeek = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay()));
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(endOfWeek.getDate() + 6);
+  
+    const startDateString = startOfWeek.toISOString().split("T")[0];
+    const endDateString = endOfWeek.toISOString().split("T")[0];
+  
+    return { startDateString, endDateString };
+  };
 
   
   useEffect(() => {
     // Affiche la liste des produits vendus aujourd'hui
+    
+    if(filter == 'Today') {
 
     fetch("http://localhost:3000/products/allProducts")
       .then((response) => response.json())
@@ -87,6 +108,8 @@ function Home() {
         });
 
         let formattedData = filteredProducts.map((product, index) => {
+          const todaySales = product.soldAt.filter((sale) => sale.date.split("T")[0] === todayDateString);
+
           const history = [
             product.soldAt
               ? product.soldAt.map((sale) => ({
@@ -110,22 +133,71 @@ function Home() {
             category: product.category[0]?.name || "N/A",
             date: todayDateString,
             stock: product.stock,
-            quantitySold: product.soldAt.reduce(
+            quantitySold: todaySales.reduce(
               (total, sale) => total + sale.quantity,
               0
             ),
-            sales: product.soldAt.length,
+            sales: todaySales.length,
             history: history,
           };
         });
        
-        
-        
         setDisplayProducts(formattedData);
      
         
       });
-  }, [refresh]);
+    } else if (filter == 'This week') {
+
+      const { startDateString, endDateString } = calculateWeekRange();
+
+    fetch("http://localhost:3000/products/allProducts")
+    .then((response) => response.json())
+    .then((data) => {
+      let filteredProducts = data.allProducts.filter((product) => {
+        let soldDates = product.soldAt.map((sale) => sale.date.split("T")[0]);
+        return soldDates.some(date => date >= startDateString && date <= endDateString);
+      });
+
+      let formattedData = filteredProducts.map((product, index) => {
+        const weekSales = product.soldAt.filter((sale) => {
+          const saleDate = sale.date.split("T")[0];
+          return saleDate >= startDateString && saleDate <= endDateString;
+        });
+        
+        const history = [
+          product.soldAt
+            ? product.soldAt.map((sale) => ({
+                type: "vendu ",
+                quantity: sale.quantity,
+                date: new Date(sale.date).toLocaleString(),
+              }))
+            : [],
+          product.restockAt
+            ? product.restockAt.map((restock) => ({
+                type: "restock ",
+                quantity: restock.quantity,
+                date: new Date(restock.date).toLocaleString(),
+              }))
+            : [],
+        ];
+
+        return {
+          key: index,
+          product: product.name,
+          category: product.category[0]?.name || "N/A",
+          date: startDateString + " to " + endDateString,
+          stock: product.stock,
+          quantitySold: weekSales.reduce((total, sale) => total + sale.quantity, 0),
+          sales: weekSales.length,
+          history: history,
+        };
+      });
+
+      setDisplayProducts(formattedData);
+    });
+    }
+
+  }, [refresh, filter]);
 
 
 
@@ -147,6 +219,11 @@ function Home() {
     setSaleModal(false);
   };
 
+  const handleFilterDateChange = (filter) => {
+    setFilter(filter);
+  };
+
+
   return (
     <main className={styles.main}>
       <h1>Welcome</h1>
@@ -161,6 +238,7 @@ function Home() {
         <button className={styles.saleProduct} onClick={handleSaleButtonClick}>
           SALE PRODUCTS
         </button>
+        <FilterDate handleFilterDateChange={handleFilterDateChange} />
       </div>
       <div className={styles.sale}>
         <div className={styles.sales}>
