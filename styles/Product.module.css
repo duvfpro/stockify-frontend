@@ -22,13 +22,15 @@
     margin-right: 15px;
 }
 
+/* Delete Button */
 .deleteBtn{
-    background-color: #35221d ;
+    background-color: #734a3f ;
     color: #e18763;
   }
 
   .deleteBtn:hover {
-    color: white;
+    background-color: #956153 ;
+    color: #fb976f !important;
   }
 
 .editBtn {

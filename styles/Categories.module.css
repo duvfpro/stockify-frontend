@@ -8,19 +8,19 @@
 }
 
 .cardMapContainer{
-
+    
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
 
 .categoryContainer{
-
+    border: 1px solid #000;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
     width: 300px;
-    background-color: #38365c;
+    background-color: rgba(60, 59, 102, 0.5);
     padding: 20px;
     margin: 30px;
     border-radius: 5px;
@@ -41,9 +41,15 @@
     margin: 20px;
 }
 
+/* Delete Button */
 .deleteBtn{
-    background-color: #35221d ;
+    background-color: #734a3f ;
     color: #e18763;
+  }
+
+.deleteBtn:hover {
+background-color: #956153 ;
+color: #fb976f !important;
 }
 
 .mainEditModContainer{

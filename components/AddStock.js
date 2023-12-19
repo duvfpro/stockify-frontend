@@ -1,14 +1,14 @@
 import styles from '../styles/AddStock.module.css';
-import { Modal } from 'antd';
+import { Modal, Input, Select, notification } from 'antd';
+import { SmileOutlined } from '@ant-design/icons';
 import React, { useState, useEffect } from 'react';
 
 
 function AddStock(props) {
-    console.log("refreshLastSale prop in AddStock:", props.refreshLastSale);
-    console.log("handle close button called",props.handleCloseButton)
+
     const [selectedOption, setSelectedOption] = useState(''); // Pour récupérer le produit choisie par le user
     const [productList, setProductList] = useState([]);
-    const [stockToAdd, setStockToAdd] = useState([]);
+    const [stockToAdd, setStockToAdd] = useState('');
     
 
     useEffect(() => { // Fetch la liste des produit pour le menu déroulant
@@ -30,21 +30,26 @@ function AddStock(props) {
 
 
     const handleSubmitButton = () => {
-        fetch(`http://localhost:3000/products/addStock/${selectedOption}/${stockToAdd}`, {
-            method: 'PUT',
-            headers: { 'Content-type': 'application/json' },
-        })
-        .then(response => response.json())
-        .then(data => {
-            props.handleCloseButton();
-            props.refreshLastSale()
-            
-        })
+        if(!stockToAdd || !selectedOption) {
+            window.confirm('Empty fields !');
+        } else {
+            fetch(`http://localhost:3000/products/addStock/${selectedOption}/${stockToAdd}`, {
+                method: 'PUT',
+                headers: { 'Content-type': 'application/json' },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                props.handleCloseButton();  
+                props.refreshLastSale();
+                openNotification(selectedOption, stockToAdd);
+            })
+        }
     };
 
 
     const handleSelectChange = (event) => { // Gère le choix du produit
-        setSelectedOption(event.target.value);
+        setSelectedOption(event);
     };
 
     const handleStockInputChange = (event) => {
@@ -56,19 +61,49 @@ function AddStock(props) {
         }
     };
 
-    return (
-        <Modal open={props.openAddStockModal} onCancel={props.handleCloseButton} footer={null} width={800} height={800}>
-            <div className={styles.title} > ADD STOCK </div>
-            <div className={styles.mainContainer}>
-                <select onChange={handleSelectChange} >
-                    <option value="" > Select a product </option>
-                    {productList.map((data, index) => (
-                    <option key={index} value={data} > {data}</option>
-                    ))}
-                </select>
-                <input type="number" onChange={handleStockInputChange} value={stockToAdd} placeholder="Quantity to add" />
-                <button onClick={() => handleSubmitButton()} className={styles.websiteButton} > SUBMIT </button>
+
+    const openNotification = (productName, productStock) => {
+        notification.open({
+          message: 'Stock added',
+          description: (
+            <div>
+              <p>
+                <span style={{ color: 'green', fontWeight: 'bold' }}>{productStock} {productName} added to your stock!</span>.
+              </p>
             </div>
+          ),
+          className: 'custom-class',
+          duration: 2,
+          style: {
+            width: 600,
+          },
+          icon: (
+            <SmileOutlined
+              style={{
+                color: '#108ee9',
+              }}
+            />
+          ),
+        });
+    };
+
+
+    return (
+        <Modal open={props.openAddStockModal} onCancel={props.handleCloseButton} footer={null} width={450} height={900}>
+            <div className={styles.modalContainer}>
+                <div className={styles.title} > Add Stock </div>
+                <div className={styles.mainContainer}>
+                    <Select className={styles.selectInput} onChange={handleSelectChange} >
+                        <option value="" > Select a product </option>
+                        {productList.map((data, index) => (
+                        <option key={index} value={data} > {data}</option>
+                        ))}
+                    </Select>
+                    <Input className={styles.inputField} type="number" onChange={handleStockInputChange} value={stockToAdd} placeholder="Quantity to add" />
+                    <button onClick={() => handleSubmitButton()} className={styles.submitButton} > SUBMIT </button>
+                </div>
+            </div>
+           
         </Modal>
     );
 

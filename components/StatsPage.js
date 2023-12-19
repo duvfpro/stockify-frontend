@@ -231,12 +231,12 @@ function StatsPage() {
             beginAtZero: true,
             title: {
               display: true,
-              text: yAxisLegend, // Utilisation de la prop pour la légende de l'axe Y
+              text: yAxisLegend, 
             },
           },
-          // ... Autres configurations de l'axe Y
+         
         },
-        // ... Autres options pour le graphique
+        
       }}
     />
       )
@@ -249,9 +249,7 @@ function StatsPage() {
   return (
     <div className={styles.mainContainer}>
       <div className={styles.titleContainer}>
-        <h1 className={styles.title}>
-          Bienvenue dans les statistiques de vos Stocks
-        </h1>
+
       </div>
 
       <div className={styles.filterContainer}>

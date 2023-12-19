@@ -33,12 +33,12 @@ const Admin = () => {
         throw new Error(`Error: ${response.status}`);
       }
       const data = await response.json();
-
+      console.log(data)
       const formattedData = data.data.map((user) => ({
         key: user._id,
         username: user.username,
         email: user.email,
-        isAdmin: user.isAdmin.toString(),
+        isAdmin: user.isAdmin !== undefined ? user.isAdmin.toString() : '',
       }));
       setUserData(formattedData);
     } catch (error) {

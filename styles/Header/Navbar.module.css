@@ -1,19 +1,33 @@
 .Navbar_headerBar__nAzn_{
   background-color: #fff !important;
+  display: flex;
+
+}
+
+.mainTitle{
+
+  padding: 0px 0px 0px 50px;
 }
 
 .headerBar {
-  background-color: #fff;
+  background-color: #ffffffef;
   color: #000;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 100vw;
+  width: 100%;
   padding: 20px;
   padding-bottom: 2rem;
   border-bottom: 1px solid #e0e0e0;
+  border-radius: 1rem;
+  margin-top: 0.5rem;
+  /* border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem; */
 }
+
+
+
 .iconTop {
   font-size: 1rem;
   cursor: pointer;
@@ -35,31 +49,3 @@
   color: #000;
 }
 
-
-/* .headerBar {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 95vw;
-  margin: 20px;
-  padding-bottom: 2rem;
-}
-
-.iconTop {
-  font-size: 1rem;
-  cursor: pointer;
-  color: #fff;
-}
-
-.iconTop:hover {
-  opacity: 0.3;
-}
-
-.iconsSection {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 10vw;
-} */
