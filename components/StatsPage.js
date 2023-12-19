@@ -1,213 +1,259 @@
-import styles from '../styles/StatsPage.module.css';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useRouter } from 'next/router';
-
-import FullCalendar from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
-
-import { CategoryScale } from 'chart.js';
-Chart.register(CategoryScale);
-import Chart from 'chart.js/auto';
-
+ // Importe la bibliothèque React.
 import React from "react";
-import { Bar } from "react-chartjs-2";
+// Importe les styles CSS pour la page des statistiques.
+import styles from "../styles/StatsPage.module.css"; 
+// Importe les hooks useEffect, useState et useRef de React.
+import { useEffect, useState, useRef } from "react"; 
+// Importe le hook useSelector de Redux pour accéder à l'état du store.
+import { useSelector } from "react-redux"; 
+// Importe le hook useRouter de Next.js pour la gestion des routes.
+import { useRouter } from "next/router"; 
 
+// Importe CategoryScale de Chart.js pour la mise à l'échelle des catégories sur les graphiques.
+import { CategoryScale } from "chart.js";
+// Enregistre CategoryScale pour une utilisation avec Chart.js.
+Chart.register(CategoryScale); 
+// Importe la version automatique de Chart.js qui sélectionne automatiquement le contrôleur de graphique et l'échelle.
+import Chart from "chart.js/auto";
+// Importe l'adaptateur date-fns pour Chart.js pour la gestion des dates.
+import "chartjs-adapter-date-fns"; 
+// Importe le composant Bar de react-chartjs-2 pour la création de graphiques à barres.
+import { Bar } from "react-chartjs-2"; 
+// Importe le composant Line de react-chartjs-2 pour la création de graphiques linéaires.
+import { Line } from "react-chartjs-2"; 
 
+// Importe des fonctions de transformation de données spécifiques.
+import transformDataSell from "./transformDataSell";
+import transformDataStock from "./transformDataStock";
+import transformDataRestock from "./transformDataRestock";
+import transformDataByP from "./transformDataByP";
+
+<<<<<<< HEAD
+
+=======
+>>>>>>> 1f6ea9e4dd13d4f1fc0c70dc023300951dfabc41
 
 function StatsPage() {
-
+  // Get the router object from the 'next/router' module
   const router = useRouter();
+
+  // Get the current user object from the Redux state
   const user = useSelector((state) => state.user.value);
 
-  /////////////////////////////////////////
-  //             TOKEN USER              //
-  /////////////////////////////////////////
-
+  // USER TOKEN
+  // If the user does not have a token, redirect them to the home page
   useEffect(() => {
-      if (!user.token) {
-        router.push('/');
-      }
-    }, [user.token, router]);
+    if (!user.token) {
+      router.push("/");
+    }
+  }, [user.token, router]);
 
+  // FILTERING BY TIME
+  // State for time filter, default is 'day'
+  const [timeFilter, setTimeFilter] = useState("day");
 
-  /////////////////////////////////////////
-  //          FILTERING BY TIME          //
-  /////////////////////////////////////////
-
-  const [timeFilter, setTimeFilter] = useState('day');
-
+  // Function to handle changes in time selection
   const handleTimeSelectChange = (event) => {
     setTimeFilter(event.target.value);
   };
 
-  /////////////////////////////////////////
-  //          RENDERING BY TIME          //
-  /////////////////////////////////////////
-
+  // RENDERING BY TIME
+  // State for date, default is current date
   const [date, setDate] = useState(new Date());
 
-  const handleDateChange = (value) => {
-    setDate(value);
-  };
-  
-  /////////////////////////////////////////
-  //     FETCHING ALL CATÉGORIES         //
-  /////////////////////////////////////////
+  // FETCHING ALL DATA
+  // State for category filter, default is 'all'
+  const [categoryState, setCategoryState] = useState({
+    category: [],
+    categoryId: "all",
+  });
 
-  const [category, setCategory] = useState([]);
-  const [categoryId, setCategoryId] = useState('');
-  const [filter, setFilter] = useState('categories'); // Ajout d'un état pour le filtre
+  // State for filter, default is 'categories'
+  const [filter, setFilter] = useState("categories");
 
-useEffect(() => { 
-  fetch('http://localhost:3000/categories/allCategories')
-    .then(response => response.json())
-    .then(data => {
-      setCategory(data.allCategories);
-      setCategoryId('all');
+  // State for data loading status, default is false
+  const [dataLoaded, setDataLoaded] = useState(false);
 
-      // Une fois que nous avons l'ID de la catégorie, nous pouvons obtenir tous les produits
-      fetch("http://localhost:3000/products/allProducts")
-        .then((response) => response.json())
-        .then((data) => {
-          const transformedData = transformData(data.allProducts);
-          setChartData(transformedData);
-          setIsLoading(false); // Les données sont chargées
-        })
-        .catch((error) => {
-          console.error(error);
-          setIsLoading(false); // Une erreur s'est produite
-        });
-    });
-}, [filter, categoryId]); // Ajoutez filter et categoryId comme dépendances
+  // State for chart data
+  const [chartData, setChartData] = useState([]);
+  const [secondChartData, setSecondChartData] = useState([]); // New state for stock chart
+  const [restockChartData, setRestockChartData] = useState([]); // New state for restock chart
+  const [isLoading, setIsLoading] = useState(true);
 
+  const [products, setProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const chartRef = useRef(null); // Créez une référence ici
 
-const handleSelectChange = (event) => { 
-  let catName = event.target.value;
-  let id;
-  if (catName === 'all') {
-    setCategoryId('all');
+  // Fetch data from the server
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch all categories
+        const responseCategories = await fetch(
+          "http://localhost:3000/categories/allCategories"
+        );
+        const dataCategories = await responseCategories.json();
+        // Update the category state with the fetched categories
+        setCategoryState((prevState) => ({
+          ...prevState,
+          category: dataCategories.allCategories,
+        }));
+
+        // Fetch all products
+        const responseProducts = await fetch(
+          "http://localhost:3000/products/allProducts"
+        );
+        const dataProducts = await responseProducts.json();
+
+        // Filter products based on selected category
+        let filteredProducts;
+        if (categoryState.categoryId === "all") {
+          filteredProducts = dataProducts.allProducts;
+        } else {
+          filteredProducts = dataProducts.allProducts.filter((product) =>
+            product.category.some(
+              (category) => category._id === categoryState.categoryId
+            )
+          );
+        }
+
+        // Transform data for selling chart
+        const transformedDataSell = transformDataSell(
+          filteredProducts,
+          filter,
+          timeFilter
+        );
+        setChartData({ ...transformedDataSell });
+
+        // Transform data for stock chart
+        const transformedDataStock = transformDataStock(
+          filteredProducts,
+          filter,
+          timeFilter,
+        );
+        setSecondChartData({ ...transformedDataStock });
+      
+
+        // Transform data for restock chart
+        const transformedDataRestock = transformDataRestock(
+          filteredProducts,
+          filter,
+          timeFilter
+        );
+        setRestockChartData({ ...transformedDataRestock });
+
+        setIsLoading(false);
+        setDataLoaded(true); // Data has been loaded
+      } catch (error) {
+        console.error(error);
+        setIsLoading(false);
+        setDataLoaded(true); // An error occurred
+      }
+    };
+
+    fetchData();
+    // This effect runs when 'filter', 'categoryState.categoryId', or 'timeFilter' changes
+  }, [filter, categoryState.categoryId, timeFilter]);
+
+  useEffect(() => {
     fetch("http://localhost:3000/products/allProducts")
       .then((response) => response.json())
       .then((data) => {
-        const transformedData = transformData(data.allProducts);
-        setChartData(transformedData);
-        setIsLoading(false); // Les données sont chargées
-      })
-      .catch((error) => {
-        console.error(error);
-        setIsLoading(false); // Une erreur s'est produite
-      });
-  } else {
-    id = category.find(element => element.name === catName);
-    setCategoryId(id._id);
-    fetch(`http://localhost:3000/products/category/${id._id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        const transformedData = transformData(data.allProducts);
-        setChartData(transformedData);
-        setIsLoading(false); // Les données sont chargées
-      })
-      .catch((error) => {
-        console.error(error);
-        setIsLoading(false); // Une erreur s'est produite
-      });
-  }
-};
-
-
-
-  /////////////////////////////////////////
-  //     FETCHING ALL SELLS PRODUCTS     //
-  /////////////////////////////////////////
-
-  const [chartData, setChartData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  
-
-  function transformData(products) {
-    if (!Array.isArray(products)) {
-      return {
-        labels: [],
-        datasets: [],
-      };
-    }
-  
-    if (filter === 'categories') {
-      let filteredProducts;
-      if (categoryId === 'all') {
-        // Si l'utilisateur a sélectionné "Toutes les catégories", incluez tous les produits
-        filteredProducts = products;
-      } else {
-        // Sinon, filtrez les produits pour n'inclure que ceux de la catégorie sélectionnée
-        filteredProducts = products.filter(product =>
-          product.category.some(category => category._id === categoryId)
-        );
-      }
-  
-      // Créez un objet pour stocker le total vendu par catégorie
-      const totalsByCategory = {};
-  
-      // Parcourez chaque produit
-      for (const product of filteredProducts) {
-        // Parcourez chaque catégorie du produit
-        for (const category of product.category) {
-          // Si la catégorie n'est pas encore dans l'objet, ajoutez-la
-          if (!totalsByCategory[category.name]) {
-            totalsByCategory[category.name] = 0;
-          }
-  
-          // Ajoutez la quantité vendue à la catégorie
-          for (const sale of product.soldAt) {
-            totalsByCategory[category.name] += sale.quantity;
-          }
+        setProducts(data.allProducts);
+        if (data.allProducts && data.allProducts.length > 0) {
+          setSelectedProduct(data.allProducts[0]._id);
         }
-      }
-  
-      // Transformez l'objet en deux tableaux pour Chart.js
-      const labels = Object.keys(totalsByCategory);
-      const data = Object.values(totalsByCategory);
-  
-      return {
-        labels: labels,
-        datasets: [
-          {
-            label: "Produits vendus",
-            data: data,
-          },
-        ],
-      };
+      });
+  }, []);
+
+  const [timeFilterByP, setTimeFilterByP] = useState("day");
+  const [productData, setProductData] = useState(null);
+
+  const handleTimeSelectChangeByP = (event) => {
+    setTimeFilterByP(event.target.value);
+  };
+
+  useEffect(() => {
+    if (products.length > 0 && selectedProduct) {
+      let product = products.find((p) => p._id === selectedProduct);
+      setProductData(transformDataByP(product, timeFilterByP));
+    }
+    //Dépendances
+  }, [products, selectedProduct, timeFilterByP]);
+
+  // State pour l'option de légende
+  const [yAxisLegend, setYAxisLegend] = useState('');
+
+  // Bar chart component
+  function BarChart({ chartData, yAxisLegend }) {
+    // If there are no labels, return a message
+    if (chartData && chartData.datasets) {
+      return (
+        <Bar
+          data={chartData}
+          options={{
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: yAxisLegend, // Utilisation de la prop pour la légende de l'axe Y
+                },
+              },
+              // ... Autres configurations de l'axe Y
+            },
+            // ... Autres options pour le graphique
+          }}
+        />
+      );
     } else {
-      // Logique pour afficher les produits vendus
-      return {
-        labels: products.map((product) => product.name),
-        datasets: [
-          {
-            label: "Produits vendus",
-            data: products.map((product) =>
-              product.soldAt?.length > 0
-                ? product.soldAt.reduce((total, sale) => total + sale.quantity, 0)
-                : 0
-            ),
-          },
-        ],
-      };
+      return <p>No data available for the chart.</p>;
     }
   }
-  
-  
-  function BarChart({ chartData }) {
-    return <Bar data={chartData} />;
+
+  useEffect(() => {
+    // ... Votre logique pour récupérer ou transformer les données du graphique
+
+    // Mettre à jour la légende de l'axe Y avec "quantité"
+    setYAxisLegend('Quantité');
+  }, [chartData]); // Assurez-vous de mettre à jour lorsque les données du graphique changent
+
+
+  // If data is not loaded, show a loading indicator
+  if (!dataLoaded) {
+    // You can render a loading spinner or another loading indicator here
+    return <div>Loading...</div>;
   }
 
-  /////////////////////////////////////////
-  //     FETCHING ALL SELLS PRODUCTS     //
-  /////////////////////////////////////////
+  function LineChart({ chartData }) {
+    if (chartData && chartData.datasets) {
+      return (
+      <Line data={chartData} 
+      options={{
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: yAxisLegend, 
+            },
+          },
+         
+        },
+        
+      }}
+    />
+      )
+    } else {
+      return <p>Pas de données disponibles pour le graphique.</p>;
+    }
+    //return <Line data={chartData} />;
+  } 
 
   return (
     <div className={styles.mainContainer}>
       <div className={styles.titleContainer}>
-        <h1 className={styles.title}>Bienvenue dans les statiques de vos Stocks</h1>
+
       </div>
 
       <div className={styles.filterContainer}>
@@ -228,37 +274,74 @@ const handleSelectChange = (event) => {
             </select>
           </div>
         </div>
-        <div className={styles.renderFilterArea}>
-          <div className={styles.renderByTemp}>
-            {timeFilter === 'day' && <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridDay" />}
-            {timeFilter === 'week' && <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridWeek" />}
-            {timeFilter === 'month' && <FullCalendar plugins={[dayGridPlugin]} initialView="dayGridMonth" />}
-          </div>
-          <div className={styles.renderByObject}>
-            <p>Render by Object</p>
-            {filter === 'categories' && category.length > 0 && (
-              <select onChange={handleSelectChange} >
-                <option value="all">Toutes les catégories</option> {/* Nouvelle option */}
-                {category.map((data, index) => (
-                  <option key={index} value={data.name}> {data.name} </option>
-                ))}
-              </select>
-            )}
-            {filter === 'products' && <p>Produits</p>}
-          </div>
-        </div>
       </div>
       <div className={styles.statsContainer}>
-        <div className={styles.firstChart}>
-          <h2>First Chart</h2>
-          {!isLoading && <BarChart chartData={chartData} />}
-        </div>
         <div className={styles.secondChart}>
-          <h2>Second Chart</h2>
+          <h2>Statistiques des Stocks en cours</h2>
+          {!isLoading && (
+            <BarChart
+            className={styles.firstChartCl}
+            chartData={chartData}
+            yAxisLegend={yAxisLegend} // Prop pour l'option de légende
+          />
+          )}
+        </div>
+        <div className={styles.thirdChart}>
+          <h2>Statistiques des Réapprovisions</h2>
+          {!isLoading && (
+            <BarChart
+            className={styles.firstChartCl}
+            chartData={chartData}
+            yAxisLegend={yAxisLegend} // Prop pour l'option de légende
+          />         
+          )}
+        </div>
+        <div className={styles.firstChart}>
+        <h2>Statistiques des Ventes</h2>
+        {!isLoading && (
+          <BarChart
+          className={styles.firstChartCl}
+          chartData={chartData}
+          yAxisLegend={yAxisLegend} // Prop pour l'option de légende
+        />        
+        )}
+      </div>
+      </div>
+      <div className={styles.chartByP}>
+        <div className={styles.chartByPTitle}>
+          <h2>Statistiques par Produits</h2>
+        </div>
+        <div>
+          <div className={styles.filters}>
+            <div className={styles.filterByTemp}>
+              <p>Filter by Temps</p>
+              <select onChange={handleTimeSelectChangeByP}>
+                <option value="day">Par Jour</option>
+                <option value="week">Par Semaine</option>
+                <option value="month">Par Mois</option>
+              </select>
+            </div>
+            <div className={styles.filterByObject}>
+              <p>Filter by Object</p>
+              <select
+                value={selectedProduct}
+                onChange={(e) => setSelectedProduct(e.target.value)}
+              >
+                {products.map((product) => (
+                  <option key={product._id} value={product._id}>
+                    {product.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className={styles.chartByProduct}>
+            {!isLoading && <LineChart chartData={productData} />}
+          </div>
         </div>
       </div>
     </div>
-  )
-};
+  );
+}
 
 export default StatsPage;

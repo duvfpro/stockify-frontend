@@ -1,5 +1,59 @@
+.allContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .mainContainer {
     display: flex;
     flex-direction: column;
+    align-items: center;
     width: 20rem;
+}
+
+.title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.inputField {
+    height: 2rem;
+    width: 18rem;
+    border-radius: 0.2rem;
+}
+
+.selectInput{
+    width: 18rem!important;
+}
+
+.newImageDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 10rem;
+    height: 3rem;
+    border: 1px solid black;
+    padding: 0.5rem;
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+}
+
+.imageField {
+    display: none;
+}
+
+
+.submitButton {
+    width:60%;
+}
+
+.noFile {
+    border: 1px solid black;
+}
+
+.fileName {
+    margin-top: 0;
 }

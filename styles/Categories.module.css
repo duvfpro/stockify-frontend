@@ -1,0 +1,66 @@
+.mainCatContainer{
+    background-color: #0d0e11;
+    display: flex;
+    flex-direction: column;
+    
+    align-items: center;
+    justify-content: center;
+}
+
+.cardMapContainer{
+    
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.categoryContainer{
+    border: 1px solid #000;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    width: 300px;
+    background-color: rgba(60, 59, 102, 0.5);
+    padding: 20px;
+    margin: 30px;
+    border-radius: 5px;
+}
+
+.mainNewCatContainer{
+    display: flex;
+    flex-direction:column;
+}
+
+.inputNewCat{
+    margin: 10px;
+    padding: auto;
+    width: 97%;
+}
+
+.addBtnCat{
+    margin: 20px;
+}
+
+/* Delete Button */
+.deleteBtn{
+    background-color: #734a3f ;
+    color: #e18763;
+  }
+
+.deleteBtn:hover {
+background-color: #956153 ;
+color: #fb976f !important;
+}
+
+.mainEditModContainer{
+    display: flex;
+    flex-direction:column;
+    justify-content: flex-end;
+    height: 130px;
+}
+
+.mainEditModContainer>input{
+    margin: 10px;
+    padding: auto;  
+    width: 97%;
+}

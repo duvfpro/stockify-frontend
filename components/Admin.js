@@ -26,29 +26,30 @@ const Admin = () => {
     }
   }, [user.token, router]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/users/allUser');
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
-        }
-        const data = await response.json();
-
-        const formattedData = data.data.map((user) => ({
-          key: user._id,
-          username: user.username,
-          email: user.email,
-          isAdmin: user.isAdmin.toString(),
-        }));
-        setUserData(formattedData);
-      } catch (error) {
-        console.error('Erreur lors du fetch des données : ', error);
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/users/allUser');
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
       }
-    };
+      const data = await response.json();
+      console.log(data)
+      const formattedData = data.data.map((user) => ({
+        key: user._id,
+        username: user.username,
+        email: user.email,
+        isAdmin: user.isAdmin !== undefined ? user.isAdmin.toString() : '',
+      }));
+      setUserData(formattedData);
+    } catch (error) {
+      console.error('Erreur lors du fetch des données : ', error);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
-  }, []);
+  }, [createUserModalVisible]);
+
 
   const handleEditClick = (key) => {
     const userToEdit = userData.find((user) => user.key === key);
@@ -77,7 +78,6 @@ const Admin = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data.message);
 
         const updatedUserData = userData.map((user) =>
           user.key === selectedUser.key
@@ -111,7 +111,6 @@ const Admin = () => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log(data.message);
 
           const updatedUserData = userData.filter((user) => user.key !== selectedUser.key);
 
@@ -163,10 +162,10 @@ const Admin = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+
+        fetchData();
 
         setCreateUserModalVisible(false);
-        window.location.reload();
       } else {
         throw new Error(`Error: ${response.status}`);
       }
@@ -174,139 +173,146 @@ const Admin = () => {
       console.error('Erreur lors de la création du user: ', error);
     }
   };
-
-  return (
-    <div className={styles.container}>
-      <div className={styles.searchBar}>
-        <Search
-          placeholder="Search users..."
-          allowClear
-          onSearch={handleSearch}
-          style={{ marginBottom: 16, marginTop: 16 }}
-        />
-        <Button type="primary" onClick={handleCreateUserClick}>
-          Create User
-        </Button>
-      </div>
-      <div className={styles.customListContainer}>
-        <List
-          dataSource={filteredData}
-          pagination={{
-            position: 'bottom',
-            align: 'center',
-          }}
-          renderItem={(item) => (
-            <List.Item className={styles.listItem}>
-              <List.Item.Meta
-                avatar={
-                  <Avatar src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${item.key}`} />
-                }
-                title={`${item.username}`}
-                description={`Email: ${item.email}, isAdmin: ${item.isAdmin}`}
-              />
-              <Button type="primary" className={styles.editButton} onClick={() => handleEditClick(item.key)}>
-                Edit
-              </Button>
-            </List.Item>
-          )}
-        />
-      </div>
-      {selectedUser && (
-        <Modal
-          title={`User information`}
-          visible={modalVisible}
-          onCancel={handleModalClose}
-          footer={[
-            <Button key="delete" type="primary" danger onClick={handleDeleteUser}>
-              Delete
-            </Button>,
-            <Button key="save" type="primary" onClick={handleSaveChanges}>
-              Save Changes
-            </Button>,
-          ]}
-        >
-          <div className={styles.modalField}>
-            <label htmlFor="editedUsername">Username:</label>
-            <Input
-              id="editedUsername"
-              value={editedUsername}
-              onChange={(e) => setEditedUsername(e.target.value)}
-            />
-          </div>
-          <div className={styles.modalField}>
-            <label htmlFor="editedEmail">Email:</label>
-            <Input
-              id="editedEmail"
-              value={editedEmail}
-              onChange={(e) => setEditedEmail(e.target.value)}
-            />
-          </div>
-          <div className={styles.switchContainer}>
-            <label htmlFor="editedIsAdmin">isAdmin:</label>
-            <div className={styles.switchField}>
-              <Switch
-                id="editedIsAdmin"
-                checked={editedIsAdmin}
-                onChange={(checked) => setEditedIsAdmin(checked)}
+  if (user.isAdmin) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.searchBar}>
+          <Search
+            placeholder="Search users..."
+            allowClear
+            onSearch={handleSearch}
+            style={{ marginBottom: 16, marginTop: 16 }}
+          />
+          <Button type="primary" onClick={handleCreateUserClick}>
+            Create User
+          </Button>
+        </div>
+        <div className={styles.customListContainer}>
+          <List
+            dataSource={filteredData}
+            pagination={{
+              position: 'bottom',
+              align: 'center',
+            }}
+            renderItem={(item) => (
+              <List.Item className={styles.listItem}>
+                <List.Item.Meta
+                  avatar={
+                    <Avatar src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${item.key}`} />
+                  }
+                  title={`${item.username}`}
+                  description={`Email: ${item.email}, isAdmin: ${item.isAdmin}`}
+                />
+                <Button type="primary" className={styles.editButton} onClick={() => handleEditClick(item.key)}>
+                  Edit
+                </Button>
+              </List.Item>
+            )}
+          />
+        </div>
+        {selectedUser && (
+          <Modal
+            title={`User information`}
+            visible={modalVisible}
+            onCancel={handleModalClose}
+            footer={[
+              <Button key="delete" type="primary" danger onClick={handleDeleteUser}>
+                Delete
+              </Button>,
+              <Button key="save" type="primary" onClick={handleSaveChanges}>
+                Save Changes
+              </Button>,
+            ]}
+          >
+            <div className={styles.modalField}>
+              <label htmlFor="editedUsername">Username:</label>
+              <Input
+                id="editedUsername"
+                value={editedUsername}
+                onChange={(e) => setEditedUsername(e.target.value)}
               />
             </div>
-          </div>
-        </Modal>
-      )}
-      {createUserModalVisible && (
-        <Modal
-          title={`Create User`}
-          visible={createUserModalVisible}
-          onCancel={handleCreateUserModalClose}
-          footer={[
-            <Button key="cancel" onClick={handleCreateUserModalClose}>
-              Cancel
-            </Button>,
-            <Button key="create" type="primary" onClick={handleCreateUser}>
-              Create
-            </Button>,
-          ]}
-        >
-          <div className={styles.modalField}>
-            <label htmlFor="editedUsername">Username:</label>
-            <Input
-              id="editedUsername"
-              value={editedUsername}
-              onChange={(e) => setEditedUsername(e.target.value)}
-            />
-          </div>
-          <div className={styles.modalField}>
-            <label htmlFor="editedEmail">Email:</label>
-            <Input
-              id="editedEmail"
-              value={editedEmail}
-              onChange={(e) => setEditedEmail(e.target.value)}
-            />
-          </div>
-          <div className={styles.modalField}>
-            <label htmlFor="createUserPassword">Password:</label>
-            <Input
-              id="createUserPassword"
-              type="password"
-              value={createUserPassword}
-              onChange={(e) => setCreateUserPassword(e.target.value)}
-            />
-          </div>
-          <div className={styles.switchContainer}>
-            <label htmlFor="editedIsAdmin">isAdmin:</label>
-            <div className={styles.switchField}>
-              <Switch
-                id="editedIsAdmin"
-                checked={editedIsAdmin}
-                onChange={(checked) => setEditedIsAdmin(checked)}
+            <div className={styles.modalField}>
+              <label htmlFor="editedEmail">Email:</label>
+              <Input
+                id="editedEmail"
+                value={editedEmail}
+                onChange={(e) => setEditedEmail(e.target.value)}
               />
             </div>
-          </div>
-        </Modal>
-      )}
+            <div className={styles.switchContainer}>
+              <label htmlFor="editedIsAdmin">isAdmin:</label>
+              <div className={styles.switchField}>
+                <Switch
+                  id="editedIsAdmin"
+                  checked={editedIsAdmin}
+                  onChange={(checked) => setEditedIsAdmin(checked)}
+                />
+              </div>
+            </div>
+          </Modal>
+        )}
+        {createUserModalVisible && (
+          <Modal
+            title={`Create User`}
+            visible={createUserModalVisible}
+            onCancel={handleCreateUserModalClose}
+            footer={[
+              <Button key="cancel" onClick={handleCreateUserModalClose}>
+                Cancel
+              </Button>,
+              <Button key="create" type="primary" onClick={handleCreateUser}>
+                Create
+              </Button>,
+            ]}
+          >
+            <div className={styles.modalField}>
+              <label htmlFor="editedUsername">Username:</label>
+              <Input
+                id="editedUsername"
+                value={editedUsername}
+                onChange={(e) => setEditedUsername(e.target.value)}
+              />
+            </div>
+            <div className={styles.modalField}>
+              <label htmlFor="editedEmail">Email:</label>
+              <Input
+                id="editedEmail"
+                value={editedEmail}
+                onChange={(e) => setEditedEmail(e.target.value)}
+              />
+            </div>
+            <div className={styles.modalField}>
+              <label htmlFor="createUserPassword">Password:</label>
+              <Input
+                id="createUserPassword"
+                type="password"
+                value={createUserPassword}
+                onChange={(e) => setCreateUserPassword(e.target.value)}
+              />
+            </div>
+            <div className={styles.switchContainer}>
+              <label htmlFor="editedIsAdmin">isAdmin:</label>
+              <div className={styles.switchField}>
+                <Switch
+                  id="editedIsAdmin"
+                  checked={editedIsAdmin}
+                  onChange={(checked) => setEditedIsAdmin(checked)}
+                />
+              </div>
+            </div>
+          </Modal>
+        )}
 
-    </div>
-  );
+      </div>
+    );
+  }
+  else {
+    return (<div>
+      <h1>This page is not allowed to intern</h1>
+    </div>);
+  }
+
 };
 
 export default Admin;
