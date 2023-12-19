@@ -16,7 +16,8 @@ p{
   color: #fff;
 }
 
-/* ALL BUTTONS ****************************************************/
+/* ALL BUTTONS ********************************************************************************/
+/* Vanilla Button */
 button{
   border: none;
   margin: 10px;
@@ -39,7 +40,7 @@ button:hover{
   border-color: #000;
 }
 
-/* ANT BUTTONS */
+/* Ant Buttons */
 .ant-btn, css-dev-only-do-not-override-p7e5j5, ant-btn-primary{
   display: flex;
   align-items: center;
@@ -60,7 +61,7 @@ img{
   height: auto;
 }
 
-/* DIDICATE COLOR FOR DRAWER **************************/
+/* DIDICATE COLOR FOR DRAWER ********************************************************************************/
 .ant-drawer-body>p{
   color: #000 !important;
 }
@@ -74,13 +75,19 @@ img{
   color: #6b6b6b;
 }
 
-/* LOGIN *************************************/
+/* LOGIN ********************************************************************************/
 /* Labels Form*/
 .ant-form-item-required{
   color: #fff!important;
 }
 
-/* DRAWER ************************************/
+/* HEADER ********************************************************************************/
+.ant-btn.css-dev-only-do-not-override-p7e5j5.ant-btn-primary:hover{
+  background-color: #209f7d;
+  color: #29edbc!important;
+}
+
+/* DRAWER ********************************************************************************/
 .Drawer_drawer-link__BiCZP{
   color: #000 !important;
 }
@@ -94,7 +101,7 @@ img{
 .anticon.anticon-poweroff>svg{
   fill: #1da584!important;
 }
-
+/* LogOff Hover SVG*/
 .anticon.anticon-poweroff>svg:hover{
   fill: #27daad!important;
 }
@@ -120,7 +127,7 @@ img{
 }
 
 
-/* PRODUCT PAGE ************************************************************************************/
+/* PRODUCT PAGE ********************************************************************************/
 
 .AddNewProduct_mainContainer__iYuHX>input{
   margin: 5px;
@@ -141,7 +148,13 @@ img{
   max-width: 150px;
 }
 
-/* ADMIN  SECTION ********************************************************************************/
+/* SALES PAGE ********************************************************************************/
+/* Targeting p elements in array */
+.ant-table-cell>ul>li>p{
+  color: #000;
+}
+
+/* ADMIN  PAGE ********************************************************************************/
 
 /* SEARCH AREA */
 /* Search Bar */
@@ -150,8 +163,21 @@ img{
 }
 
 /* Search Bar Logo */
-.ant-btn, css-dev-only-do-not-override-p7e5j5, ant-btn-default, ant-btn-icon-only, ant-input-search-button{
+.ant-btn.css-dev-only-do-not-override-p7e5j5.ant-btn-default.ant-btn-icon-only.ant-input-search-button{
   margin: 0;
+}
+
+.ant-btn.css-dev-only-do-not-override-p7e5j5.ant-btn-default.ant-btn-icon-only.ant-input-search-button:hover{
+  margin: 0;
+}
+
+/* SVG Search Logo */
+.ant-input-group-addon>button>span>span>svg{
+  fill: #1da584!important;
+}
+
+.ant-input-group-addon>button>span>span>svg:hover{
+  fill: #27daad!important;
 }
 
 /* DISPLAY AREA */
