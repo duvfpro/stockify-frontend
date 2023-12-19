@@ -6,7 +6,7 @@ const NotificationButton = () => {
   const [dataProducts, setDataProducts] = useState(null);
 
   useEffect(() => {
-    fetchData()
+    
   }, []);
 
   const fetchData = async () => {
