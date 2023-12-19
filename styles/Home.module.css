@@ -12,6 +12,7 @@
     justify-content: space-between;
     margin-bottom: 10px;
   }
+/*   
   .addProduct:hover{
     background-color: #323A57;
     color: #fff;
@@ -25,11 +26,12 @@
     border: 2px solid #000;
     font-size: 12px;
     font-weight: 600;
-    background-color: #fff;
+
     cursor: pointer;
     transition-duration: 1s;
-  }
-  .saleProduct:hover{
+  } */
+
+  /* .saleProduct:hover{
     background-color: #323A57;
     color: #fff;
     border: 2px solid #fff;
@@ -45,7 +47,8 @@
     background-color: #fff;
     cursor: pointer;
     transition-duration: 1s;
-  }
+  } */
+
   .sale{
     display: flex;
     align-items: center;

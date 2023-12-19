@@ -232,11 +232,11 @@ function Home() {
           className={styles.addProduct}
           onClick={handleAddStockButtonClick}
         >
-          ADD STOCK
+          Add stock
         </button>
 
         <button className={styles.saleProduct} onClick={handleSaleButtonClick}>
-          SALE PRODUCTS
+          Sale Products
         </button>
         <FilterDate handleFilterDateChange={handleFilterDateChange} />
       </div>
