@@ -1,0 +1,11 @@
+.mainContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.mainContainer>select, .mainContainer>input, .mainContainer>button {
+    width: 60%;
+}

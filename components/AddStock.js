@@ -58,7 +58,7 @@ function AddStock(props) {
 
     return (
         <Modal open={props.openAddStockModal} onCancel={props.handleCloseButton} footer={null} width={800} height={800}>
-            <div className={styles.title} > ADD STOCK </div>
+            <div className={styles.title} > Add Stock </div>
             <div className={styles.mainContainer}>
                 <select onChange={handleSelectChange} >
                     <option value="" > Select a product </option>
@@ -67,7 +67,7 @@ function AddStock(props) {
                     ))}
                 </select>
                 <input type="number" onChange={handleStockInputChange} value={stockToAdd} placeholder="Quantity to add" />
-                <button onClick={() => handleSubmitButton()} className={styles.websiteButton} > SUBMIT </button>
+                <button onClick={() => handleSubmitButton()} className={styles.websiteButton} > Submit </button>
             </div>
         </Modal>
     );

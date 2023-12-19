@@ -66,7 +66,7 @@ function Sale(props) {
                     ))}
                 </select>
                 <input type="number" onChange={handleStockInputChange} value={sales} placeholder="Quantity to add" />
-                <button onClick={() => handleSubmitButton()} className={styles.websiteButton} > SUBMIT </button>
+                <button onClick={() => handleSubmitButton()} className={styles.websiteButton} > Submit </button>
             </div>
         </Modal>
     );

@@ -115,10 +115,6 @@ function SalesPage() {
       });
   }, []);
 
-  
-
-  
-
   const tableStyle = {
     backgroundColor: "#213F62",
     border: "2px solid #000",

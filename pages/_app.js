@@ -53,7 +53,7 @@ function App({ Component, pageProps }) {
       case '/sales':
         return 'Ventes';
       case '/statistics':
-        return 'Statistique';
+        return 'Statistiques';
       case '/categories':
         return 'Categories';
       default:

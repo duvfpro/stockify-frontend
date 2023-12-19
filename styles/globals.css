@@ -55,6 +55,11 @@ button:hover{
   border-color: #000;
 }
 
+/* ARRAYS */
+.ant-table-cell.ant-table-row-expand-icon-cell,.ant-table-thead,.ant-table-thead>th,.ant-table-cell.ant-table-column-has-sorters,.ant-table-cell{
+  background-color: #323A57!important;
+}
+
 /* RESING FOR ALL IMG */
 img{
   width: 120px;
@@ -149,9 +154,28 @@ img{
 }
 
 /* SALES PAGE ********************************************************************************/
+/* Section Type */
+.ant-table-column-sorters{
+  color: #fff;
+}
+
+/* Cells of array */
+.ant-table-cell{
+  color: #fff;
+}
+
+/* Icon + */
+.ant-table-row-expand-icon.ant-table-row-expand-icon-collapsed{
+  color: #000;
+}
+/* Icon + hover */
+.ant-table-row-expand-icon.ant-table-row-expand-icon-collapsed:hover{
+  color: #000!important;
+}
+
 /* Targeting p elements in array */
 .ant-table-cell>ul>li>p{
-  color: #000;
+  color: #fff;
 }
 
 /* ADMIN  PAGE ********************************************************************************/
@@ -166,7 +190,7 @@ img{
 .ant-btn.css-dev-only-do-not-override-p7e5j5.ant-btn-default.ant-btn-icon-only.ant-input-search-button{
   margin: 0;
 }
-
+/* Search Bar Logo Hover*/
 .ant-btn.css-dev-only-do-not-override-p7e5j5.ant-btn-default.ant-btn-icon-only.ant-input-search-button:hover{
   margin: 0;
 }
@@ -175,7 +199,7 @@ img{
 .ant-input-group-addon>button>span>span>svg{
   fill: #1da584!important;
 }
-
+/* SVG Search Logo hover*/
 .ant-input-group-addon>button>span>span>svg:hover{
   fill: #27daad!important;
 }
