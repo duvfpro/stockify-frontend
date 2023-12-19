@@ -1,7 +1,6 @@
 .Navbar_headerBar__nAzn_{
   background-color: #fff !important;
   display: flex;
-
 }
 
 .mainTitle{
@@ -16,14 +15,12 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  padding: 20px;
-  padding-bottom: 2rem;
+  width: 99.8%;
+  padding-left: 1.5rem;
+  padding-right: 2rem;
   border-bottom: 1px solid #e0e0e0;
   border-radius: 1rem;
-  margin-top: 0.5rem;
-  /* border-bottom-left-radius: 1rem;
-  border-bottom-right-radius: 1rem; */
+  margin-top: 0.3rem;
 }
 
 
