@@ -249,9 +249,7 @@ function StatsPage() {
   return (
     <div className={styles.mainContainer}>
       <div className={styles.titleContainer}>
-        <h1 className={styles.title}>
-          Bienvenue dans les statistiques de vos Stocks
-        </h1>
+
       </div>
 
       <div className={styles.filterContainer}>
