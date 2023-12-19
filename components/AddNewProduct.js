@@ -45,8 +45,13 @@ function AddNewProduct(props) {
                 .then(response => response.json())
                 .then(data => {
                     console.log(data)
+                    if(data.result == false) {
+                        window.confirm(data.error);
+                    } else {
+                       props.handleCloseButton();  
+                    }
                 });
-                props.handleCloseButton(); 
+                
         } 
         else {
             const formData = new FormData();
