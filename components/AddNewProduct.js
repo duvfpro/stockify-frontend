@@ -1,5 +1,5 @@
 import styles from '../styles/AddNewProduct.module.css';
-import { Modal } from 'antd';
+import { Modal, Input, Select } from 'antd';
 import React, { useState, useEffect } from 'react';
 
 
@@ -113,16 +113,16 @@ function AddNewProduct(props) {
             <div className={styles.allContainer} >
                 <div className={styles.title} > Add New Product </div>
                     <div className={styles.mainContainer}>
-                        <input className={styles.inputField} type="text" onChange={handleNameInputChange} value={productName} placeholder="Product name" required />
-                        <input className={styles.inputField} type="number" onChange={handleStockInputChange} value={productStock} placeholder="Stock" required />
-                        <input className={styles.inputField} type="number" onChange={handlePriceInputChange} value={productPrice} placeholder="Price" required />
-                        <select className={styles.inputField} onChange={handleSelectChange} >
+                        <Input className={styles.inputField} type="text" onChange={handleNameInputChange} value={productName} placeholder="Product name" required />
+                        <Input className={styles.inputField} type="number" onChange={handleStockInputChange} value={productStock} placeholder="Stock" required />
+                        <Input className={styles.inputField} type="number" onChange={handlePriceInputChange} value={productPrice} placeholder="Price" required />
+                        <Select size='small' onChange={handleSelectChange} >
                             {category.map((data, index) => (
                             <option key={index} value={data.name}> {data.name} </option>
                             ))}
-                        </select>       
+                        </Select>       
 
-                        <input className={styles.imageField} type="file" onChange={handleImageInputChange} accept="image/*" id="fileInput"/>
+                        <Input className={styles.imageField} type="file" onChange={handleImageInputChange} accept="image/*" id="fileInput"/>
                         <label htmlFor="fileInput" className={styles.customFileInput}>
                               {selectedFile ? selectedFile.name : 'Choose an image'}
                         </label>

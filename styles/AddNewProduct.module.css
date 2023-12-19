@@ -18,8 +18,8 @@
 
 .inputField {
     height: 2rem;
-    width: 100%;
-    border-radius: 0.5rem;
+    width: 18rem;
+    border-radius: 0.2rem;
 }
 
 .imageField {
@@ -35,6 +35,7 @@
     /* display: none;  // pour ne pas afficher la bouton*/
 }
 
+
   
   .customFileInput {
     background-color: #A9DFD8;
@@ -44,6 +45,7 @@
     cursor: pointer;
     border-radius: 5px;
     font-size: 16px;
+    width:100%;
   }
 
 .submitButton {
