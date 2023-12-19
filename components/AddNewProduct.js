@@ -8,7 +8,7 @@ function AddNewProduct(props) {
     const [productName, setProductName] = useState('');
     const [productStock, setProductStock] = useState(0);
     const [productPrice, setProductPrice] = useState(null);
-    const [productImage, setProductImage] = useState("http://localhost:3000/stockpic.jpg");
+    const [productImage, setProductImage] = useState("https://res.cloudinary.com/dj6bueyfl/image/upload/v1702976676/stockpic_unkgms.jpg");
     const [category, setCategory] = useState([]);
     const [categotyId, setCategoryId] = useState('');
     const [selectedOption, setSelectedOption] = useState(''); // Stock le choix de la catégorie
@@ -34,9 +34,9 @@ function AddNewProduct(props) {
         setIsOpen(false);
     };
 
-    const handleSubmitButton = () => { // Manque à pouvoir ajouter du stock à la création et une IMAGE
+    const handleSubmitButton = () => {
 
-        if(productImage === "http://localhost:3000/stockpic.jpg") {
+        if(productImage === "https://res.cloudinary.com/dj6bueyfl/image/upload/v1702976676/stockpic_unkgms.jpg") {
             fetch('http://localhost:3000/products/newProduct', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -45,8 +45,13 @@ function AddNewProduct(props) {
                 .then(response => response.json())
                 .then(data => {
                     console.log(data)
+                    if(data.result == false) {
+                        window.confirm(data.error);
+                    } else {
+                       props.handleCloseButton();  
+                    }
                 });
-                props.handleCloseButton(); 
+                
         } 
         else {
             const formData = new FormData();

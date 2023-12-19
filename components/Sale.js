@@ -17,7 +17,7 @@ function Sale(props) {
         .then(data => {
             let products = [];
             for (let i=0; i<data.allProducts.length; i++) {
-                products.push(data.allProducts[i].name)
+                products.push(data.allProducts[i])
             };
             setProductList(products);
         })
@@ -62,7 +62,7 @@ function Sale(props) {
                 <select onChange={handleSelectChange} >
                     <option value="" > Select a product </option>
                     {productList.map((data, index) => (
-                    <option key={index} value={data} > {data}</option>
+                    <option key={index} value={data.name} > {data.name} ({data.stock} left)</option>
                     ))}
                 </select>
                 <input type="number" onChange={handleStockInputChange} value={sales} placeholder="Quantity to add" />

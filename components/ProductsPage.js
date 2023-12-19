@@ -25,7 +25,7 @@ function ProductsPage(props) {
   const [openEditModal, setOpenEditModal] = useState(false);
 
   const [selectedFilters, setSelectedFilters] = useState([]); // pour stocker les filtres
-  const [selectedStockFilters, setSelectedStockFilters] = useState([]); // pour stocker les filtres stock
+  const [selectedStockFilters, setSelectedStockFilters] = useState(''); // pour stocker les filtres stock
 
   const [triggerSortByStock, setTriggerSortByStock] = useState(false);
 
@@ -58,14 +58,18 @@ function ProductsPage(props) {
           }
         }
         if(JSON.stringify(productTab) === JSON.stringify([])) { // = s'il ny a pas de filtre
-          if(triggerSortByStock) { // = si le bouton trie par stock est activé
+          if(triggerSortByStock == "Stock Ascending") { // = si le bouton trie par stock est activé
             setMyProducts(data.allProducts.sort(compareByStock));
+          } else if(triggerSortByStock == "Stock Descending") {
+            setMyProducts(data.allProducts.sort(compareByStock).reverse());
           } else {
             setMyProducts(data.allProducts);
           }
         } else {
-          if(triggerSortByStock) { // = si le bouton trie par stock est activé
+          if(triggerSortByStock == "Stock Ascending") { // = si le bouton trie par stock est activé
             setMyProducts(productTab.sort(compareByStock));
+          } else if(triggerSortByStock == "Stock Descending") {
+            setMyProducts(productTab.sort(compareByStock).reverse());
           } else {
             setMyProducts(productTab);
           }     
@@ -195,17 +199,23 @@ const handleSaveButton = () => {
     setSelectedFilters(selectedFilters);
   }
 
-  const handleStockFilterChange = (selectedFilters) => {
-    setSelectedStockFilters(selectedFilters)
+  const handleStockFilterChange = (stockFilterChange) => {
+    setTriggerSortByStock(stockFilterChange);
+
+    // setTriggerSortByStock(!triggerSortByStock);
+    // setSelectedStockFilters(selectedFilters)
   }
 
 
     return (
       <div className={styles.main}>
         <div className={styles.filtersContainer}>
-          <FilterCascader handleFilterChange={handleFilterChange} />
-          <FilterStock handleStockFilterChange={handleStockFilterChange} />
-          <Button type="primary" onClick={() => handleTriStockButton()} className={styles.addProductButton} > Tri stock croissant </Button>
+          <div className={styles.myFilters}>
+            <FilterCascader handleFilterChange={handleFilterChange} />
+            <FilterStock handleStockFilterChange={handleStockFilterChange} />
+          </div>
+          
+          {/* <Button type="primary" onClick={() => handleTriStockButton()} className={styles.addProductButton} > Tri stock croissant </Button> */}
           <button className={styles.addProduct} onClick={() => handleAddProductButton() }> ADD NEW PRODUCT </button>
         </div>
 

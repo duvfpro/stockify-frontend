@@ -23,13 +23,11 @@ function SalesPage() {
       title: "Product",
       width: 120,
       dataIndex: "product",
-      sorter: true,
     },
     {
       title: "Category",
       width: 120,
       dataIndex: "category",
-      sorter: true,
     },
     {
       title: "Date",
@@ -40,19 +38,25 @@ function SalesPage() {
       title: "current Stock ",
       dataIndex: "stock",
       width: 120,
-      sorter: true,
+      sorter: (a, b) => a.stock - b.stock,
+      sortDirections: ['ascend', 'descend', 'ascend'],
+      defaultSortOrder: 'ascend',
     },
     {
       title: "Number of sales",
       dataIndex: "sales",
       width: 120,
-      sorter: true,
+      sorter: (a, b) => a.sales - b.sales,
+      sortDirections: ['ascend', 'descend', 'ascend'],
+      defaultSortOrder: 'ascend',
     },
     {
       title: "Quantity Sold",
       dataIndex: "quantitySold",
       width: 120,
-      sorter: true,
+      sorter: (a, b) => a.quantitySold - b.quantitySold,
+      sortDirections: ['ascend', 'descend', 'ascend'],
+      defaultSortOrder: 'ascend',
     },
   ];
 
@@ -81,14 +85,14 @@ function SalesPage() {
               ? product.soldAt.map((sale) => ({
                   type: "vendu ",
                   quantity: sale.quantity,
-                  date: new Date(sale.date).toLocaleString(),
+                  date: new Date(sale.date).toString(),
                 }))
               : [],
             product.restockAt
               ? product.restockAt.map((restock) => ({
                   type: "restock ",
                   quantity: restock.quantity,
-                  date: new Date(restock.date).toLocaleString(),
+                  date: new Date(restock.date).toString(),
                 }))
               : [],
           ];
@@ -116,7 +120,9 @@ function SalesPage() {
   }, []);
 
   
+const handleSorterChange = () => {
 
+}
   
 
   const tableStyle = {
@@ -151,6 +157,7 @@ function SalesPage() {
             ),
             rowExpandable: (record) => record.history.length > 0,
           }}
+          onChange={handleSorterChange}
         />
       </div>
     </div>
