@@ -62,7 +62,7 @@ function Sale(props) {
                 <select onChange={handleSelectChange} >
                     <option value="" > Select a product </option>
                     {productList.map((data, index) => (
-                    <option key={index} value={data.name} > {data.name} ({data.stock} left)</option>
+                    <option key={index} value={data.name} > {data.name} ({data.stock})</option>
                     ))}
                 </select>
                 <input type="number" onChange={handleStockInputChange} value={sales} placeholder="Quantity to add" />

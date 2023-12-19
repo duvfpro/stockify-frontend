@@ -18,35 +18,12 @@
   padding: 10px;
 }
 
-.productCards{
-  display: flex;
-  flex-wrap: wrap;
-}
+  .productCards{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 
-.inputField {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  margin-left: 2rem;
-  padding: 10px;
-  border-radius: 2rem;
-  height: 3rem;
-  width: 15rem;
-  border: 2px solid #ccc; /* Bordure fine */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Légère ombre pour un effet de profondeur */
-}
-
-.title {
-  font-size: 2rem;
-}
-
-.filtersContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100vw;
-}
-
-.myFilters {
-  display: flex;
-  flex-direction: row;
-}
+  .ProductsPage_productCards__8mvPE{
+    justify-content: center;
+  }
