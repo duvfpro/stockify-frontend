@@ -34,16 +34,14 @@ const FilterCascader = (props) => {
   };
 
   return (
-    <div className={styles.filter}>
       <Select
       mode="multiple"
       placeholder="Filter by category"
       value={selectedItems}
       onChange={handleFilterChange}
+      style={{ width: '10rem' }}
       options={filteredOptions.map((item) => ({ value: item, label: item }))}
-      // class="ant-select-selection-placeholder"
     />
-    </div>
     
   );
 };

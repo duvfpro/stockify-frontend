@@ -57,7 +57,6 @@ function ProductsPage(props) {
             }
           }          
         }
-        console.log(productTab)
 
         if(JSON.stringify(productTab) === JSON.stringify([])) { // = s'il ny a pas de filtre
           if(triggerSortByStock == "Stock Ascending") { // = si le bouton trie par stock est activé
@@ -224,7 +223,6 @@ const handleSaveButton = () => {
             <FilterStock handleStockFilterChange={handleStockFilterChange} />
           </div>
           
-          {/* <Button type="primary" onClick={() => handleTriStockButton()} className={styles.addProductButton} > Tri stock croissant </Button> */}
           <button className={styles.addProduct} onClick={() => handleAddProductButton() }> Add New Product </button>
         </div>
 

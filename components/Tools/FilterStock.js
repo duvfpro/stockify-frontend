@@ -14,13 +14,12 @@ const Filter = (props) => {
   };
 
   return (
-    <div className={styles.filter}>
       <Select
       placeholder="Filter by stock"
       options={[{value: "Stock Ascending"}, {value: "Stock Descending"}, {value: "No Stock Filter"}]}
       onChange={handleStockFilterChange}
+      style={{ width: '10rem' }}
     />
-    </div>
     
   );
 };
