@@ -88,17 +88,19 @@ function Sale(props) {
     };
 
     return (
-        <Modal open={props.openSaleModal} onCancel={props.handleCloseButton} footer={null} width={800} height={800}>
-            <div className={styles.title} > Today's Sales </div>
-            <div className={styles.mainContainer}>
-                <select onChange={handleSelectChange} >
-                    <option value="" > Select a product </option>
-                    {productList.map((data, index) => (
-                    <option key={index} value={data} > {data}</option>
-                    ))}
-                </select>
-                <input type="number" onChange={handleStockInputChange} value={sales} placeholder="Quantity to add" />
-                <button onClick={() => handleSubmitButton()} className={styles.websiteButton} > SUBMIT </button>
+        <Modal open={props.openSaleModal} onCancel={props.handleCloseButton} footer={null} width={450} height={900}>
+            <div className={styles.modalContainer}>
+                <div className={styles.title} > Sell a product</div>
+                <div className={styles.mainContainer}>
+                    <Select className={styles.selectInput} onChange={handleSelectChange} >
+                        <option value="" > Select a product </option>
+                        {productList.map((data, index) => (
+                        <option key={index} value={data.name} > {data.name} ({data.stock})</option>
+                        ))}
+                    </Select>
+                    <Input className={styles.inputField} type="number" onChange={handleStockInputChange} value={sales} placeholder="Quantity to add" />
+                    <button onClick={() => handleSubmitButton()} className={styles.websiteButton} > SUBMIT </button>
+                </div>
             </div>
         </Modal>
     );

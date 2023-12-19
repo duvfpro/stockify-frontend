@@ -119,6 +119,12 @@ function SalesPage() {
       });
   }, []);
 
+  
+const handleSorterChange = () => {
+
+}
+  
+
   const tableStyle = {
     backgroundColor: "#213F62",
     border: "2px solid #000",

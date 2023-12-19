@@ -1,12 +1,32 @@
-.mainContainer{
+.modalContainer {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    margin-top: 20px;
 }
 
-.mainContainer>select, .mainContainer>input, .mainContainer>button {
+.title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
 
-    width: 60%;
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20rem;
+}
+
+.inputField {
+    height: 2rem;
+    width: 18rem;
+    border-radius: 0.2rem;
+}
+
+.selectInput{
+    width: 18rem!important;
+}
+
+
+.submitButton {
+    width:60%;
 }
