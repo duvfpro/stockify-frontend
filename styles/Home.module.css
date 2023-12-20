@@ -3,6 +3,7 @@
     flex-direction: column;
     align-items: center;
     height: 100vh;
+    width: 100vw;
   }
 
   .productButton{
@@ -12,42 +13,14 @@
     justify-content: space-between;
     margin-bottom: 10px;
   }
-/*   
-  .addProduct:hover{
-    background-color: #323A57;
-    color: #fff;
-    border: 2px solid #fff;
-  }
-  .addProduct{
-    width: 150px;
-    height: 45px;
-    margin: 20px;
-    border-radius: 6px;
-    border: 2px solid #000;
-    font-size: 12px;
-    font-weight: 600;
 
-    cursor: pointer;
-    transition-duration: 1s;
-  } */
-
-  /* .saleProduct:hover{
-    background-color: #323A57;
-    color: #fff;
-    border: 2px solid #fff;
+  .leftSection{
+    width: 67vw !important;
   }
-  .saleProduct{
-    width: 150px;
-    height: 45px;
-    margin: 20px;
-    border-radius: 6px;
-    border: 2px solid #000;
-    font-size: 12px;
-    font-weight: 600;
-    background-color: #fff;
-    cursor: pointer;
-    transition-duration: 1s;
-  } */
+
+  .rightSection{
+    width: 33vw !important;
+  }
 
   .sale{
     display: flex;
@@ -67,4 +40,34 @@
   .LastSales_tableContainer__M76O7{
     border: 2px solid #000;
     background-color: #323A57;
+  }
+
+
+/* GRAPH SECTION */
+  .filterContainer{
+    margin-top: 30px;
+    width: 100%;
+    display: flex;
+
+  }
+
+  .filterArea{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .filterByTemp{
+    display: flex;
+
+  }
+
+  .filterByObject{
+    display: flex;
+  }
+
+  .firstChartCl{
+    color: #fff !important;
+    width: 67vw;
+    height: auto;
   }
