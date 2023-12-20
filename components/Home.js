@@ -415,8 +415,21 @@ function BarChart({ chartData, yAxisLegend }) {
                 display: true,
                 text: yAxisLegend, // Utilisation de la prop pour la légende de l'axe Y
               },
+              ticks: {
+                color: 'white' // Change la couleur du texte de l'axe y en blanc
+              },
+              grid: {
+                color: '#232323' // Change la couleur des lignes d'axe pour l'axe x
+              }
             },
-            // ... Autres configurations de l'axe Y
+            x: {
+                ticks: {
+                  color: 'white' // Change la couleur du texte de l'axe x en blanc
+              },
+              grid: {
+                color: '#232323' // Change la couleur des lignes d'axe pour l'axe x
+              } 
+            }
           },
           // ... Autres options pour le graphique
         }}
@@ -454,26 +467,28 @@ useEffect(() => { // pour lister les produits à droite
   })
 }, []);
 
-
-
   return (
     <main className={styles.main}>
       <h1>Welcome</h1>
-      <div className={styles.productButton}>
-        <button
-          className={styles.addProduct}
-          onClick={handleAddStockButtonClick}
-        >
-          Add stock
-        </button>
-
-        <button className={styles.saleProduct} onClick={handleSaleButtonClick}>
-          Sale Products
-        </button>
-        <FilterDate handleFilterDateChange={handleFilterDateChange} />
-      </div>
       <div className={styles.mainContent}>
         <div className={styles.leftSection}>
+          <div className={styles.productButton}>
+            <div className={styles.groupButtons}>
+              <button
+                className={styles.addProduct}
+                onClick={handleAddStockButtonClick}
+              >
+                Add stock
+              </button>
+
+              <button className={styles.saleProduct} onClick={handleSaleButtonClick}>
+                Sale Products
+              </button>
+            </div>
+            <div className={styles.dateFilter}>
+              <FilterDate handleFilterDateChange={handleFilterDateChange} />
+            </div>
+          </div>
           <div className={styles.sale}>
             <div className={styles.sales}>
               <div className={styles.tableContainer}>
