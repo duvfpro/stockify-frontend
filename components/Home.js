@@ -143,12 +143,29 @@ function Home() {
               : []
           ];
 
-        const history = soldHistory.concat(restockHistory).flat()
+        const historyExtended = soldHistory.concat(restockHistory).flat()
         .sort((a, b) => {
           const dateA = a.date.split('/').reverse().join('');
           const dateB = b.date.split('/').reverse().join('');
           return parseInt(dateB) - parseInt(dateA);
         })
+
+        const history = [];
+          for (let i = 0; i < historyExtended.length; i++) {
+            let found = false;
+
+            for (let j = 0; j < history.length; j++) {
+              if (historyExtended[i].type === history[j].type && historyExtended[i].date === history[j].date) {
+                history[j].quantity += historyExtended[i].quantity;
+                found = true;
+                break;
+              }
+            }
+
+            if (!found) {
+              history.push(historyExtended[i] );
+            }
+          }
 
           return {
             key: index,
@@ -207,12 +224,29 @@ function Home() {
             : []
         ];
 
-      const history = soldHistory.concat(restockHistory).flat()
+      const historyExtended = soldHistory.concat(restockHistory).flat()
       .sort((a, b) => {
         const dateA = a.date.split('/').reverse().join('');
         const dateB = b.date.split('/').reverse().join('');
         return parseInt(dateB) - parseInt(dateA);
       })
+
+      const history = [];
+      for (let i = 0; i < historyExtended.length; i++) {
+        let found = false;
+
+        for (let j = 0; j < history.length; j++) {
+          if (historyExtended[i].type === history[j].type && historyExtended[i].date === history[j].date) {
+            history[j].quantity += historyExtended[i].quantity;
+            found = true;
+            break;
+          }
+        }
+
+        if (!found) {
+          history.push(historyExtended[i] );
+        }
+      }      
 
         return {
           key: index,
