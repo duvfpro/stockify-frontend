@@ -7,7 +7,25 @@ import Sale from "./Sale";
 import { Table } from "antd";
 import FilterDate from './Tools/FilterDate';
 
+// Importe CategoryScale de Chart.js pour la mise à l'échelle des catégories sur les graphiques.
+import { CategoryScale } from "chart.js";
+// Enregistre CategoryScale pour une utilisation avec Chart.js.
+Chart.register(CategoryScale); 
+// Importe la version automatique de Chart.js qui sélectionne automatiquement le contrôleur de graphique et l'échelle.
+import Chart from "chart.js/auto";
+// Importe l'adaptateur date-fns pour Chart.js pour la gestion des dates.
+import "chartjs-adapter-date-fns"; 
+// Importe le composant Bar de react-chartjs-2 pour la création de graphiques à barres.
+import { Bar } from "react-chartjs-2"; 
+// Importe le composant Line de react-chartjs-2 pour la création de graphiques linéaires.
+import { Line } from "react-chartjs-2"; 
 
+import transformDataSell from "./transformDataSell";
+
+  // Function to handle changes in time selection
+  const handleTimeSelectChange = (event) => {
+    setTimeFilter(event.target.value);
+  };
 
 function Home() {
   const user = useSelector((state) => state.user.value);
@@ -286,10 +304,125 @@ function Home() {
     setSaleModal(false);
   };
 
+
+  /* Statisitcs Graph Chart */
+
+  const [timeFilter, setTimeFilter] = useState("day");
+  const [chartData, setChartData] = useState([]);
+  const [yAxisLegend, setYAxisLegend] = useState('');
+  const [categoryState, setCategoryState] = useState({
+    category: [],
+    categoryId: "all",
+  });
+  const [products, setProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
   const handleFilterDateChange = (filter) => {
     setFilter(filter);
   };
 
+  // Function to handle changes in time selection in graph
+  const handleTimeSelectChange = (event) => {
+    setTimeFilter(event.target.value);
+  };
+
+
+// Fetch data from the server
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      // Fetch all categories
+      const responseCategories = await fetch(
+        "http://localhost:3000/categories/allCategories"
+      );
+      const dataCategories = await responseCategories.json();
+      // Update the category state with the fetched categories
+      setCategoryState((prevState) => ({
+        ...prevState,
+        category: dataCategories.allCategories,
+      }));
+
+      // Fetch all products
+      const responseProducts = await fetch(
+        "http://localhost:3000/products/allProducts"
+      );
+      const dataProducts = await responseProducts.json();
+
+      // Filter products based on selected category
+      let filteredProducts;
+      if (categoryState.categoryId === "all") {
+        filteredProducts = dataProducts.allProducts;
+      } else {
+        filteredProducts = dataProducts.allProducts.filter((product) =>
+          product.category.some(
+            (category) => category._id === categoryState.categoryId
+          )
+        );
+      }
+
+      // Transform data for selling chart
+      const transformedDataSell = transformDataSell(
+        filteredProducts,
+        filter,
+        timeFilter
+      );
+      setChartData({ ...transformedDataSell });
+
+      setDataLoaded(true); // Data has been loaded
+    } catch (error) {
+      console.error(error);
+
+  
+    }
+  };
+
+  fetchData();
+  // This effect runs when 'filter', 'categoryState.categoryId', or 'timeFilter' changes
+}, [filter, categoryState.categoryId, timeFilter]);
+
+useEffect(() => {
+  fetch("http://localhost:3000/products/allProducts")
+    .then((response) => response.json())
+    .then((data) => {
+      setProducts(data.allProducts);
+      if (data.allProducts && data.allProducts.length > 0) {
+        setSelectedProduct(data.allProducts[0]._id);
+      }
+    });
+}, []);
+
+const [productData, setProductData] = useState(null);
+
+
+// State pour l'option de légende
+
+
+// Bar chart component
+function BarChart({ chartData, yAxisLegend }) {
+  // If there are no labels, return a message
+  if (chartData && chartData.datasets) {
+    return (
+      <Bar
+        data={chartData}
+        options={{
+          scales: {
+            y: {
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: yAxisLegend, // Utilisation de la prop pour la légende de l'axe Y
+              },
+            },
+            // ... Autres configurations de l'axe Y
+          },
+          // ... Autres options pour le graphique
+        }}
+      />
+    );
+  } else {
+    return <p>No data available for the chart.</p>;
+  }
+}
 
   return (
     <main className={styles.main}>
@@ -307,38 +440,79 @@ function Home() {
         </button>
         <FilterDate handleFilterDateChange={handleFilterDateChange} />
       </div>
-      <div className={styles.sale}>
-        <div className={styles.sales}>
-          <div className={styles.tableContainer}>
-            <Table
-              className={styles.Table}
-              dataSource={displayProducts}
-              columns={columns}
-              pagination={{ pageSize: 10 }}
-              size="large"
-              style={tableStyle}
-              expandable={{
-                expandedRowRender: (record) => {  
-                return (
-                  <ul>
-                  <div style={{ maxHeight: '20rem', overflowY: 'auto' }}>
-                    {record.history.map((operationGroup, groupIndex) => (
-                      <li key={groupIndex}>
-                            {operationGroup.type && operationGroup.quantity && operationGroup.date
-                              ? `${operationGroup.date.split(' ')[0]}: ${operationGroup.quantity} ${operationGroup.type}`
-                              : ""} 
-                      </li>
-                    ))}
-                  </div>
-                </ul>
-                )},
-                rowExpandable: (record) => record.history.length > 0,
-              }}
-            />
+      <div className={styles.leftSection}>
+        <div className={styles.sale}>
+          <div className={styles.sales}>
+            <div className={styles.tableContainer}>
+              <Table
+                className={styles.Table}
+                dataSource={displayProducts}
+                columns={columns}
+                pagination={{ pageSize: 10 }}
+                size="large"
+                style={tableStyle}
+                expandable={{
+                  expandedRowRender: (record) => {  
+                  return (
+                    <ul>
+                    <div style={{ maxHeight: '20rem', overflowY: 'auto' }}>
+                      {record.history.map((operationGroup, groupIndex) => (
+                        <li key={groupIndex}>
+                              {operationGroup.type && operationGroup.quantity && operationGroup.date
+                                ? `${operationGroup.date.split(' ')[0]}: ${operationGroup.quantity} ${operationGroup.type}`
+                                : ""} 
+                        </li>
+                      ))}
+                    </div>
+                  </ul>
+                  )},
+                  rowExpandable: (record) => record.history.length > 0,
+                }}
+              />
+            </div>
           </div>
         </div>
-      </div>
+                {/* GRAPH SECTION */}
+        <div>
+          <div className={styles.filterContainer}>
+            <div className={styles.filterArea}>
+              <div className={styles.filterByTemp}>
+                <p>Filter by Temps</p>
+                <select onChange={handleTimeSelectChange}>
+                  <option value="day">Par Jour</option>
+                  <option value="week">Par Semaine</option>
+                  <option value="month">Par Mois</option>
+                </select>
+              </div>
+              <div className={styles.filterByObject}>
+                <p>Filter by Object</p>
+                <select onChange={(e) => setFilter(e.target.value)}>
+                  <option value="categories">Catégories</option>
+                  <option value="products">Produits</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className={styles.firstChart}>
+            <h2>Sales Statistics</h2>
+            
+              <BarChart
+              className={styles.firstChartCl}
+              chartData={chartData}
+              yAxisLegend={yAxisLegend} // Prop pour l'option de légende
+            />        
+        
+          </div>
+        </div>
+                  {/* END GRAPH SECTION */}
 
+      </div>
+      
+      <div className={styles.rightSection}>
+
+                {/* NATHAN VA TRAVAILLER ICI */}
+
+      </div>
       {openAddStockModal && (
         <AddStock
           openAddStockModal={openAddStockModal}
