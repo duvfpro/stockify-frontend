@@ -3,21 +3,47 @@
     flex-direction: column;
     align-items: center;
     height: 100vh;
+    width: 100vw;
   }
 
+.mainContent {
+  display: flex;
+}
+
   .productButton{
-    width: 40vw;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 10px;
   }
 
+  .productButton{
+    margin-left: 10px;
+  }
+
+  .dateFilter{
+    width: 225px;
+  }
+
+  .leftSection{
+    width: 67vw !important;
+  }
+
+  .rightSection{
+    width: 33vw !important;
+  }
+
   .sale{
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 50vw;
+    width: 100%;
+  }
+
+  .sales{
+    width: 100%;
+    margin: 0px 10px 0px 10px;
   }
   
   .ant-table-row {
@@ -32,3 +58,73 @@
     border: 2px solid #000;
     background-color: #323A57;
   }
+
+
+/* GRAPH SECTION */
+  .filterContainer{
+    margin-top: 30px;
+    width: 100%;
+    display: flex;
+
+  }
+
+  .filterArea{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .filterByTemp{
+    display: flex;
+
+  }
+
+  .filterByTemp>p{
+    margin-right: 20px;
+  }
+
+  .filterByObject{
+    display: flex;
+  }
+
+  .filterByObject>p{
+    margin: 20px;
+  }
+
+  .firstChart>h2{
+    margin: 50px;
+  }
+
+  .firstChartCl{
+    color: #fff !important;
+    width: 67vw;
+    height: auto;
+  }
+
+  .productList {
+    border: 1px solid white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+
+  .rightProductsContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .product {
+    background-color: #323A57;
+    width: 20rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+  }
+

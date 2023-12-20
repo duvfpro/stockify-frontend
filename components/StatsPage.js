@@ -195,7 +195,21 @@ function StatsPage() {
                   display: true,
                   text: yAxisLegend, // Utilisation de la prop pour la légende de l'axe Y
                 },
+                ticks: {
+                  color: 'white' // Change la couleur du texte de l'axe y en blanc
+                },
+                grid: {
+                  color: '#232323' // Change la couleur des lignes d'axe pour l'axe x
+                }
               },
+              x: {
+                ticks: {
+                  color: 'white' // Change la couleur du texte de l'axe x en blanc
+                },
+                grid: {
+                  color: '#232323' // Change la couleur des lignes d'axe pour l'axe x
+                }
+              }
               // ... Autres configurations de l'axe Y
             },
             // ... Autres options pour le graphique
@@ -233,8 +247,21 @@ function StatsPage() {
               display: true,
               text: yAxisLegend, 
             },
+            ticks: {
+              color: 'white' // Change la couleur du texte de l'axe y en blanc
+            },
+            grid: {
+              color: '#232323' // Change la couleur des lignes d'axe pour l'axe x
+            }
           },
-         
+          x: {
+            ticks: {
+              color: 'white' // Change la couleur du texte de l'axe x en blanc
+            },
+            grid: {
+              color: '#232323' // Change la couleur des lignes d'axe pour l'axe x
+            }
+          }
         },
         
       }}

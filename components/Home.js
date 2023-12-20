@@ -3,9 +3,12 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import styles from "../styles/Home.module.css";
 import AddStock from "./AddStock";
+import Product from './Product';
 import Sale from "./Sale";
 import { Table } from "antd";
 import FilterDate from './Tools/FilterDate';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 
 // Importe CategoryScale de Chart.js pour la mise à l'échelle des catégories sur les graphiques.
 import { CategoryScale } from "chart.js";
@@ -17,8 +20,6 @@ import Chart from "chart.js/auto";
 import "chartjs-adapter-date-fns"; 
 // Importe le composant Bar de react-chartjs-2 pour la création de graphiques à barres.
 import { Bar } from "react-chartjs-2"; 
-// Importe le composant Line de react-chartjs-2 pour la création de graphiques linéaires.
-import { Line } from "react-chartjs-2"; 
 
 import transformDataSell from "./transformDataSell";
 
@@ -35,6 +36,8 @@ function Home() {
   const [refresh, setRefresh] = useState(false);
   const [displayProducts, setDisplayProducts] = useState([]);
   const [filter, setFilter] = useState('Today');
+  const [myProducts, setMyProducts] = useState([]); // affichage des produits
+
 
   const refreshLastSale = () => {
 
@@ -310,7 +313,7 @@ function Home() {
   };
 
 
-  /* Statisitcs Graph Chart */
+  /* Statistics Graph Chart */
 
   const [timeFilter, setTimeFilter] = useState("day");
   const [chartData, setChartData] = useState([]);
@@ -415,7 +418,21 @@ function BarChart({ chartData, yAxisLegend }) {
                 display: true,
                 text: yAxisLegend, // Utilisation de la prop pour la légende de l'axe Y
               },
+              ticks: {
+                color: 'white' // Change la couleur du texte de l'axe y en blanc
+              },
+              grid: {
+                color: '#232323' // Change la couleur des lignes d'axe pour l'axe x
+              }
             },
+            x: {
+                ticks: {
+                  color: 'white' // Change la couleur du texte de l'axe x en blanc
+              },
+              grid: {
+                color: '#232323' // Change la couleur des lignes d'axe pour l'axe x
+              } 
+            }
           },
         }}
       />
@@ -425,95 +442,152 @@ function BarChart({ chartData, yAxisLegend }) {
   }
 }
 
+
+useEffect(() => { // pour lister les produits à droite
+  fetch('http://localhost:3000/products/allProducts')
+  .then(response => response.json())
+  .then(data => {
+    let productsSold = [];
+    for(let i=0; i<data.allProducts.length; i++) {
+      let sum = 0;
+      for(let j=0; j<data.allProducts[i].soldAt.length; j++) {
+        sum += data.allProducts[i].soldAt[j].quantity
+      }
+      productsSold.push({
+        name: data.allProducts[i].name,
+        quantitySold: sum,
+        stock: data.allProducts[i].stock
+      })
+    }
+    productsSold = productsSold.sort((a, b) => b.quantitySold - a.quantitySold)
+
+    let topTenProducts = productsSold;
+    if(productsSold.length > 10) {
+      topTenProducts = productsSold.slice(0, 10);
+    }
+    setMyProducts(topTenProducts);
+  })
+}, []);
+
   return (
     <main className={styles.main}>
       <h1>Welcome {user.username}</h1>
-      <div className={styles.productButton}>
-        <button
-          className={styles.addProduct}
-          onClick={handleAddStockButtonClick}
-        >
-          Add stock
-        </button>
+      <div className={styles.mainContent}>
+        <div className={styles.leftSection}>
+          <div className={styles.productButton}>
+            <div className={styles.groupButtons}>
+              <button
+                className={styles.addProduct}
+                onClick={handleAddStockButtonClick}
+              >
+                Add stock
+              </button>
 
-        <button className={styles.saleProduct} onClick={handleSaleButtonClick}>
-          Sale Products
-        </button>
-        <FilterDate handleFilterDateChange={handleFilterDateChange} />
-      </div>
-      <div className={styles.leftSection}>
-        <div className={styles.sale}>
-          <div className={styles.sales}>
-            <div className={styles.tableContainer}>
-              <Table
-                className={styles.Table}
-                dataSource={displayProducts}
-                columns={columns}
-                pagination={{ pageSize: 10 }}
-                size="large"
-                style={tableStyle}
-                expandable={{
-                  expandedRowRender: (record) => {  
-                  return (
-                    <ul>
-                    <div style={{ maxHeight: '20rem', overflowY: 'auto' }}>
-                      {record.history.map((operationGroup, groupIndex) => (
-                        <li key={groupIndex}>
-                              {operationGroup.type && operationGroup.quantity && operationGroup.date
-                                ? `${operationGroup.date.split(' ')[0]}: ${operationGroup.quantity} ${operationGroup.type}`
-                                : ""} 
-                        </li>
-                      ))}
-                    </div>
-                  </ul>
-                  )},
-                  rowExpandable: (record) => record.history.length > 0,
-                }}
-              />
+              <button className={styles.saleProduct} onClick={handleSaleButtonClick}>
+                Sale Products
+              </button>
+            </div>
+            <div className={styles.dateFilter}>
+              <FilterDate handleFilterDateChange={handleFilterDateChange} />
             </div>
           </div>
+          <div className={styles.sale}>
+            <div className={styles.sales}>
+              <div className={styles.tableContainer}>
+                <Table
+                  className={styles.Table}
+                  dataSource={displayProducts}
+                  columns={columns}
+                  pagination={{ pageSize: 10 }}
+                  size="large"
+                  style={tableStyle}
+                  expandable={{
+                    expandedRowRender: (record) => {  
+                    return (
+                      <ul>
+                      <div style={{ maxHeight: '20rem', overflowY: 'auto' }}>
+                        {record.history.map((operationGroup, groupIndex) => (
+                          <li key={groupIndex}>
+                                {operationGroup.type && operationGroup.quantity && operationGroup.date
+                                  ? `${operationGroup.date.split(' ')[0]}: ${operationGroup.quantity} ${operationGroup.type}`
+                                  : ""} 
+                          </li>
+                        ))}
+                      </div>
+                    </ul>
+                    )},
+                    rowExpandable: (record) => record.history.length > 0,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+                  {/* GRAPH SECTION */}
+          <div>
+            <div className={styles.filterContainer}>
+              <div className={styles.filterArea}>
+                <div className={styles.filterByTemp}>
+                  <p>Filter by Temps</p>
+                  <select onChange={handleTimeSelectChange}>
+                    <option value="day">Par Jour</option>
+                    <option value="week">Par Semaine</option>
+                    <option value="month">Par Mois</option>
+                  </select>
+                </div>
+                <div className={styles.filterByObject}>
+                  <p>Filter by Object</p>
+                  <select onChange={(e) => setFilter(e.target.value)}>
+                    <option value="categories">Catégories</option>
+                    <option value="products">Produits</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div className={styles.firstChart}>
+              <h2>Sales Statistics</h2>
+              
+                <BarChart
+                className={styles.firstChartCl}
+                chartData={chartData}
+                yAxisLegend={yAxisLegend} // Prop pour l'option de légende
+              />        
+          
+            </div>
+          </div>
+                    {/* END GRAPH SECTION */}
+
         </div>
-                {/* GRAPH SECTION */}
-        <div>
-          <div className={styles.filterContainer}>
-            <div className={styles.filterArea}>
-              <div className={styles.filterByTemp}>
-                <p>Filter by Temps</p>
-                <select onChange={handleTimeSelectChange}>
-                  <option value="day">Par Jour</option>
-                  <option value="week">Par Semaine</option>
-                  <option value="month">Par Mois</option>
-                </select>
-              </div>
-              <div className={styles.filterByObject}>
-                <p>Filter by Object</p>
-                <select onChange={(e) => setFilter(e.target.value)}>
-                  <option value="categories">Catégories</option>
-                  <option value="products">Produits</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div className={styles.firstChart}>
-            <h2>Sales Statistics</h2>
-            
-              <BarChart
-              className={styles.firstChartCl}
-              chartData={chartData}
-              yAxisLegend={yAxisLegend} // Prop pour l'option de légende
-            />        
         
-          </div>
-        </div>
-                  {/* END GRAPH SECTION */}
+        <div className={styles.rightSection}>
 
+                  {/* NATHAN VA TRAVAILLER ICI */}
+
+          <div className={styles.productList}>
+            <h2 className={styles.productsTitle}>
+                  Top 10 products
+            </h2>
+            <div className={styles.rightProductsContainer}>
+              {myProducts.length === 0 ? (
+                <p>No products</p>
+              ) : (
+                myProducts.map((data, i) => {
+                  return (
+                      <div key={i} className={styles.product}>
+                        <button className={styles.plusMinusBtn} ><FontAwesomeIcon icon={faPlus}/></button>
+                        {data.name} ({data.quantitySold}) - {data.stock} in stock
+                        <button className={styles.plusMinusBtn} ><FontAwesomeIcon icon={faMinus}/></button>
+                    </div>
+                  )     
+                })
+              )}              
+            </div>
+
+          </div>
+          
+
+        </div>
       </div>
       
-      <div className={styles.rightSection}>
-
-                {/* NATHAN VA TRAVAILLER ICI */}
-
-      </div>
       {openAddStockModal && (
         <AddStock
           openAddStockModal={openAddStockModal}
