@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import styles from "../styles/Home.module.css";
 import AddStock from "./AddStock";
+import Product from './Product';
 import Sale from "./Sale";
 import { Table } from "antd";
 import FilterDate from './Tools/FilterDate';
@@ -35,6 +36,8 @@ function Home() {
   const [refresh, setRefresh] = useState(false);
   const [displayProducts, setDisplayProducts] = useState([]);
   const [filter, setFilter] = useState('Today');
+  const [myProducts, setMyProducts] = useState([]); // affichage des produits
+
 
   const refreshLastSale = () => {
 
@@ -424,6 +427,18 @@ function BarChart({ chartData, yAxisLegend }) {
   }
 }
 
+
+useEffect(() => { // pour lister les produits à droite
+  fetch('http://localhost:3000/products/allProducts')
+  .then(response => response.json())
+  .then(data => {
+    console.log(data.allProducts);
+    setMyProducts(data.allProducts);
+  })
+}, []);
+
+
+
   return (
     <main className={styles.main}>
       <h1>Welcome</h1>
@@ -511,6 +526,24 @@ function BarChart({ chartData, yAxisLegend }) {
       <div className={styles.rightSection}>
 
                 {/* NATHAN VA TRAVAILLER ICI */}
+
+        <div className={styles.productList}>
+          <h2 className={styles.productsTitle}>
+                My Products
+          </h2>
+          {myProducts.length === 0 ? (
+            <p>Aucun produits</p>
+          ) : (
+            myProducts.map((data, i) => {
+              return (
+                  <div key={i}>
+                    {data.name} - {data.stock} in stock
+                </div>
+              )     
+            })
+          )}
+        </div>
+        
 
       </div>
       {openAddStockModal && (
