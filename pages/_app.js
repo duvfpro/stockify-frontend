@@ -1,7 +1,4 @@
-import styles from '../styles/Header/Navbar.module.css';
 import '../styles/globals.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 import Head from 'next/head';
 import { Provider} from 'react-redux';
@@ -15,8 +12,7 @@ import storage from 'redux-persist/lib/storage';
 
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-import DrawerLeft from '../components/Header/DrawerLeft';
-import NotificationButton from '../components/Header/Notifications';
+import HeaderBar from '../components/Header/HeaderBar';
 
 const reducers = combineReducers({ user });
 
@@ -31,54 +27,22 @@ const persistor = persistStore(store);
 
 
 function App({ Component, pageProps }) {
+  
   const router = useRouter();
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const handleDrawerClick = () => {
-    setIsDrawerOpen(!isDrawerOpen);
-  };
-
-
   const isLoginPage = router.pathname === '/';
 
-  const getPageTitle = () => {
-    switch (router.pathname) {
-      case '/admin':
-        return 'Administrator';
-      case '/home':
-        return 'Stockify';
-      case '/products':
-        return 'Products';
-      case '/sales':
-        return 'Sales';
-      case '/statistics':
-        return 'Statistics';
-      case '/categories':
-        return 'Categories';
-      default:
-        return 'Stockify';
-    }
-  };
 
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <Head>
-          <title>{getPageTitle()}</title>
         </Head>
 
         {!isLoginPage && (
-          <div className={styles.headerBar}>
-            <div className={styles.iconsSection}>
-              <FontAwesomeIcon icon={faBars} className={styles.iconTop} onClick={handleDrawerClick} />
-              <h1 className={styles.mainTitle} >{getPageTitle()}</h1>
-            </div>
-            <div>
-              <p>{user.username}</p>
-              <NotificationButton />
-            </div>
-          </div>
+
+          <HeaderBar />
+          
         )}
-        <DrawerLeft isDrawerOpen={isDrawerOpen} handleDrawerClick={handleDrawerClick} />
         <Component {...pageProps} />
       </PersistGate>
     </Provider>

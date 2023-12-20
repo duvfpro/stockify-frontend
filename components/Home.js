@@ -471,7 +471,6 @@ useEffect(() => { // pour lister les produits à droite
 
   return (
     <main className={styles.main}>
-      <h1>Welcome {user.username}</h1>
       <div className={styles.mainContent}>
         <div className={styles.leftSection}>
           <div className={styles.productButton}>
