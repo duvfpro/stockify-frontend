@@ -4,8 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 import Head from 'next/head';
-
-import { Provider } from 'react-redux';
+import { Provider} from 'react-redux';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import user from '../reducers/users';
@@ -34,7 +33,6 @@ const persistor = persistStore(store);
 function App({ Component, pageProps }) {
   const router = useRouter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
   const handleDrawerClick = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
@@ -75,6 +73,7 @@ function App({ Component, pageProps }) {
               <h1 className={styles.mainTitle} >{getPageTitle()}</h1>
             </div>
             <div>
+              <p>{user.username}</p>
               <NotificationButton />
             </div>
           </div>

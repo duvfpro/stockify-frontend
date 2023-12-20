@@ -391,8 +391,6 @@ useEffect(() => {
     });
 }, []);
 
-const [productData, setProductData] = useState(null);
-
 
 // State pour l'option de légende
 
@@ -413,9 +411,7 @@ function BarChart({ chartData, yAxisLegend }) {
                 text: yAxisLegend, // Utilisation de la prop pour la légende de l'axe Y
               },
             },
-            // ... Autres configurations de l'axe Y
           },
-          // ... Autres options pour le graphique
         }}
       />
     );
@@ -426,7 +422,7 @@ function BarChart({ chartData, yAxisLegend }) {
 
   return (
     <main className={styles.main}>
-      <h1>Welcome</h1>
+      <h1>Welcome {user.username}</h1>
       <div className={styles.productButton}>
         <button
           className={styles.addProduct}
