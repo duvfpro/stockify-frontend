@@ -115,14 +115,26 @@ function AddNewProduct(props) {
             <div className={styles.allContainer} >
                 <div className={styles.title} > Add New Product </div>
                     <div className={styles.mainContainer}>
-                        <Input className={styles.inputField} type="text" onChange={handleNameInputChange} value={productName} placeholder="Product name" required />
-                        <Input className={styles.inputField} type="number" onChange={handleStockInputChange} value={productStock} placeholder="Stock" required />
-                        <Input className={styles.inputField} type="number" onChange={handlePriceInputChange} value={productPrice} placeholder="Price" required />
-                        <Select className={styles.selectInput} onChange={handleSelectChange} >
+                        <div className={styles.inputContainer}>
+                            <p className={styles.inputName}> Name</p>
+                            <Input className={styles.inputField} type="text" onChange={handleNameInputChange} value={productName} placeholder="Product name" required />
+                        </div>
+                        <div className={styles.inputContainer}>
+                            <p className={styles.inputName}> Stock</p>
+                            <Input className={styles.inputField} type="number" onChange={handleStockInputChange} value={productStock} placeholder="Stock" required />
+                        </div>
+                        <div className={styles.inputContainer}>
+                            <p className={styles.inputName}> Price</p>
+                            <Input className={styles.inputField} type="number" onChange={handlePriceInputChange} value={productPrice} placeholder="Price" required />
+                        </div>
+                        <div className={styles.inputContainer}>
+                            <p className={styles.inputName}> Category</p>
+                            <Select className={styles.selectInput} onChange={handleSelectChange} >
                             {category.map((data, index) => (
                             <option key={index} value={data.name}> {data.name} </option>
                             ))}
-                        </Select>       
+                        </Select>
+                        </div>
 
                         <Input className={styles.imageField} type="file" onChange={handleImageInputChange} accept="image/*" id="fileInput"/>
                             <label className={styles.newImageDiv} htmlFor="fileInput"> 

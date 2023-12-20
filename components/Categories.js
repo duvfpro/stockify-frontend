@@ -1,6 +1,6 @@
 import styles from '../styles/Categories.module.css';
 import React, { useState, useEffect } from 'react';
-import { Modal } from 'antd';
+import { Modal, Input } from 'antd';
 
 function Categories() {
 
@@ -28,7 +28,7 @@ function Categories() {
     };
 
     const handleNewNameInputChange = (event) => {
-        setNewCategoryName(event.target.value);
+        setNewCategoryName(event);
     };
 
     const handleNewSaveButton = () => {
@@ -57,7 +57,7 @@ function Categories() {
         };
 
         const handleNameInputChange = (event) => {
-            setCategoryName(event.target.value);
+            setCategoryName(event);
         };
 
        
@@ -111,15 +111,22 @@ function Categories() {
 
         return (
             <div key={data._id} className={styles.categoryContainer}>
-                <h3 className={styles.categoryname}> {data.name} </h3>
-                <button className={styles.edit} onClick={handleEditButton}> Edit </button>
-                <button className={styles.deleteBtn} onClick={() => handleDeleteButton(data.name, data._id)}> Delete </button>
+                <h3 className={styles.categoryname}>{data.name} </h3>
+                <div className={styles.btnContainer}>
+                    <button className={styles.edit} onClick={handleEditButton}> Edit </button>
+                    <button className={styles.deleteBtn} onClick={() => handleDeleteButton(data.name, data._id)}> Delete </button>
+                </div>
 
-                <Modal open={openEditModal} onCancel={closeEditModal} footer={null} width={800} height={800}>
-                    <div className={styles.titleEditMod}> Update {data.name} ({data._id}) </div>
-                    <div className={styles.mainEditModContainer}>
-                        <input type="text" onChange={handleNameInputChange} value={categoryName} placeholder="New Category name" />
-                        <button onClick={() => handleSaveButton(data.name, data._id)}> Submit </button>
+                <Modal open={openEditModal} onCancel={closeEditModal} footer={null} width={450} height={900}>
+                    <div className={styles.allModalContainer} >                   
+                        <div className={styles.titleEditMod}> Update {data.name} </div>
+                        <div className={styles.mainEditModContainer}>
+                        <div className={styles.inputContainer}>
+                            <p className={styles.inputName}> Name</p>
+                            <Input className={styles.inputField} type="text" onChange={handleNameInputChange} value={categoryName} placeholder="New Category name" />
+                        </div>
+                            <button onClick={() => handleSaveButton(data.name, data._id)}> Submit </button>
+                        </div>
                     </div>
                 </Modal>
             </div>
@@ -140,11 +147,16 @@ function Categories() {
                     }
                 })}
                 
-                <Modal open={openNewCatModal} onCancel={closeNewCatModal} footer={null} width={800} height={800}>
-                    <div className={styles.addBtnCat}> Add New Category </div>
-                    <div className={styles.mainNewCatContainer}>
-                        <input type="text" className={styles.inputNewCat} onChange={handleNewNameInputChange} value={newCategoryName} placeholder="Category name" />
-                        <button onClick={() => handleNewSaveButton()}> Submit </button>
+                <Modal open={openNewCatModal} onCancel={closeNewCatModal} footer={null} width={450} height={900}>
+                    <div className={styles.allModalContainer}>
+                        <div className={styles.addBtnCat}> Add New Category </div>
+                        <div className={styles.mainNewCatContainer}>
+                            <div inputContainer >
+                                <p className={styles.inputName}> Name</p>
+                                <Input type="text" className={styles.inputField} onChange={handleNewNameInputChange} value={newCategoryName} placeholder="Category name" />
+                            </div>
+                            <button onClick={() => handleNewSaveButton()}> Submit </button>
+                        </div>
                     </div>
                 </Modal>
             </div>

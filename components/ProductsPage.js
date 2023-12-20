@@ -3,7 +3,7 @@ import AddNewProduct from './AddNewProduct';
 import Product from './Product';
 import FilterCascader from './Tools/FilterCascader';
 import FilterStock from './Tools/FilterStock';
-import { Modal } from 'antd';
+import { Modal, Input, Select } from 'antd';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
@@ -168,29 +168,29 @@ function ProductsPage(props) {
   };
 
   const handleNameInputChange = (event) => {
-    setProductName(event.target.value);
+    setProductName(event);
   };
 
   const handleSelectChange = (event) => {
-    let catName = event.target.value;
+    let catName = event;
     let id = category.find(element => element.name === catName)
     setCategoryId(id._id);
     setCategoryName(catName);
   };
 
   const handlePriceInputChange = (event) => {
-    const isValidInput = /^-?\d*\.?\d*$/.test(event.target.value);
+    const isValidInput = /^-?\d*\.?\d*$/.test(event);
 
     if (isValidInput) {
-      setPrice(event.target.value);
+      setPrice(event);
     };
   };
 
   const handleStockInputChange = (event) => {
-    const isValidInput = /^-?\d*\.?\d*$/.test(event.target.value);
+    const isValidInput = /^-?\d*\.?\d*$/.test(event);
 
     if (isValidInput) {
-      setStock(event.target.value);
+      setStock(event);
     };
   };
 
@@ -246,23 +246,27 @@ function ProductsPage(props) {
       <Modal className={styles.modalMainContent} open={openEditModal} onCancel={closeEditModal} footer={null} width={800} height={800}>
         <div className={styles.modalMainContent}>
           <img src={image} alt={productName} />
-          <div className={styles.title} > UPDATE PRODUCT </div>
+          <div className={styles.title} > Update product </div>
           <div className={styles.mainContainer}>
-            <div>
-              NAME <input className={styles.inputField} type="text" onChange={handleNameInputChange} value={productName} placeholder="Product name" />
+            <div className={styles.inputContainer}>
+              <p className={styles.inputName}> Name</p>
+              <Input className={styles.inputField} type="text" onChange={handleNameInputChange} value={productName} placeholder="Product name" />
             </div>
-            <div>
-              PRICE <input className={styles.inputField} type="number" onChange={handlePriceInputChange} value={price} placeholder="Price" required />
+            <div className={styles.inputContainer}>
+              <p className={styles.inputName}> Price</p>
+              <Input className={styles.inputField} type="number" onChange={handlePriceInputChange} value={price} placeholder="Price" required />
             </div>
-            <div>
-              STOCK <input className={styles.inputField} type="number" onChange={handleStockInputChange} value={stock} placeholder="Stock" required />
+            <div className={styles.inputContainer}>
+              <p className={styles.inputName}> Stock</p>
+              <Input className={styles.inputField} type="number" onChange={handleStockInputChange} value={stock} placeholder="Stock" required />
             </div>
-            <div>
-              CATEGORY <select className={styles.inputField} onChange={handleSelectChange} >
+            <div className={styles.inputContainer}>
+              <p className={styles.inputName}> Category</p>
+              <Select className={styles.selectInput} onChange={handleSelectChange} >
                 {category.map((data, index) => (
                   <option key={index} value={data.name}> {data.name} </option>
                 ))}
-              </select>
+              </Select>
             </div>
             <button onClick={() => handleSaveButton()} > Submit </button>
           </div>

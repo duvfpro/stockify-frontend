@@ -11,6 +11,12 @@
     width: 20rem;
 }
 
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+  }
+
 .title {
     font-size: 1.5rem;
     margin-bottom: 1.5rem;
@@ -44,6 +50,10 @@
 .imageField {
     display: none;
 }
+
+.inputName {
+    margin: 0;
+  }
 
 
 .submitButton {

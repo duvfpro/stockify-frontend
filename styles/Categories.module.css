@@ -16,11 +16,16 @@
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
+    align-items: center;
     width: 300px;
     background-color: rgba(60, 59, 102, 0.5);
     padding: 20px;
     margin: 30px;
     border-radius: 5px;
+}
+
+.btnContainer {
+    display: flex;
 }
 
 .mainNewCatContainer{
@@ -60,4 +65,38 @@ color: #fb976f !important;
     margin: 10px;
     padding: auto;  
     width: 97%;
+}
+
+
+.allModalContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+  }
+
+.titleEditMod {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.addBtnCat {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem; 
+}
+
+.inputField {
+    height: 2rem;
+    width: 18rem;
+    border-radius: 0.2rem;
+    margin-bottom: 1rem;
+}
+
+.inputName {
+    margin: 0;
 }
