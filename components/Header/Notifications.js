@@ -3,6 +3,8 @@ import { Button, notification } from 'antd';
 import { BellOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 
+import styles from '../../styles/Header/Notification.module.css'
+
 const NotificationButton = () => {
   const [dataProducts, setDataProducts] = useState(null);
 
@@ -42,15 +44,15 @@ const NotificationButton = () => {
     notification.open({
       message: 'Notifications',
       description: (
-        <div>
+        <div className={styles.mainContainer}>
           <p>
             Stock de{' '}
-            <span style={{ fontWeight: 'bold' }}>{productName}</span> est critique à{' '}
+            <span style={{  color: 'black', fontWeight: 'bold' }}>{productName}</span> est critique à{' '}
             <span style={{ color: 'red', fontWeight: 'bold' }}>{productStock}</span>.
           </p>
           <p>
             La dernière vente est :
-          <span style={{ fontWeight: 'bold' }}> {soldAt}</span>.
+          <span style={{ color: 'black', fontWeight: 'bold' }}> {soldAt}</span>.
           </p>
         </div>
       ),

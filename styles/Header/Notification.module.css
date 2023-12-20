@@ -1,0 +1,4 @@
+/* Content color for text */
+.mainContainer>p{
+    color: black !important;
+}

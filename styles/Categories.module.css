@@ -1,14 +1,11 @@
 .mainCatContainer{
-    background-color: #0d0e11;
     display: flex;
-    flex-direction: column;
-    
+    flex-direction: column;    
     align-items: center;
     justify-content: center;
 }
 
-.cardMapContainer{
-    
+.cardMapContainer{    
     display: flex;
     flex-wrap: wrap;
     justify-content: center;

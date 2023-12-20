@@ -18,3 +18,11 @@
   bottom: 10px;
   cursor: pointer;
 }
+
+.sign-out-button:hover{
+  margin-top: auto;
+  position:absolute;
+  bottom: 10px;
+  cursor: pointer;
+  background-color: #209f7d !important;
+}
