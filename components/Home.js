@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import styles from "../styles/Home.module.css";
 import AddStock from "./AddStock";
+import Product from './Product';
 import Sale from "./Sale";
 import { Table } from "antd";
 import FilterDate from './Tools/FilterDate';
@@ -33,6 +34,8 @@ function Home() {
   const [refresh, setRefresh] = useState(false);
   const [displayProducts, setDisplayProducts] = useState([]);
   const [filter, setFilter] = useState('Today');
+  const [myProducts, setMyProducts] = useState([]); // affichage des produits
+
 
   const refreshLastSale = () => {
 
@@ -422,6 +425,18 @@ function BarChart({ chartData, yAxisLegend }) {
   }
 }
 
+
+useEffect(() => { // pour lister les produits à droite
+  fetch('http://localhost:3000/products/allProducts')
+  .then(response => response.json())
+  .then(data => {
+    console.log(data.allProducts);
+    setMyProducts(data.allProducts);
+  })
+}, []);
+
+
+
   return (
     <main className={styles.main}>
       <h1>Welcome</h1>
@@ -438,79 +453,100 @@ function BarChart({ chartData, yAxisLegend }) {
         </button>
         <FilterDate handleFilterDateChange={handleFilterDateChange} />
       </div>
-      <div className={styles.leftSection}>
-        <div className={styles.sale}>
-          <div className={styles.sales}>
-            <div className={styles.tableContainer}>
-              <Table
-                className={styles.Table}
-                dataSource={displayProducts}
-                columns={columns}
-                pagination={{ pageSize: 10 }}
-                size="large"
-                style={tableStyle}
-                expandable={{
-                  expandedRowRender: (record) => {  
-                  return (
-                    <ul>
-                    <div style={{ maxHeight: '20rem', overflowY: 'auto' }}>
-                      {record.history.map((operationGroup, groupIndex) => (
-                        <li key={groupIndex}>
-                              {operationGroup.type && operationGroup.quantity && operationGroup.date
-                                ? `${operationGroup.date.split(' ')[0]}: ${operationGroup.quantity} ${operationGroup.type}`
-                                : ""} 
-                        </li>
-                      ))}
-                    </div>
-                  </ul>
-                  )},
-                  rowExpandable: (record) => record.history.length > 0,
-                }}
-              />
-            </div>
-          </div>
-        </div>
-                {/* GRAPH SECTION */}
-        <div>
-          <div className={styles.filterContainer}>
-            <div className={styles.filterArea}>
-              <div className={styles.filterByTemp}>
-                <p>Filter by Temps</p>
-                <select onChange={handleTimeSelectChange}>
-                  <option value="day">Par Jour</option>
-                  <option value="week">Par Semaine</option>
-                  <option value="month">Par Mois</option>
-                </select>
-              </div>
-              <div className={styles.filterByObject}>
-                <p>Filter by Object</p>
-                <select onChange={(e) => setFilter(e.target.value)}>
-                  <option value="categories">Catégories</option>
-                  <option value="products">Produits</option>
-                </select>
+      <div className={styles.mainContent}>
+        <div className={styles.leftSection}>
+          <div className={styles.sale}>
+            <div className={styles.sales}>
+              <div className={styles.tableContainer}>
+                <Table
+                  className={styles.Table}
+                  dataSource={displayProducts}
+                  columns={columns}
+                  pagination={{ pageSize: 10 }}
+                  size="large"
+                  style={tableStyle}
+                  expandable={{
+                    expandedRowRender: (record) => {  
+                    return (
+                      <ul>
+                      <div style={{ maxHeight: '20rem', overflowY: 'auto' }}>
+                        {record.history.map((operationGroup, groupIndex) => (
+                          <li key={groupIndex}>
+                                {operationGroup.type && operationGroup.quantity && operationGroup.date
+                                  ? `${operationGroup.date.split(' ')[0]}: ${operationGroup.quantity} ${operationGroup.type}`
+                                  : ""} 
+                          </li>
+                        ))}
+                      </div>
+                    </ul>
+                    )},
+                    rowExpandable: (record) => record.history.length > 0,
+                  }}
+                />
               </div>
             </div>
           </div>
-          <div className={styles.firstChart}>
-            <h2>Sales Statistics</h2>
-            
-              <BarChart
-              className={styles.firstChartCl}
-              chartData={chartData}
-              yAxisLegend={yAxisLegend} // Prop pour l'option de légende
-            />        
-        
+                  {/* GRAPH SECTION */}
+          <div>
+            <div className={styles.filterContainer}>
+              <div className={styles.filterArea}>
+                <div className={styles.filterByTemp}>
+                  <p>Filter by Temps</p>
+                  <select onChange={handleTimeSelectChange}>
+                    <option value="day">Par Jour</option>
+                    <option value="week">Par Semaine</option>
+                    <option value="month">Par Mois</option>
+                  </select>
+                </div>
+                <div className={styles.filterByObject}>
+                  <p>Filter by Object</p>
+                  <select onChange={(e) => setFilter(e.target.value)}>
+                    <option value="categories">Catégories</option>
+                    <option value="products">Produits</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div className={styles.firstChart}>
+              <h2>Sales Statistics</h2>
+              
+                <BarChart
+                className={styles.firstChartCl}
+                chartData={chartData}
+                yAxisLegend={yAxisLegend} // Prop pour l'option de légende
+              />        
+          
+            </div>
           </div>
-        </div>
-                  {/* END GRAPH SECTION */}
+                    {/* END GRAPH SECTION */}
 
+        </div>
+        
+        <div className={styles.rightSection}>
+
+                  {/* NATHAN VA TRAVAILLER ICI */}
+
+          <div className={styles.productList}>
+            <h2 className={styles.productsTitle}>
+                  My Products
+            </h2>
+            {myProducts.length === 0 ? (
+              <p>Aucun produits</p>
+            ) : (
+              myProducts.map((data, i) => {
+                return (
+                    <div key={i}>
+                      {data.name} - {data.stock} in stock
+                  </div>
+                )     
+              })
+            )}
+          </div>
+          
+
+        </div>
       </div>
       
-      <div className={styles.rightSection}>
-
-                {/* NATHAN VA TRAVAILLER ICI */}
-
-      </div>
       {openAddStockModal && (
         <AddStock
           openAddStockModal={openAddStockModal}

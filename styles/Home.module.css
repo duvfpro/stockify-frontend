@@ -71,3 +71,10 @@
     width: 67vw;
     height: auto;
   }
+  .productList {
+    border: 1px solid white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+

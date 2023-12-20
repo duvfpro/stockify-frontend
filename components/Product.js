@@ -1,7 +1,8 @@
 import styles from '../styles/Product.module.css';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faTrash, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+
 
 function Product (props) {
 
@@ -25,8 +26,8 @@ function Product (props) {
             <p className={styles.category}>Category: {props.category}</p>
         </div>
         <div className={styles.productBtn}>
-            <button className={styles.editBtn} onClick={() => handleEditButton()} > Edit </button>
-            <button className={styles.deleteBtn} onClick={() => handleDeleteButton()} > Delete </button>
+            <button className={styles.editBtn} onClick={() => handleEditButton()} ><FontAwesomeIcon icon={faPen}/></button>
+            <button className={styles.deleteBtn} onClick={() => handleDeleteButton()} ><FontAwesomeIcon icon={faTrash} color = 'white'/></button>
         </div>
     </div>
     );
