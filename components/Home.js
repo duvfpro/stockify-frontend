@@ -74,6 +74,11 @@ function Home() {
       sorter: (a, b) => a.stock - b.stock,
       sortDirections: ['ascend', 'descend', 'ascend'],
       defaultSortOrder: 'ascend',
+      render:(text) =>(
+        <span className={text <= 10 ? 'low-stock' : 'good-Stock'}>
+        {text}
+        </span>
+      ),
     },
     {
       title: "Number of sales",
@@ -394,8 +399,6 @@ useEffect(() => {
     });
 }, []);
 
-const [productData, setProductData] = useState(null);
-
 
 // State pour l'option de légende
 
@@ -431,7 +434,6 @@ function BarChart({ chartData, yAxisLegend }) {
               } 
             }
           },
-          // ... Autres options pour le graphique
         }}
       />
     );
@@ -469,7 +471,7 @@ useEffect(() => { // pour lister les produits à droite
 
   return (
     <main className={styles.main}>
-      <h1>Welcome</h1>
+      <h1>Welcome {user.username}</h1>
       <div className={styles.mainContent}>
         <div className={styles.leftSection}>
           <div className={styles.productButton}>

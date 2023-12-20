@@ -67,6 +67,16 @@ button:hover{
   background-color: #323A57!important;
 }
 
+
+.low-stock {
+  color: red !important;
+  font-weight: bold !important;
+}
+.good-Stock {
+  color: #209f7d;
+  font-weight: bold !important;
+}
+
 /* RESING FOR ALL IMG */
 img{
   width: 120px;
