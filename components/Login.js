@@ -29,7 +29,9 @@ const Login = () => {
             });
 
             if (response.ok) {
+            
                 const data = await response.json();
+                console.log(data)
                 if (data.result && data.token) {
                     dispatch(login({
                         username: data.username,

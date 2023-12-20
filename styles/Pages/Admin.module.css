@@ -32,7 +32,23 @@
 .editButton {
   margin-right: 12px;
 }
+.btnEditUser{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
 
+}
+
+.createBtn{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
+}
+.cancelBtn{
+  background-color:#734a3f;
+}
 .modalField {
   margin-bottom: 16px;
 }
