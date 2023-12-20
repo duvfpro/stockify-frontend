@@ -20,7 +20,7 @@ p{
 /* Vanilla Button */
 button{
   border: none;
-  margin: 10px;
+  margin: 10px 10px 10px 0px;
   padding: 8px 20px 8px 20px;
   background-color: #17745b;
   color: #fff;
@@ -31,7 +31,7 @@ button{
 
 button:hover{
   border: none;
-  margin: 10px;
+  margin: 10px 10px 10px 0px;
   padding: 8px 20px 8px 20px;
   background-color: #209f7d;
   color: #fff!important;
@@ -46,7 +46,7 @@ button:hover{
   align-items: center;
   justify-content: center;
   border: none;
-  margin: 10px;
+  margin: 10px 10px 10px 0px;
   padding: 15px 25px 15px 25px;
   background-color: #17745b;
   color: #fff;
@@ -56,7 +56,14 @@ button:hover{
 }
 
 /* ARRAYS */
+/* Change the core */
 .ant-table-cell.ant-table-row-expand-icon-cell,.ant-table-thead,.ant-table-thead>th,.ant-table-cell.ant-table-column-has-sorters,.ant-table-cell{
+  background-color: #323A57!important;
+  color: #fff !important;
+  border-radius: 0px !important;
+}
+ /* Change the bottom*/
+.ant-table-wrapper.css-dev-only-do-not-override-p7e5j5{
   background-color: #323A57!important;
 }
 
@@ -102,6 +109,7 @@ img{
  margin: 10px;
 }
 
+/* To see How the button colors change on hover go to the css module */
 /* LogOff SVG*/
 .anticon.anticon-poweroff>svg{
   fill: #fff!important;
@@ -254,5 +262,6 @@ align-items: center!important;
   align-items: center!important;
 }
 
-input {
+.ant-notification-notice-description{
+  color: black !important;
 }

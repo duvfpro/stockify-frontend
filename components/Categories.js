@@ -111,7 +111,7 @@ function Categories() {
 
         return (
             <div key={data._id} className={styles.categoryContainer}>
-                <h3 className={styles.categoryname}>Category: {data.name} </h3>
+                <h3 className={styles.categoryname}> {data.name} </h3>
                 <button className={styles.edit} onClick={handleEditButton}> Edit </button>
                 <button className={styles.deleteBtn} onClick={() => handleDeleteButton(data.name, data._id)}> Delete </button>
 
