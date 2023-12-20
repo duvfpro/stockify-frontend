@@ -293,19 +293,19 @@ function StatsPage() {
           )}
         </div>
         <div className={styles.firstChart}>
-        <h2>Statistiques des Ventes</h2>
-        {!isLoading && (
-          <BarChart
-          className={styles.firstChartCl}
-          chartData={chartData}
-          yAxisLegend={yAxisLegend} // Prop pour l'option de légende
-        />        
-        )}
-      </div>
+          <h2>Sales Statistics</h2>
+          {!isLoading && (
+            <BarChart
+            className={styles.firstChartCl}
+            chartData={chartData}
+            yAxisLegend={yAxisLegend} // Prop pour l'option de légende
+          />        
+          )}
+        </div>
       </div>
       <div className={styles.chartByP}>
         <div className={styles.chartByPTitle}>
-          <h2>Sales Statistics</h2>
+          <h2>Statistics by product</h2>
         </div>
         <div>
           <div className={styles.filters}>
