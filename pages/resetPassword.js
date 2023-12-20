@@ -26,10 +26,12 @@ const ResetPassword = () => {
                     token: resetToken, // Utilisez le jeton de réinitialisation
                     newPassword: values.password,
                 }),
+                
             });
-
+            
             if (response.ok) {
                 const data = await response.json();
+                // console.log(data)
                 if (data.result) {
                     console.log('Password reset successfully');
                     // Redirigez l'utilisateur vers la page de connexion ou une autre page appropriée
