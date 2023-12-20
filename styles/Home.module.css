@@ -12,42 +12,6 @@
     justify-content: space-between;
     margin-bottom: 10px;
   }
-/*   
-  .addProduct:hover{
-    background-color: #323A57;
-    color: #fff;
-    border: 2px solid #fff;
-  }
-  .addProduct{
-    width: 150px;
-    height: 45px;
-    margin: 20px;
-    border-radius: 6px;
-    border: 2px solid #000;
-    font-size: 12px;
-    font-weight: 600;
-
-    cursor: pointer;
-    transition-duration: 1s;
-  } */
-
-  /* .saleProduct:hover{
-    background-color: #323A57;
-    color: #fff;
-    border: 2px solid #fff;
-  }
-  .saleProduct{
-    width: 150px;
-    height: 45px;
-    margin: 20px;
-    border-radius: 6px;
-    border: 2px solid #000;
-    font-size: 12px;
-    font-weight: 600;
-    background-color: #fff;
-    cursor: pointer;
-    transition-duration: 1s;
-  } */
 
   .sale{
     display: flex;
