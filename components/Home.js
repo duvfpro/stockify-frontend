@@ -18,8 +18,6 @@ import Chart from "chart.js/auto";
 import "chartjs-adapter-date-fns"; 
 // Importe le composant Bar de react-chartjs-2 pour la création de graphiques à barres.
 import { Bar } from "react-chartjs-2"; 
-// Importe le composant Line de react-chartjs-2 pour la création de graphiques linéaires.
-import { Line } from "react-chartjs-2"; 
 
 import transformDataSell from "./transformDataSell";
 
@@ -308,7 +306,7 @@ function Home() {
   };
 
 
-  /* Statisitcs Graph Chart */
+  /* Statistics Graph Chart */
 
   const [timeFilter, setTimeFilter] = useState("day");
   const [chartData, setChartData] = useState([]);
