@@ -1,6 +1,6 @@
 .productContainer {
     background-color: #323A57;
-    width: auto;
+    width: 200px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -9,6 +9,12 @@
     padding: 10px;
     border: 1px solid black;
     border-radius: 5px;
+}
+.productBtn{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 }
 
 .productContainer:hover {

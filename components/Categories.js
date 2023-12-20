@@ -1,6 +1,14 @@
 import styles from '../styles/Categories.module.css';
 import React, { useState, useEffect } from 'react';
 import { Modal } from 'antd';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faPen,
+    faTrash,
+    faUser,
+    faRotateLeft,
+    faPlus,
+  } from "@fortawesome/free-solid-svg-icons";
 
 function Categories() {
 
@@ -112,8 +120,8 @@ function Categories() {
         return (
             <div key={data._id} className={styles.categoryContainer}>
                 <h3 className={styles.categoryname}> {data.name} </h3>
-                <button className={styles.edit} onClick={handleEditButton}> Edit </button>
-                <button className={styles.deleteBtn} onClick={() => handleDeleteButton(data.name, data._id)}> Delete </button>
+                <button className={styles.edit} onClick={handleEditButton}><FontAwesomeIcon icon={faPen} color="white" /> </button>
+                <button className={styles.deleteBtn} onClick={() => handleDeleteButton(data.name, data._id)}><FontAwesomeIcon icon={faTrash} color="white" /> </button>
 
                 <Modal open={openEditModal} onCancel={closeEditModal} footer={null} width={800} height={800}>
                     <div className={styles.titleEditMod}> Update {data.name} ({data._id}) </div>
