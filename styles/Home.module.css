@@ -6,6 +6,10 @@
     width: 100vw;
   }
 
+.mainContent {
+  display: flex;
+}
+
   .productButton{
     width: 40vw;
     display: flex;
@@ -43,16 +47,6 @@
   }
 
 
-  .productList {
-    border: 1px solid white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-
-
-
 /* GRAPH SECTION */
   .filterContainer{
     margin-top: 30px;
@@ -81,3 +75,10 @@
     width: 67vw;
     height: auto;
   }
+  .productList {
+    border: 1px solid white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
