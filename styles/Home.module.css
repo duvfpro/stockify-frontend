@@ -27,7 +27,8 @@
   }
 
   .leftSection{
-    width: 67vw !important;
+    margin-left: 4vw;
+    width: 63vw !important;
   }
 
   .rightSection{
