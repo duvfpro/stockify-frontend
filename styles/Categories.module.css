@@ -1,5 +1,5 @@
 .mainCatContainer{
-    background-color: #171821;
+    background-color: #0d0e11;
     display: flex;
     flex-direction: column;
     
@@ -8,20 +8,22 @@
 }
 
 .cardMapContainer{
+    
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
 
 .categoryContainer{
+    border: 1px solid #000;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
     width: 300px;
-    background-color: #323A57;
+    background-color: rgba(60, 59, 102, 0.5);
     padding: 20px;
     margin: 30px;
-    border-radius: 15px;
+    border-radius: 5px;
 }
 
 .mainNewCatContainer{
@@ -39,8 +41,15 @@
     margin: 20px;
 }
 
+/* Delete Button */
 .deleteBtn{
-    background-color: red  ;
+    background-color: #734a3f ;
+    color: #e18763;
+  }
+
+.deleteBtn:hover {
+background-color: #956153 ;
+color: #fb976f !important;
 }
 
 .mainEditModContainer{

@@ -19,28 +19,26 @@
 }
 
 .productCards{
-  display: flex;
-  flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-.inputField {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  margin-left: 2rem;
-  padding: 10px;
-  border-radius: 2rem;
-  height: 3rem;
-  width: 15rem;
-  border: 2px solid #ccc; /* Bordure fine */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Légère ombre pour un effet de profondeur */
-}
-
-.title {
-  font-size: 2rem;
+.ProductsPage_productCards__8mvPE{
+    justify-content: center;
 }
 
 .filtersContainer {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   width: 100vw;
+  height: 4rem;
+}
+
+.myFilters {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 30rem;
 }

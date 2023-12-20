@@ -1,12 +1,13 @@
 import { SmileOutlined } from '@ant-design/icons';
 import { Button, notification } from 'antd';
+import { BellOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 
 const NotificationButton = () => {
   const [dataProducts, setDataProducts] = useState(null);
 
   useEffect(() => {
-    fetchData()
+    
   }, []);
 
   const fetchData = async () => {
@@ -20,19 +21,22 @@ const NotificationButton = () => {
       setDataProducts(data.allProducts);
       checkStockAndNotify(data.allProducts);
 
-    } catch (error) {
+    } catch (error) { 
       console.error('Erreur lors du fetch', error);
     }
   };
 
   const checkStockAndNotify = (products) => {
     products.forEach((product) => {
-      const lastProduct = product.soldAt.length - 1;
-      if (product.stock <= 5) {
-        openNotification(product.name, product.stock, product.soldAt[lastProduct].date);
+      if (product && product.stock && product.soldAt && product.soldAt.length > 0) {
+        const lastProduct = product.soldAt.length - 1;
+        if (product.stock <= 5) {
+          openNotification(product.storeName, product.stock, product.soldAt[lastProduct].date);
+        }
       }
     });
   };
+  
 
   const openNotification = (productName, productStock, soldAt) => {
     notification.open({
@@ -66,9 +70,9 @@ const NotificationButton = () => {
   };
 
   return (
-    <Button type="primary" onClick={fetchData}>
+    <BellOutlined style={{fontSize:'24px'}} onClick={fetchData}>
       Notifications
-    </Button>
+    </BellOutlined>
   );
 };
 

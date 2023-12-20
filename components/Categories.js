@@ -112,14 +112,14 @@ function Categories() {
         return (
             <div key={data._id} className={styles.categoryContainer}>
                 <h3 className={styles.categoryname}>Category: {data.name} </h3>
-                <button className={styles.edit} onClick={handleEditButton}> EDIT </button>
-                <button className={styles.deleteBtn} onClick={() => handleDeleteButton(data.name, data._id)}> DELETE </button>
+                <button className={styles.edit} onClick={handleEditButton}> Edit </button>
+                <button className={styles.deleteBtn} onClick={() => handleDeleteButton(data.name, data._id)}> Delete </button>
 
                 <Modal open={openEditModal} onCancel={closeEditModal} footer={null} width={800} height={800}>
-                    <div className={styles.titleEditMod}> UPDATE {data.name} ({data._id}) </div>
+                    <div className={styles.titleEditMod}> Update {data.name} ({data._id}) </div>
                     <div className={styles.mainEditModContainer}>
                         <input type="text" onChange={handleNameInputChange} value={categoryName} placeholder="New Category name" />
-                        <button onClick={() => handleSaveButton(data.name, data._id)}> SUBMIT </button>
+                        <button onClick={() => handleSaveButton(data.name, data._id)}> Submit </button>
                     </div>
                 </Modal>
             </div>
@@ -129,7 +129,7 @@ function Categories() {
     return (
         <div className={styles.mainCatContainer}>
             <div className={styles.title}>
-                <button className={styles.addButton} onClick={() => addNewCategory()}> ADD NEW CATEGORY </button>
+                <button className={styles.addButton} onClick={() => addNewCategory()}> Add New Category </button>
             </div>
             <div className={styles.cardMapContainer}>
                 {categoriesTab.map((data) => {
@@ -141,10 +141,10 @@ function Categories() {
                 })}
                 
                 <Modal open={openNewCatModal} onCancel={closeNewCatModal} footer={null} width={800} height={800}>
-                    <div className={styles.addBtnCat}> ADD NEW CATEGORY </div>
+                    <div className={styles.addBtnCat}> Add New Category </div>
                     <div className={styles.mainNewCatContainer}>
                         <input type="text" className={styles.inputNewCat} onChange={handleNewNameInputChange} value={newCategoryName} placeholder="Category name" />
-                        <button onClick={() => handleNewSaveButton()}> SUBMIT </button>
+                        <button onClick={() => handleNewSaveButton()}> Submit </button>
                     </div>
                 </Modal>
             </div>

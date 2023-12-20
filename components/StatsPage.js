@@ -177,15 +177,43 @@ function StatsPage() {
     //Dépendances
   }, [products, selectedProduct, timeFilterByP]);
 
+  // State pour l'option de légende
+  const [yAxisLegend, setYAxisLegend] = useState('');
+
   // Bar chart component
-  function BarChart({ chartData }) {
+  function BarChart({ chartData, yAxisLegend }) {
     // If there are no labels, return a message
     if (chartData && chartData.datasets) {
-      return <Bar data={chartData} />;
+      return (
+        <Bar
+          data={chartData}
+          options={{
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: yAxisLegend, // Utilisation de la prop pour la légende de l'axe Y
+                },
+              },
+              // ... Autres configurations de l'axe Y
+            },
+            // ... Autres options pour le graphique
+          }}
+        />
+      );
     } else {
       return <p>No data available for the chart.</p>;
     }
   }
+
+  useEffect(() => {
+    // ... Votre logique pour récupérer ou transformer les données du graphique
+
+    // Mettre à jour la légende de l'axe Y avec "quantité"
+    setYAxisLegend('Quantité');
+  }, [chartData]); // Assurez-vous de mettre à jour lorsque les données du graphique changent
+
 
   // If data is not loaded, show a loading indicator
   if (!dataLoaded) {
@@ -195,7 +223,23 @@ function StatsPage() {
 
   function LineChart({ chartData }) {
     if (chartData && chartData.datasets) {
-      return <Line data={chartData} />;
+      return (
+      <Line data={chartData} 
+      options={{
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: yAxisLegend, 
+            },
+          },
+         
+        },
+        
+      }}
+    />
+      )
     } else {
       return <p>Pas de données disponibles pour le graphique.</p>;
     }
@@ -205,9 +249,7 @@ function StatsPage() {
   return (
     <div className={styles.mainContainer}>
       <div className={styles.titleContainer}>
-        <h1 className={styles.title}>
-          Bienvenue dans les statistiques de vos Stocks
-        </h1>
+
       </div>
 
       <div className={styles.filterContainer}>
@@ -234,26 +276,32 @@ function StatsPage() {
           <h2>Statistiques des Stocks en cours</h2>
           {!isLoading && (
             <BarChart
-              className={styles.secondChartCl}
-              chartData={secondChartData}
-            />
+            className={styles.firstChartCl}
+            chartData={chartData}
+            yAxisLegend={yAxisLegend} // Prop pour l'option de légende
+          />
           )}
         </div>
         <div className={styles.thirdChart}>
           <h2>Statistiques des Réapprovisions</h2>
           {!isLoading && (
             <BarChart
-              className={styles.thirdChartCl}
-              chartData={restockChartData}
-            />
+            className={styles.firstChartCl}
+            chartData={chartData}
+            yAxisLegend={yAxisLegend} // Prop pour l'option de légende
+          />         
           )}
         </div>
         <div className={styles.firstChart}>
-          <h2>Statistiques des Ventes</h2>
-          {!isLoading && (
-            <BarChart className={styles.firstChartCl} chartData={chartData} />
-          )}
-        </div>
+        <h2>Statistiques des Ventes</h2>
+        {!isLoading && (
+          <BarChart
+          className={styles.firstChartCl}
+          chartData={chartData}
+          yAxisLegend={yAxisLegend} // Prop pour l'option de légende
+        />        
+        )}
+      </div>
       </div>
       <div className={styles.chartByP}>
         <div className={styles.chartByPTitle}>

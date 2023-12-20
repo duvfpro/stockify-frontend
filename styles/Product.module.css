@@ -8,8 +8,7 @@
     margin: 10px;
     padding: 10px;
     border: 1px solid black;
-    border-radius: 15px;
-    transition-duration: 1s;
+    border-radius: 5px;
 }
 
 .productContainer:hover {
@@ -23,13 +22,15 @@
     margin-right: 15px;
 }
 
+/* Delete Button */
 .deleteBtn{
-    background-color: red;
-    cursor: pointer;
+    background-color: #734a3f ;
+    color: #e18763;
   }
 
   .deleteBtn:hover {
-    color: white;
+    background-color: #956153 ;
+    color: #fb976f !important;
   }
 
 .editBtn {

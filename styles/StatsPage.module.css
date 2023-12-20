@@ -59,7 +59,7 @@
 
 .statsContainer{
   width: 100%;
-  margin-top: 30px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -116,5 +116,8 @@
 
 .filters{
   display: flex;
-  justify-content: space-around
+  justify-content: space-around;
+  margin-bottom: 30px;
 }
+
+
