@@ -7,6 +7,8 @@ import Product from './Product';
 import Sale from "./Sale";
 import { Table } from "antd";
 import FilterDate from './Tools/FilterDate';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 
 // Importe CategoryScale de Chart.js pour la mise à l'échelle des catégories sur les graphiques.
 import { CategoryScale } from "chart.js";
@@ -430,8 +432,25 @@ useEffect(() => { // pour lister les produits à droite
   fetch('http://localhost:3000/products/allProducts')
   .then(response => response.json())
   .then(data => {
-    console.log(data.allProducts);
-    setMyProducts(data.allProducts);
+    let productsSold = [];
+    for(let i=0; i<data.allProducts.length; i++) {
+      let sum = 0;
+      for(let j=0; j<data.allProducts[i].soldAt.length; j++) {
+        sum += data.allProducts[i].soldAt[j].quantity
+      }
+      productsSold.push({
+        name: data.allProducts[i].name,
+        quantitySold: sum,
+        stock: data.allProducts[i].stock
+      })
+    }
+    productsSold = productsSold.sort((a, b) => b.quantitySold - a.quantitySold)
+
+    let topTenProducts = productsSold;
+    if(productsSold.length > 10) {
+      topTenProducts = productsSold.slice(0, 10);
+    }
+    setMyProducts(topTenProducts);
   })
 }, []);
 
@@ -528,19 +547,24 @@ useEffect(() => { // pour lister les produits à droite
 
           <div className={styles.productList}>
             <h2 className={styles.productsTitle}>
-                  My Products
+                  Top 10 products
             </h2>
-            {myProducts.length === 0 ? (
-              <p>Aucun produits</p>
-            ) : (
-              myProducts.map((data, i) => {
-                return (
-                    <div key={i}>
-                      {data.name} - {data.stock} in stock
-                  </div>
-                )     
-              })
-            )}
+            <div className={styles.rightProductsContainer}>
+              {myProducts.length === 0 ? (
+                <p>No products</p>
+              ) : (
+                myProducts.map((data, i) => {
+                  return (
+                      <div key={i} className={styles.product}>
+                        <button className={styles.plusMinusBtn} ><FontAwesomeIcon icon={faPlus}/></button>
+                        {data.name} ({data.quantitySold}) - {data.stock} in stock
+                        <button className={styles.plusMinusBtn} ><FontAwesomeIcon icon={faMinus}/></button>
+                    </div>
+                  )     
+                })
+              )}              
+            </div>
+
           </div>
           
 
