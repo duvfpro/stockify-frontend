@@ -85,6 +85,19 @@ function Home() {
     return { startDateString, endDateString };
   };
 
+
+  function convertirFormatDate(dateStr) {
+    const dateObj = new Date(dateStr);
+  
+    const jour = dateObj.getDate().toString().padStart(2, '0');
+    const mois = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+    const annee = dateObj.getFullYear();
+  
+    const dateFormatee = `${jour}/${mois}/${annee}`;
+  
+    return dateFormatee;
+  }
+
   
   useEffect(() => {
     // Affiche la liste des produits vendus aujourd'hui
@@ -110,22 +123,32 @@ function Home() {
         let formattedData = filteredProducts.map((product, index) => {
           const todaySales = product.soldAt.filter((sale) => sale.date.split("T")[0] === todayDateString);
 
-          const history = [
+          const soldHistory = [
             product.soldAt
               ? product.soldAt.map((sale) => ({
-                  type: "sold: ",
+                  type: "sold",
                   quantity: sale.quantity,
-                  date: new Date(sale.date).toLocaleDateString().split('/').reverse().join('/'),
+                  date: convertirFormatDate(sale.date),
                 }))
-              : [],
+              : []
+          ];
+          
+          const restockHistory = [
             product.restockAt
               ? product.restockAt.map((restock) => ({
-                  type: "restock: ",
+                  type: "restock",
                   quantity: restock.quantity,
-                  date: new Date(restock.date).toLocaleDateString().split('/').reverse().join('/'),
+                  date: convertirFormatDate(restock.date),
                 }))
-              : [],
+              : []
           ];
+
+        const history = soldHistory.concat(restockHistory).flat()
+        .sort((a, b) => {
+          const dateA = a.date.split('/').reverse().join('');
+          const dateB = b.date.split('/').reverse().join('');
+          return parseInt(dateB) - parseInt(dateA);
+        })
 
           return {
             key: index,
@@ -164,22 +187,32 @@ function Home() {
           return saleDate >= startDateString && saleDate <= endDateString;
         });
         
-        const history = [
+        const soldHistory = [
           product.soldAt
             ? product.soldAt.map((sale) => ({
-                type: "sold: ",
+                type: "sold",
                 quantity: sale.quantity,
-                date: new Date(sale.date).toLocaleString(),
+                date: convertirFormatDate(sale.date),
               }))
-            : [],
+            : []
+        ];
+        
+        const restockHistory = [
           product.restockAt
             ? product.restockAt.map((restock) => ({
-                type: "restock: ",
+                type: "restock",
                 quantity: restock.quantity,
-                date: new Date(restock.date).toLocaleString(),
+                date: convertirFormatDate(restock.date),
               }))
-            : [],
+            : []
         ];
+
+      const history = soldHistory.concat(restockHistory).flat()
+      .sort((a, b) => {
+        const dateA = a.date.split('/').reverse().join('');
+        const dateB = b.date.split('/').reverse().join('');
+        return parseInt(dateB) - parseInt(dateA);
+      })
 
         return {
           key: index,
@@ -251,21 +284,20 @@ function Home() {
               size="large"
               style={tableStyle}
               expandable={{
-                expandedRowRender: (record) => (
+                expandedRowRender: (record) => {  
+                return (
                   <ul>
-                  {(record.history).map((operationGroup, groupIndex) => (
-                    <li key={groupIndex}>
-                      {operationGroup.map((operation, operationIndex) => (
-                        <p key={operationIndex}>
-                          {operation.type && operation.quantity && operation.date
-                            ? `${operation.type} ${operation.quantity} on ${operation.date}`
-                            : "Invalid operation data"}
-                        </p>
-                      ))}
-                    </li>
-                  ))}
+                  <div style={{ maxHeight: '20rem', overflowY: 'auto' }}>
+                    {record.history.map((operationGroup, groupIndex) => (
+                      <li key={groupIndex}>
+                            {operationGroup.type && operationGroup.quantity && operationGroup.date
+                              ? `${operationGroup.date.split(' ')[0]}: ${operationGroup.quantity} ${operationGroup.type}`
+                              : ""} 
+                      </li>
+                    ))}
+                  </div>
                 </ul>
-                ),
+                )},
                 rowExpandable: (record) => record.history.length > 0,
               }}
             />
