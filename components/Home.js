@@ -21,13 +21,6 @@ import "chartjs-adapter-date-fns";
 // Importe le composant Bar de react-chartjs-2 pour la création de graphiques à barres.
 import { Bar } from "react-chartjs-2"; 
 
-import transformDataSell from "./transformDataSell";
-
-  // Function to handle changes in time selection
-  const handleTimeSelectChange = (event) => {
-    setTimeFilter(event.target.value);
-  };
-
 function Home() {
   const user = useSelector((state) => state.user.value);
   const router = useRouter();
@@ -37,7 +30,6 @@ function Home() {
   const [displayProducts, setDisplayProducts] = useState([]);
   const [filter, setFilter] = useState('Today');
   const [myProducts, setMyProducts] = useState([]); // affichage des produits
-
 
   const refreshLastSale = () => {
 
@@ -209,7 +201,7 @@ function Home() {
       });
     } else if (filter == 'This week') {
 
-      const { startDateString, endDateString } = calculateWeekRange();
+    const { startDateString, endDateString } = calculateWeekRange();
 
     fetch("http://localhost:3000/products/allProducts")
     .then((response) => response.json())
@@ -287,8 +279,6 @@ function Home() {
 
   }, [refresh, filter]);
 
-
-
   const tableStyle = {
     backgroundColor: "#213F62",
     border: "2px solid #000",
@@ -307,81 +297,48 @@ function Home() {
     setSaleModal(false);
   };
 
-
   /* Statistics Graph Chart */
-
-  const [timeFilter, setTimeFilter] = useState("day");
-  const [chartData, setChartData] = useState([]);
-  const [yAxisLegend, setYAxisLegend] = useState('');
-  const [categoryState, setCategoryState] = useState({
-    category: [],
-    categoryId: "all",
-  });
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
-
+  
   const handleFilterDateChange = (filter) => {
     setFilter(filter);
   };
 
-  // Function to handle changes in time selection in graph
-  const handleTimeSelectChange = (event) => {
-    setTimeFilter(event.target.value);
-  };
+// Fetch data from the server for Stock at present day
+const [chartData, setChartData] = useState({ labels: [], datasets: [] });
 
-
-// Fetch data from the server
 useEffect(() => {
-  const fetchData = async () => {
+  const fetchStockData = async () => {
     try {
-      // Fetch all categories
-      const responseCategories = await fetch(
-        "http://localhost:3000/categories/allCategories"
-      );
-      const dataCategories = await responseCategories.json();
-      // Update the category state with the fetched categories
-      setCategoryState((prevState) => ({
-        ...prevState,
-        category: dataCategories.allCategories,
-      }));
+      const response = await fetch("http://localhost:3000/products/stocksAtDay");
+      const data = await response.json();
 
-      // Fetch all products
-      const responseProducts = await fetch(
-        "http://localhost:3000/products/allProducts"
-      );
-      const dataProducts = await responseProducts.json();
-
-      // Filter products based on selected category
-      let filteredProducts;
-      if (categoryState.categoryId === "all") {
-        filteredProducts = dataProducts.allProducts;
-      } else {
-        filteredProducts = dataProducts.allProducts.filter((product) =>
-          product.category.some(
-            (category) => category._id === categoryState.categoryId
-          )
-        );
+      if (data && data.stocksAtDay) {
+        const chartData = {
+          labels: data.stocksAtDay.map(stock => stock.productName),
+          datasets: [
+            {
+              label: "Stock",
+              data: data.stocksAtDay.map(stock => stock.currentStock),
+              backgroundColor: "rgba(75, 192, 192, 0.2)",
+              borderColor: "rgba(75, 192, 192, 1)",
+              borderWidth: 1,
+            },
+          ],
+        };
+        setChartData(chartData);
       }
-
-      // Transform data for selling chart
-      const transformedDataSell = transformDataSell(
-        filteredProducts,
-        filter,
-        timeFilter
-      );
-      setChartData({ ...transformedDataSell });
-
-      setDataLoaded(true); // Data has been loaded
     } catch (error) {
-      console.error(error);
-
-  
+      console.error("Error fetching stock data:", error);
     }
   };
 
-  fetchData();
-  // This effect runs when 'filter', 'categoryState.categoryId', or 'timeFilter' changes
-}, [filter, categoryState.categoryId, timeFilter]);
+  fetchStockData();
+}, [refresh, filter, setChartData]);
+
+console.log(chartData);
+
 
 useEffect(() => {
   fetch("http://localhost:3000/products/allProducts")
@@ -394,15 +351,9 @@ useEffect(() => {
     });
 }, []);
 
-const [productData, setProductData] = useState(null);
-
-
-// State pour l'option de légende
-
-
 // Bar chart component
 function BarChart({ chartData, yAxisLegend }) {
-  // If there are no labels, return a message
+
   if (chartData && chartData.datasets) {
     return (
       <Bar
@@ -413,25 +364,25 @@ function BarChart({ chartData, yAxisLegend }) {
               beginAtZero: true,
               title: {
                 display: true,
-                text: yAxisLegend, // Utilisation de la prop pour la légende de l'axe Y
+                text: yAxisLegend,
               },
               ticks: {
-                color: 'white' // Change la couleur du texte de l'axe y en blanc
+                color: 'white',
               },
               grid: {
-                color: '#232323' // Change la couleur des lignes d'axe pour l'axe x
-              }
+                color: '#232323',
+              },
             },
             x: {
-                ticks: {
-                  color: 'white' // Change la couleur du texte de l'axe x en blanc
+              ticks: {
+                color: 'white',
               },
               grid: {
-                color: '#232323' // Change la couleur des lignes d'axe pour l'axe x
-              } 
-            }
+                color: '#232323',
+              },
+            },
           },
-          // ... Autres options pour le graphique
+
         }}
       />
     );
@@ -439,7 +390,6 @@ function BarChart({ chartData, yAxisLegend }) {
     return <p>No data available for the chart.</p>;
   }
 }
-
 
 useEffect(() => { // pour lister les produits à droite
   fetch('http://localhost:3000/products/allProducts')
@@ -522,38 +472,12 @@ useEffect(() => { // pour lister les produits à droite
           </div>
                   {/* GRAPH SECTION */}
           <div>
-            <div className={styles.filterContainer}>
-              <div className={styles.filterArea}>
-                <div className={styles.filterByTemp}>
-                  <p>Filter by Temps</p>
-                  <select onChange={handleTimeSelectChange}>
-                    <option value="day">Par Jour</option>
-                    <option value="week">Par Semaine</option>
-                    <option value="month">Par Mois</option>
-                  </select>
-                </div>
-                <div className={styles.filterByObject}>
-                  <p>Filter by Object</p>
-                  <select onChange={(e) => setFilter(e.target.value)}>
-                    <option value="categories">Catégories</option>
-                    <option value="products">Produits</option>
-                  </select>
-                </div>
-              </div>
-            </div>
             <div className={styles.firstChart}>
               <h2>Sales Statistics</h2>
-              
-                <BarChart
-                className={styles.firstChartCl}
-                chartData={chartData}
-                yAxisLegend={yAxisLegend} // Prop pour l'option de légende
-              />        
-          
+                <BarChart chartData={chartData} yAxisLegend="Quantité en stock" />
             </div>
           </div>
                     {/* END GRAPH SECTION */}
-
         </div>
         
         <div className={styles.rightSection}>
