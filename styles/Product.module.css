@@ -1,6 +1,6 @@
 .productContainer {
     background-color: #323A57;
-    width: auto;
+    width: 200px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
