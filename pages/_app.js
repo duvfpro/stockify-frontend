@@ -45,15 +45,15 @@ function App({ Component, pageProps }) {
   const getPageTitle = () => {
     switch (router.pathname) {
       case '/admin':
-        return 'Administrateur';
+        return 'Administrator';
       case '/home':
         return 'Stockify';
       case '/products':
-        return 'Produits';
+        return 'Products';
       case '/sales':
-        return 'Ventes';
+        return 'Sales';
       case '/statistics':
-        return 'Statistique';
+        return 'Statistics';
       case '/categories':
         return 'Categories';
       default:

@@ -277,7 +277,7 @@ function StatsPage() {
       </div>
       <div className={styles.statsContainer}>
         <div className={styles.secondChart}>
-          <h2>Statistiques des Stocks en cours</h2>
+          <h2>Current Stock Statistics</h2>
           {!isLoading && (
             <BarChart
             className={styles.firstChartCl}
@@ -287,7 +287,7 @@ function StatsPage() {
           )}
         </div>
         <div className={styles.thirdChart}>
-          <h2>Statistiques des Réapprovisions</h2>
+          <h2>Replenishment statistics</h2>
           {!isLoading && (
             <BarChart
             className={styles.firstChartCl}
@@ -309,7 +309,7 @@ function StatsPage() {
       </div>
       <div className={styles.chartByP}>
         <div className={styles.chartByPTitle}>
-          <h2>Statistiques par Produits</h2>
+          <h2>Sales Statistics</h2>
         </div>
         <div>
           <div className={styles.filters}>

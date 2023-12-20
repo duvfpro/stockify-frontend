@@ -201,7 +201,12 @@ const Admin = () => {
                     <Avatar src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${item.key}`} />
                   }
                   title={`${item.username}`}
-                  description={`Email: ${item.email}, isAdmin: ${item.isAdmin}`}
+                  description={      
+                  <>
+                    {item.email}, <br />
+                    Is An Admin: {item.isAdmin.toString()}
+                  </>
+                  }
                 />
                 <Button type="primary" className={styles.editButton} onClick={() => handleEditClick(item.key)}>
                   Edit
