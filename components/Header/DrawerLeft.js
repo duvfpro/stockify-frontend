@@ -20,7 +20,7 @@ const DrawerLeft = (props) => {
       <Drawer
         title={
           <Link href="/home">
-            <a className={styles['drawer-link']}>Accueil</a>
+            <a className={styles['drawer-link']}>Home</a>
           </Link>
         }
         placement="left"
@@ -40,7 +40,7 @@ const DrawerLeft = (props) => {
           Statistics
         </p>
         <p className={styles['drawer-link']} onClick={() => router.push('/categories')}>
-          Categorie
+          Categories
         </p>
         <p className={styles['drawer-link']} onClick={() => router.push('/admin')}>
           Admin
@@ -51,7 +51,6 @@ const DrawerLeft = (props) => {
           onClick={() => {
             dispatch(logout());
             onClose();
-
           }}
         >
           <PoweroffOutlined /> Sign out
