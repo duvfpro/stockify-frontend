@@ -1,5 +1,6 @@
 import styles from '../styles/Pages/Login.module.css';
 import { Button, Form, Input } from 'antd';
+import Link from 'next/link';
 
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
@@ -105,6 +106,9 @@ const Login = () => {
                         <Button type="primary" htmlType="submit">
                             Sign In
                         </Button>
+                        <Link href={'/forgotPassword'}>
+                            <a className={styles.forgotPasswordLink}>forgotPassword</a>
+                        </Link>
                     </Form.Item>
                 </Form>
             </div>
