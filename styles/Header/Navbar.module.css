@@ -43,3 +43,13 @@
 .Drawer_drawer-link__o1AYJ>p{
   color: #000;
 }
+
+.rightContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 7rem;
+}
+
+.userName {
+  color: #000;
+}

@@ -8,6 +8,7 @@
 
 .mainContent {
   display: flex;
+  margin-top: 1.5rem;
 }
 
   .productButton{
@@ -27,7 +28,8 @@
   }
 
   .leftSection{
-    width: 67vw !important;
+    margin-left: 4vw;
+    width: 63 vw !important;
   }
 
   .rightSection{
@@ -105,6 +107,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  .productList>h2{
+    margin-top: 0px;
   }
 
 
