@@ -7,8 +7,10 @@ import Product from "./Product";
 import Sale from "./Sale";
 import { Table } from "antd";
 import FilterDate from "./Tools/FilterDate";
-import { FontAwesomeIcon, faTriangleExclamation } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon,  } from "@fortawesome/react-fontawesome";
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { faCircle, } from "@fortawesome/free-solid-svg-icons";
+import { faMinus,faExclamation,faCheck } from '@fortawesome/free-solid-svg-icons'
 
 // Importe CategoryScale de Chart.js pour la mise à l'échelle des catégories sur les graphiques.
 import { CategoryScale } from "chart.js";
@@ -419,7 +421,7 @@ function Home() {
                           {data.stock < 20 && (
                             <div className={styles.iconWrapper}>
                               <FontAwesomeIcon
-                                icon={faCircle}
+                                icon={faExclamation}
                                 size="2xl"
                                 color="red"
                                 fade
@@ -439,7 +441,7 @@ function Home() {
                           {data.stock >= 20 && data.stock < 50 && (
                             <div className={styles.iconWrapper}>
                               <FontAwesomeIcon
-                                icon={faCircle}
+                                icon={faMinus}
                                 size="2xl"
                                 color="yellow"
                                 className={`${styles.warningIcon} ${styles.iconEffect}`}
@@ -457,7 +459,7 @@ function Home() {
                           {data.stock >= 50 && (
                             <div className={styles.iconWrapper}>
                               <FontAwesomeIcon
-                                icon={faCircle}
+                                icon={faCheck}
                                 size="2xl"
                                 color="green"
                                 className={`${styles.okIcon} ${styles.iconEffect}`}
