@@ -249,7 +249,7 @@ function ProductsPage(props) {
             return <Product key={i} name={data.name} stock={data.stock} price={data.price} category={data.category[0].name} image={data.image} handleDeleteButton={handleDeleteButton} handleEditButton={handleEditButton} />
           })
         )}
-      </div>
+      </div> 
 
       <Modal className={styles.modalMainContent} open={openEditModal} onCancel={closeEditModal} footer={null} width={450} height={800}>
         <div className={styles.modalMainContent}>
