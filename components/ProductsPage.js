@@ -276,7 +276,7 @@ function ProductsPage(props) {
                 ))}
               </Select>
             </div>
-            <button onClick={() => handleSaveButton()} > Submit </button>
+            <button onClick={() => handleSaveButton()} > Save </button>
           </div>
         </div>
 

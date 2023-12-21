@@ -65,12 +65,12 @@ function Categories() {
         };
 
         const handleNameInputChange = (event) => {
-            setCategoryName(event);
+            setCategoryName(event.target.value);
         };
 
        
         const handleSaveButton = (name, id) => {
-                fetch(`http://localhost:3000/categories/updateCategory/${name}`, {
+                fetch(`http://localhost:3000/categories/updateMyCategory/${name}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: categoryName })
@@ -134,7 +134,7 @@ function Categories() {
                             <p className={styles.inputName}> Name</p>
                             <Input className={styles.inputField} type="text" onChange={handleNameInputChange} value={categoryName} placeholder="New Category name" />
                         </div>
-                            <button onClick={() => handleSaveButton(data.name, data._id)}> Submit </button>
+                            <button onClick={() => handleSaveButton(data.name, data._id)}> Save </button>
                         </div>
                     </div>
                 </Modal>
