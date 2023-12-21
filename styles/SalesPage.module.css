@@ -29,8 +29,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
-  margin-left: 10px;
+  margin-top: 1rem;
+  padding-left: 28.5rem;
+  padding-right: 27rem;
 }
 
 

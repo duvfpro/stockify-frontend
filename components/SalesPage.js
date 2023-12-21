@@ -6,6 +6,7 @@ import { Table } from "antd";
 import FilterDate from './Tools/FilterDate';
 import AddStock from "./AddStock";
 import Sale from "./Sale";
+import { format, startOfWeek, endOfWeek, addDays } from 'date-fns';
 
 
 function SalesPage() {
@@ -77,15 +78,15 @@ function SalesPage() {
 
   const calculateWeekRange = () => {
     const currentDate = new Date();
-    const startOfWeek = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay()));
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(endOfWeek.getDate() + 6);
+    const startOfWeekDate = startOfWeek(currentDate);
+    const endOfWeekDate = endOfWeek(currentDate);
   
-    const startDateString = startOfWeek.toISOString().split("T")[0];
-    const endDateString = endOfWeek.toISOString().split("T")[0];
+    const startDateString = format(startOfWeekDate, 'dd/MM/yyyy');
+    const endDateString = format(endOfWeekDate, 'dd/MM/yyyy');
   
     return { startDateString, endDateString };
   };
+  
 
 
   function convertirFormatDate(dateStr) {
