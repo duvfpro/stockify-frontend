@@ -64,6 +64,11 @@ function SalesPage() {
       sorter: (a, b) => a.sales - b.sales,
       sortDirections: ['ascend', 'descend', 'ascend'],
       defaultSortOrder: 'ascend',
+      render:(text) =>(
+        <span className={text <= 10 ? 'low-stock' : 'good-Stock'}>
+        {text}
+        </span>
+        )
     },
     {
       title: "Quantity Sold",

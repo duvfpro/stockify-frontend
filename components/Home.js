@@ -8,7 +8,7 @@ import Sale from "./Sale";
 import { Table } from "antd";
 import FilterDate from './Tools/FilterDate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircle } from '@fortawesome/free-solid-svg-icons';
+import { faMinus,faExclamation,faCheck } from '@fortawesome/free-solid-svg-icons';
 
 // Importe CategoryScale de Chart.js pour la mise à l'échelle des catégories sur les graphiques.
 import { CategoryScale } from "chart.js";
@@ -398,9 +398,9 @@ useEffect(() => { // pour lister les produits à droite
                   return (
                       <div key={i} className={styles.product}>
                         {data.name} - {data.stock} in stock
-                        {data.stock<20 && <FontAwesomeIcon icon={faCircle} size="2xl" fade color='red'/>}
-                        {data.stock<50 && data.stock>=20 && <FontAwesomeIcon icon={faCircle} size="2xl" color='yellow'/>}
-                        {data.stock<100 && data.stock>=50 && <FontAwesomeIcon icon={faCircle} size="2xl" color='green'/>}
+                        {data.stock<10 && <FontAwesomeIcon icon={faMinus} size="2xl" fade color='red'/>}
+                        {data.stock<50 && data.stock>=10 && <FontAwesomeIcon icon={faExclamation} size="2xl" color='yellow'/>}
+                        {data.stock<100 && data.stock>=50 && <FontAwesomeIcon icon={faCheck} size="2xl" color='green'/>}
                     </div>
                   )     
                 })
