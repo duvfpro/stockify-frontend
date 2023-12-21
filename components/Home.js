@@ -7,7 +7,7 @@ import Product from "./Product";
 import Sale from "./Sale";
 import { Table } from "antd";
 import FilterDate from "./Tools/FilterDate";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon, faTriangleExclamation } from "@fortawesome/react-fontawesome";
 import { faCircle, } from "@fortawesome/free-solid-svg-icons";
 
 // Importe CategoryScale de Chart.js pour la mise à l'échelle des catégories sur les graphiques.
@@ -87,19 +87,7 @@ function Home() {
     },
   ];
 
-  const calculateWeekRange = () => {
-    const currentDate = new Date();
-    const startOfWeek = new Date(
-      currentDate.setDate(currentDate.getDate() - currentDate.getDay())
-    );
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(endOfWeek.getDate() + 6);
 
-    const startDateString = startOfWeek.toISOString().split("T")[0];
-    const endDateString = endOfWeek.toISOString().split("T")[0];
-
-    return { startDateString, endDateString };
-  };
 
   function convertirFormatDate(dateStr) {
     const dateObj = new Date(dateStr);
@@ -116,183 +104,90 @@ function Home() {
   useEffect(() => {
     // Affiche la liste des produits vendus aujourd'hui
 
-    if (filter == "Today") {
-      fetch("http://localhost:3000/products/allProducts")
-        .then((response) => response.json())
-        .then((data) => {
-          const currentDate = new Date();
-          const date = currentDate.getDate().toString();
-          const month = (currentDate.getMonth() + 1).toString();
-          const year = currentDate.getFullYear().toString();
+    fetch("http://localhost:3000/products/allProducts")
+      .then((response) => response.json())
+      .then((data) => {
 
-          const todayDateString = `${year}-${month}-${date}`;
+        const currentDate = new Date();
+        const date = currentDate.getDate().toString();
+        const month = (currentDate.getMonth() + 1).toString();
+        const year = currentDate.getFullYear().toString();
 
-          let filteredProducts = data.allProducts.filter((product) => {
-            let soldDates = product.soldAt.map(
-              (sale) => sale.date.split("T")[0]
-            );
-            return soldDates.includes(todayDateString);
-          });
+        const todayDateString = `${year}-${month}-${date}`;
+        const todayDateFR = `${date}/${month}/${year}`;
 
-          let formattedData = filteredProducts.map((product, index) => {
-            const todaySales = product.soldAt.filter(
-              (sale) => sale.date.split("T")[0] === todayDateString
-            );
+        let filteredProducts = data.allProducts.filter((product) => {
+          let soldDates = product.soldAt.map((sale) => sale.date.split("T")[0]);
+          return soldDates.includes(todayDateString);
+        });
 
-            const soldHistory = [
-              product.soldAt
-                ? product.soldAt.map((sale) => ({
-                    type: "sold",
-                    quantity: sale.quantity,
-                    date: convertirFormatDate(sale.date),
-                  }))
-                : [],
-            ];
+        let formattedData = filteredProducts.map((product, index) => {
+          const todaySales = product.soldAt.filter((sale) => sale.date.split("T")[0] === todayDateString);
 
-            const restockHistory = [
-              product.restockAt
-                ? product.restockAt.map((restock) => ({
-                    type: "restock",
-                    quantity: restock.quantity,
-                    date: convertirFormatDate(restock.date),
-                  }))
-                : [],
-            ];
+          const soldHistory = [
+            product.soldAt
+              ? product.soldAt.map((sale) => ({
+                  type: "sold",
+                  quantity: sale.quantity,
+                  date: convertirFormatDate(sale.date),
+                }))
+              : []
+          ];
+          
+          const restockHistory = [
+            product.restockAt
+              ? product.restockAt.map((restock) => ({
+                  type: "restock",
+                  quantity: restock.quantity,
+                  date: convertirFormatDate(restock.date),
+                }))
+              : []
+          ];
 
-            const historyExtended = soldHistory
-              .concat(restockHistory)
-              .flat()
-              .sort((a, b) => {
-                const dateA = a.date.split("/").reverse().join("");
-                const dateB = b.date.split("/").reverse().join("");
-                return parseInt(dateB) - parseInt(dateA);
-              });
+        const historyExtended = soldHistory.concat(restockHistory).flat()
+        .sort((a, b) => {
+          const dateA = a.date.split('/').reverse().join('');
+          const dateB = b.date.split('/').reverse().join('');
+          return parseInt(dateB) - parseInt(dateA);
+        })
 
-            const history = [];
-            for (let i = 0; i < historyExtended.length; i++) {
-              let found = false;
+        const history = [];
+          for (let i = 0; i < historyExtended.length; i++) {
+            let found = false;
 
-              for (let j = 0; j < history.length; j++) {
-                if (
-                  historyExtended[i].type === history[j].type &&
-                  historyExtended[i].date === history[j].date
-                ) {
-                  history[j].quantity += historyExtended[i].quantity;
-                  found = true;
-                  break;
-                }
-              }
-
-              if (!found) {
-                history.push(historyExtended[i]);
+            for (let j = 0; j < history.length; j++) {
+              if (historyExtended[i].type === history[j].type && historyExtended[i].date === history[j].date) {
+                history[j].quantity += historyExtended[i].quantity;
+                found = true;
+                break;
               }
             }
 
-            return {
-              key: index,
-              product: product.name,
-              category: product.category[0]?.name || "N/A",
-              date: todayDateString,
-              stock: product.stock,
-              quantitySold: todaySales.reduce(
-                (total, sale) => total + sale.quantity,
-                0
-              ),
-              sales: todaySales.length,
-              history: history,
-            };
-          });
-
-          setDisplayProducts(formattedData);
-        });
-    } else if (filter == "This week") {
-      const { startDateString, endDateString } = calculateWeekRange();
-
-      fetch("http://localhost:3000/products/allProducts")
-        .then((response) => response.json())
-        .then((data) => {
-          let filteredProducts = data.allProducts.filter((product) => {
-            let soldDates = product.soldAt.map(
-              (sale) => sale.date.split("T")[0]
-            );
-            return soldDates.some(
-              (date) => date >= startDateString && date <= endDateString
-            );
-          });
-
-          let formattedData = filteredProducts.map((product, index) => {
-            const weekSales = product.soldAt.filter((sale) => {
-              const saleDate = sale.date.split("T")[0];
-              return saleDate >= startDateString && saleDate <= endDateString;
-            });
-
-            const soldHistory = [
-              product.soldAt
-                ? product.soldAt.map((sale) => ({
-                    type: "sold",
-                    quantity: sale.quantity,
-                    date: convertirFormatDate(sale.date),
-                  }))
-                : [],
-            ];
-
-            const restockHistory = [
-              product.restockAt
-                ? product.restockAt.map((restock) => ({
-                    type: "restock",
-                    quantity: restock.quantity,
-                    date: convertirFormatDate(restock.date),
-                  }))
-                : [],
-            ];
-
-            const historyExtended = soldHistory
-              .concat(restockHistory)
-              .flat()
-              .sort((a, b) => {
-                const dateA = a.date.split("/").reverse().join("");
-                const dateB = b.date.split("/").reverse().join("");
-                return parseInt(dateB) - parseInt(dateA);
-              });
-
-            const history = [];
-            for (let i = 0; i < historyExtended.length; i++) {
-              let found = false;
-
-              for (let j = 0; j < history.length; j++) {
-                if (
-                  historyExtended[i].type === history[j].type &&
-                  historyExtended[i].date === history[j].date
-                ) {
-                  history[j].quantity += historyExtended[i].quantity;
-                  found = true;
-                  break;
-                }
-              }
-
-              if (!found) {
-                history.push(historyExtended[i]);
-              }
+            if (!found) {
+              history.push(historyExtended[i] );
             }
+          }
 
-            return {
-              key: index,
-              product: product.name,
-              category: product.category[0]?.name || "N/A",
-              date: startDateString + " to " + endDateString,
-              stock: product.stock,
-              quantitySold: weekSales.reduce(
-                (total, sale) => total + sale.quantity,
-                0
-              ),
-              sales: weekSales.length,
-              history: history,
-            };
-          });
-
-          setDisplayProducts(formattedData);
+          return {
+            key: index,
+            product: product.name,
+            category: product.category[0]?.name || "N/A",
+            date: todayDateFR,
+            stock: product.stock,
+            quantitySold: todaySales.reduce(
+              (total, sale) => total + sale.quantity,
+              0
+            ),
+            sales: todaySales.length,
+            history: history,
+          };
         });
-    }
+       
+        setDisplayProducts(formattedData);
+     
+        
+      });
+
   }, [refresh, filter]);
 
   const tableStyle = {
@@ -427,13 +322,13 @@ function Home() {
           (a, b) => b.quantitySold - a.quantitySold
         );
 
-        let topTenProducts = productsSold;
-        if (productsSold.length > 10) {
-          topTenProducts = productsSold.slice(0, 10);
-        }
-        setMyProducts(topTenProducts);
-      });
-  }, []);
+    let topTenProducts = productsSold;
+    if(productsSold.length > 10) {
+      topTenProducts = productsSold.slice(0, 10);
+    }
+    setMyProducts(topTenProducts);
+  })
+}, [refresh]);
 
   return (
     <main className={styles.main}>
@@ -441,22 +336,13 @@ function Home() {
         <div className={styles.leftSection}>
           <div className={styles.productButton}>
             <div className={styles.groupButtons}>
-              <button
-                className={styles.addProduct}
-                onClick={handleAddStockButtonClick}
-              >
-                Add stock
-              </button>
-
-              <button
-                className={styles.saleProduct}
-                onClick={handleSaleButtonClick}
-              >
-                Sale Products
-              </button>
+              {/* <div className={styles.product}> Add stock</div>
+              <div className={styles.product}> Sale product</div> */}
+              <button className={styles.addProduct}onClick={handleAddStockButtonClick}> Add stock </button>
+              <button className={styles.saleProduct} onClick={handleSaleButtonClick}> Sale Products </button>
             </div>
             <div className={styles.dateFilter}>
-              <FilterDate handleFilterDateChange={handleFilterDateChange} />
+              <p className={styles.todaySales}>Today's sales</p>
             </div>
           </div>
           <div className={styles.sale}>
@@ -510,10 +396,10 @@ function Home() {
         </div>
 
         <div className={styles.rightSection}>
-          {/* NATHAN VA TRAVAILLER ICI */}
+
 
           <div className={styles.productList}>
-            <h2 className={styles.productsTitle}>Top 10 products</h2>
+            <h2 className={styles.productsTitle}> Top 10 products </h2>
             <div className={styles.rightProductsContainer}>
               {myProducts.length === 0 ? (
                 <p>No products</p>
