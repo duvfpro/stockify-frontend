@@ -251,9 +251,9 @@ function ProductsPage(props) {
         )}
       </div>
 
-      <Modal className={styles.modalMainContent} open={openEditModal} onCancel={closeEditModal} footer={null} width={800} height={800}>
+      <Modal className={styles.modalMainContent} open={openEditModal} onCancel={closeEditModal} footer={null} width={450} height={800}>
         <div className={styles.modalMainContent}>
-          <img src={image} alt={productName} />
+          <img src={image} alt={productName} className={styles.image} />
           <div className={styles.title} > Update product </div>
           <div className={styles.mainContainer}>
             <div className={styles.inputContainer}>
