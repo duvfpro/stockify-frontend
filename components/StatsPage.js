@@ -199,7 +199,21 @@ function StatsPage() {
                   display: true,
                   text: yAxisLegend, // Utilisation de la prop pour la légende de l'axe Y
                 },
+                ticks: {
+                  color: 'white' // Change la couleur du texte de l'axe y en blanc
+                },
+                grid: {
+                  color: '#232323' // Change la couleur des lignes d'axe pour l'axe x
+                }
               },
+              x: {
+                ticks: {
+                  color: 'white' // Change la couleur du texte de l'axe x en blanc
+                },
+                grid: {
+                  color: '#232323' // Change la couleur des lignes d'axe pour l'axe x
+                }
+              }
               // ... Autres configurations de l'axe Y
             },
             // ... Autres options pour le graphique
@@ -237,8 +251,21 @@ function StatsPage() {
               display: true,
               text: yAxisLegend, 
             },
+            ticks: {
+              color: 'white' // Change la couleur du texte de l'axe y en blanc
+            },
+            grid: {
+              color: '#232323' // Change la couleur des lignes d'axe pour l'axe x
+            }
           },
-         
+          x: {
+            ticks: {
+              color: 'white' // Change la couleur du texte de l'axe x en blanc
+            },
+            grid: {
+              color: '#232323' // Change la couleur des lignes d'axe pour l'axe x
+            }
+          }
         },
         
       }}
@@ -297,19 +324,19 @@ function StatsPage() {
           )}
         </div>
         <div className={styles.firstChart}>
-        <h2>Statistiques des Ventes</h2>
-        {!isLoading && (
-          <BarChart
-          className={styles.firstChartCl}
-          chartData={chartData}
-          yAxisLegend={yAxisLegend} // Prop pour l'option de légende
-        />        
-        )}
-      </div>
+          <h2>Sales Statistics</h2>
+          {!isLoading && (
+            <BarChart
+            className={styles.firstChartCl}
+            chartData={chartData}
+            yAxisLegend={yAxisLegend} // Prop pour l'option de légende
+          />        
+          )}
+        </div>
       </div>
       <div className={styles.chartByP}>
         <div className={styles.chartByPTitle}>
-          <h2>Sales Statistics</h2>
+          <h2>Statistics by product</h2>
         </div>
         <div>
           <div className={styles.filters}>

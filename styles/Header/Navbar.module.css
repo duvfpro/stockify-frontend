@@ -4,8 +4,8 @@
 }
 
 .mainTitle{
-
-  padding: 0px 0px 0px 50px;
+  font-size: 50px;
+  padding: 0px 0px 0px 200px;
 }
 
 .headerBar {
@@ -41,5 +41,15 @@
 }
 
 .Drawer_drawer-link__o1AYJ>p{
+  color: #000;
+}
+
+.rightContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 7rem;
+}
+
+.userName {
   color: #000;
 }

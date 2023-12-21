@@ -5,6 +5,12 @@
     justify-content: center;
 }
 
+.categoryBtn{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-evenly;
+}
 .cardMapContainer{    
     display: flex;
     flex-wrap: wrap;

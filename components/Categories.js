@@ -1,6 +1,6 @@
 import styles from '../styles/Categories.module.css';
 import React, { useState, useEffect } from 'react';
-import { Modal } from 'antd';
+import { Modal, Input } from 'antd';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faPen,
@@ -120,8 +120,11 @@ function Categories() {
         return (
             <div key={data._id} className={styles.categoryContainer}>
                 <h3 className={styles.categoryname}> {data.name} </h3>
+                <div className={styles.categoryBtn}>
                 <button className={styles.edit} onClick={handleEditButton}><FontAwesomeIcon icon={faPen} color="white" /> </button>
                 <button className={styles.deleteBtn} onClick={() => handleDeleteButton(data.name, data._id)}><FontAwesomeIcon icon={faTrash} color="white" /> </button>
+                </div>
+                
 
                 <Modal open={openEditModal} onCancel={closeEditModal} footer={null} width={450} height={900}>
                     <div className={styles.allModalContainer} >                   
