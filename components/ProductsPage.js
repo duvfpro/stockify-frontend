@@ -18,6 +18,7 @@ function ProductsPage(props) {
   const [image, setImage] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [categoryName, setCategoryName] = useState('');
+  const [myCategory, setMyCategory] = useState('');
   const [productName, setProductName] = useState('');
   const [openEditModal, setOpenEditModal] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState([]);
@@ -166,15 +167,16 @@ function ProductsPage(props) {
     setPrice(price);
     setStock(stock);
     setImage(image);
-    console.log(image);
+    setMyCategory(category);
   };
+
 
   const closeEditModal = () => {
     setOpenEditModal(false);
   };
 
   const handleNameInputChange = (event) => {
-    setProductName(event);
+    setProductName(event.target.value);
   };
 
   const handleSelectChange = (event) => {
@@ -182,21 +184,22 @@ function ProductsPage(props) {
     let id = category.find(element => element.name === catName)
     setCategoryId(id._id);
     setCategoryName(catName);
+    setMyCategory(catName);
   };
 
   const handlePriceInputChange = (event) => {
-    const isValidInput = /^-?\d*\.?\d*$/.test(event);
+    const isValidInput = /^-?\d*\.?\d*$/.test(event.target.value);
 
     if (isValidInput) {
-      setPrice(event);
+      setPrice(event.target.value);
     };
   };
 
   const handleStockInputChange = (event) => {
-    const isValidInput = /^-?\d*\.?\d*$/.test(event);
+    const isValidInput = /^-?\d*\.?\d*$/.test(event.target.value);
 
     if (isValidInput) {
-      setStock(event);
+      setStock(event.target.value);
     };
   };
 
@@ -267,7 +270,7 @@ function ProductsPage(props) {
             </div>
             <div className={styles.inputContainer}>
               <p className={styles.inputName}> Category</p>
-              <Select className={styles.selectInput} onChange={handleSelectChange} >
+              <Select className={styles.selectInput} onChange={handleSelectChange} value={myCategory} >
                 {category.map((data, index) => (
                   <option key={index} value={data.name}> {data.name} </option>
                 ))}
