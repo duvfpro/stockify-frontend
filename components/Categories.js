@@ -12,7 +12,7 @@ function Categories() {
     const [newCategoryName, setNewCategoryName] = useState('');
 
     useEffect(() => {
-        fetch('http://localhost:3000/categories/allCategories')
+        fetch('https://stockify-backend-wheat.vercel.app/categories/allCategories')
             .then(response => response.json())
             .then(data => {
                 setCategoriesTab(data.allCategories);
@@ -34,7 +34,7 @@ function Categories() {
     };
 
     const handleNewSaveButton = () => {
-        fetch('http://localhost:3000/categories/newCategory', {
+        fetch('https://stockify-backend-wheat.vercel.app/categories/newCategory', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: newCategoryName, image: "No Image for now" })
@@ -64,7 +64,7 @@ function Categories() {
 
 
         const handleSaveButton = (name, id) => {
-                fetch(`http://localhost:3000/categories/updateMyCategory/${name}`, {
+                fetch(`https://stockify-backend-wheat.vercel.app/categories/updateMyCategory/${name}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: categoryName })
@@ -79,7 +79,7 @@ function Categories() {
         const handleDeleteButton = (name, id) => {
             const isConfirmed = window.confirm('Are you sure you want to delete this user?');
             if (isConfirmed) {
-                fetch(`http://localhost:3000/products/productsByCategoryId`, {
+                fetch(`https://stockify-backend-wheat.vercel.app/products/productsByCategoryId`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ categoryId: id })
@@ -88,7 +88,7 @@ function Categories() {
                     .then(data => {
                         if (data.result == true) {
                             for (let i = 0; i < data.allProducts.length; i++) {
-                                fetch(`http://localhost:3000/products/updateMyProduct/${data.allProducts[i].name}`, {
+                                fetch(`https://stockify-backend-wheat.vercel.app/products/updateMyProduct/${data.allProducts[i].name}`, {
                                     method: 'PUT',
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify({ name: data.allProducts.name, category: '657ab87025ea6d64cea475e6' })
@@ -100,7 +100,7 @@ function Categories() {
                             }
                         }
                     })
-                    .then(fetch(`http://localhost:3000/categories/deleteMyCategory/${name}`, {
+                    .then(fetch(`https://stockify-backend-wheat.vercel.app/categories/deleteMyCategory/${name}`, {
                         method: 'DELETE',
                         headers: { 'Content-Type': 'application/json' },
                     })

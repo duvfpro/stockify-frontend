@@ -7,10 +7,10 @@ import Product from "./Product";
 import Sale from "./Sale";
 import { Table } from "antd";
 import FilterDate from "./Tools/FilterDate";
-import { FontAwesomeIcon,  } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon, } from "@fortawesome/react-fontawesome";
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { faCircle, } from "@fortawesome/free-solid-svg-icons";
-import { faMinus,faExclamation,faCheck } from '@fortawesome/free-solid-svg-icons'
+import { faMinus, faExclamation, faCheck } from '@fortawesome/free-solid-svg-icons'
 
 // Importe CategoryScale de Chart.js pour la mise à l'échelle des catégories sur les graphiques.
 import { CategoryScale } from "chart.js";
@@ -104,7 +104,7 @@ function Home() {
   }
 
   useEffect(() => {
-    fetch("http://localhost:3000/products/allProducts")
+    fetch("https://stockify-backend-wheat.vercel.app/products/allProducts")
       .then((response) => response.json())
       .then((data) => {
 
@@ -127,31 +127,31 @@ function Home() {
           const soldHistory = [
             product.soldAt
               ? product.soldAt.map((sale) => ({
-                  type: "sold",
-                  quantity: sale.quantity,
-                  date: convertirFormatDate(sale.date),
-                }))
+                type: "sold",
+                quantity: sale.quantity,
+                date: convertirFormatDate(sale.date),
+              }))
               : []
           ];
-          
+
           const restockHistory = [
             product.restockAt
               ? product.restockAt.map((restock) => ({
-                  type: "restock",
-                  quantity: restock.quantity,
-                  date: convertirFormatDate(restock.date),
-                }))
+                type: "restock",
+                quantity: restock.quantity,
+                date: convertirFormatDate(restock.date),
+              }))
               : []
           ];
 
-        const historyExtended = soldHistory.concat(restockHistory).flat()
-        .sort((a, b) => {
-          const dateA = a.date.split('/').reverse().join('');
-          const dateB = b.date.split('/').reverse().join('');
-          return parseInt(dateB) - parseInt(dateA);
-        })
+          const historyExtended = soldHistory.concat(restockHistory).flat()
+            .sort((a, b) => {
+              const dateA = a.date.split('/').reverse().join('');
+              const dateB = b.date.split('/').reverse().join('');
+              return parseInt(dateB) - parseInt(dateA);
+            })
 
-        const history = [];
+          const history = [];
           for (let i = 0; i < historyExtended.length; i++) {
             let found = false;
 
@@ -164,7 +164,7 @@ function Home() {
             }
 
             if (!found) {
-              history.push(historyExtended[i] );
+              history.push(historyExtended[i]);
             }
           }
 
@@ -182,10 +182,10 @@ function Home() {
             history: history,
           };
         });
-       
+
         setDisplayProducts(formattedData);
-     
-        
+
+
       });
 
   }, [refresh, filter]);
@@ -223,7 +223,7 @@ function Home() {
     const fetchStockData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/products/stocksAtDay"
+          "https://stockify-backend-wheat.vercel.app/products/stocksAtDay"
         );
         const data = await response.json();
 
@@ -253,7 +253,7 @@ function Home() {
   console.log(chartData);
 
   useEffect(() => {
-    fetch("http://localhost:3000/products/allProducts")
+    fetch("https://stockify-backend-wheat.vercel.app/products/allProducts")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data.allProducts);
@@ -303,7 +303,7 @@ function Home() {
 
   useEffect(() => {
     // pour lister les produits à droite
-    fetch("http://localhost:3000/products/allProducts")
+    fetch("https://stockify-backend-wheat.vercel.app/products/allProducts")
       .then((response) => response.json())
       .then((data) => {
         let productsSold = [];
@@ -322,13 +322,13 @@ function Home() {
           (a, b) => b.quantitySold - a.quantitySold
         );
 
-    let topTenProducts = productsSold;
-    if(productsSold.length > 10) {
-      topTenProducts = productsSold.slice(0, 10);
-    }
-    setMyProducts(topTenProducts);
-  })
-}, [refresh]);
+        let topTenProducts = productsSold;
+        if (productsSold.length > 10) {
+          topTenProducts = productsSold.slice(0, 10);
+        }
+        setMyProducts(topTenProducts);
+      })
+  }, [refresh]);
 
   return (
     <main className={styles.main}>
@@ -338,7 +338,7 @@ function Home() {
             <div className={styles.groupButtons}>
               {/* <div className={styles.product}> Add stock</div>
               <div className={styles.product}> Sale product</div> */}
-              <button className={styles.addProduct}onClick={handleAddStockButtonClick}> Add stock </button>
+              <button className={styles.addProduct} onClick={handleAddStockButtonClick}> Add stock </button>
               <button className={styles.saleProduct} onClick={handleSaleButtonClick}> Sale Products </button>
             </div>
             <div className={styles.dateFilter}>
@@ -366,11 +366,10 @@ function Home() {
                               (operationGroup, groupIndex) => (
                                 <li key={groupIndex}>
                                   {operationGroup.type &&
-                                  operationGroup.quantity &&
-                                  operationGroup.date
-                                    ? `${operationGroup.date.split(" ")[0]}: ${
-                                        operationGroup.quantity
-                                      } ${operationGroup.type}`
+                                    operationGroup.quantity &&
+                                    operationGroup.date
+                                    ? `${operationGroup.date.split(" ")[0]}: ${operationGroup.quantity
+                                    } ${operationGroup.type}`
                                     : ""}
                                 </li>
                               )
@@ -420,14 +419,14 @@ function Home() {
                             <div className={styles.iconWrapper}>
                               <FontAwesomeIcon
                                 icon={faExclamation}
-                                size="2xl"
+                                size="xl"
                                 color="red"
                                 fade
                                 className={`${styles.alertIcon} ${styles.iconEffect}`}
                               />
                               <FontAwesomeIcon
                                 icon={faCircle}
-                                size="2xl"
+                                size="xl"
                                 color="red"
                                 fade
                                 className={`${styles.alertIcon} ${styles.iconEffectBKGalert}`}
@@ -435,30 +434,30 @@ function Home() {
                             </div>
                           )}
                         </div>
-                        <div className={styles.iconContainer}>
+                        {/* <div className={styles.iconContainer}>
                           {data.stock >= 20 && data.stock < 50 && (
                             <div className={styles.iconWrapper}>
                               <FontAwesomeIcon
                                 icon={faMinus}
-                                size="2xl"
+                                size="xl"
                                 color="yellow"
                                 className={`${styles.warningIcon} ${styles.iconEffect}`}
                               />
                               <FontAwesomeIcon
                                 icon={faCircle}
-                                size="2xl"
+                                size="xl"
                                 color="yellow"
                                 className={`${styles.warningIconIcon} ${styles.iconEffectBKGwarning}`}
                               />
                             </div>
                           )}
-                        </div>
-                        <div className={styles.iconContainer}>
+                        </div> */}
+                        {/* <div className={styles.iconContainer}>
                           {data.stock >= 50 && (
                             <div className={styles.iconWrapper}>
                               <FontAwesomeIcon
                                 icon={faCheck}
-                                size="2xl"
+                                size="xl"
                                 color="green"
                                 className={`${styles.okIcon} ${styles.iconEffect}`}
                               />
@@ -470,7 +469,7 @@ function Home() {
                               />
                             </div>
                           )}
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   );

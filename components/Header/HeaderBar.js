@@ -49,8 +49,8 @@ function HeaderBar () {
         </div>
         <div className={styles.rightContainer}>
           <p className={styles.userName} >Welcome {user.username}</p>
-          <NotificationButton />
         </div>
+        <NotificationButton />
         <DrawerLeft isDrawerOpen={isDrawerOpen} handleDrawerClick={handleDrawerClick} />
       </div>
     )

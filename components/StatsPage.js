@@ -87,7 +87,7 @@ function StatsPage() {
       try {
         // Fetch all categories
         const responseCategories = await fetch(
-          "http://localhost:3000/categories/allCategories"
+          "https://stockify-backend-wheat.vercel.app/categories/allCategories"
         );
         const dataCategories = await responseCategories.json();
         // Update the category state with the fetched categories
@@ -98,7 +98,7 @@ function StatsPage() {
 
         // Fetch all products
         const responseProducts = await fetch(
-          "http://localhost:3000/products/allProducts"
+          "https://stockify-backend-wheat.vercel.app/products/allProducts"
         );
         const dataProducts = await responseProducts.json();
 
@@ -153,7 +153,7 @@ function StatsPage() {
   }, [filter, categoryState.categoryId, timeFilter]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/products/allProducts")
+    fetch("https://stockify-backend-wheat.vercel.app/products/allProducts")
       .then((response) => response.json())
       .then((data) => {
         setProducts(data.allProducts);

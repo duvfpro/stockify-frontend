@@ -112,7 +112,7 @@ function SalesPage() {
     
     if(filter == 'Today') {
 
-    fetch("http://localhost:3000/products/allProducts")
+    fetch("https://stockify-backend-wheat.vercel.app/products/allProducts")
       .then((response) => response.json())
       .then((data) => {
 
@@ -199,7 +199,7 @@ function SalesPage() {
 
     const { startDateString, endDateString } = calculateWeekRange();
 
-    fetch("http://localhost:3000/products/allProducts")
+    fetch("https://stockify-backend-wheat.vercel.app/products/allProducts")
     .then((response) => response.json())
     .then((data) => {
       let filteredProducts = data.allProducts.filter((product) => {
