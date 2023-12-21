@@ -30,7 +30,7 @@ function Categories() {
     };
 
     const handleNewNameInputChange = (event) => {
-        setNewCategoryName(event);
+        setNewCategoryName(event.target.value);
     };
 
     const handleNewSaveButton = () => {
