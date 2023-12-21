@@ -106,8 +106,6 @@ function Home() {
 
   
   useEffect(() => {
-    // Affiche la liste des produits vendus aujourd'hui
-
     fetch("http://localhost:3000/products/allProducts")
       .then((response) => response.json())
       .then((data) => {
