@@ -91,18 +91,6 @@ function Home() {
   ];
 
 
-  const calculateWeekRange = () => {
-    const currentDate = new Date();
-    const startOfWeek = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay()));
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(endOfWeek.getDate() + 6);
-  
-    const startDateString = startOfWeek.toISOString().split("T")[0];
-    const endDateString = endOfWeek.toISOString().split("T")[0];
-  
-    return { startDateString, endDateString };
-  };
-
 
   function convertirFormatDate(dateStr) {
     const dateObj = new Date(dateStr);
@@ -119,8 +107,6 @@ function Home() {
   
   useEffect(() => {
     // Affiche la liste des produits vendus aujourd'hui
-    
-    if(filter == 'Today') {
 
     fetch("http://localhost:3000/products/allProducts")
       .then((response) => response.json())
@@ -132,6 +118,7 @@ function Home() {
         const year = currentDate.getFullYear().toString();
 
         const todayDateString = `${year}-${month}-${date}`;
+        const todayDateFR = `${date}/${month}/${year}`;
 
         let filteredProducts = data.allProducts.filter((product) => {
           let soldDates = product.soldAt.map((sale) => sale.date.split("T")[0]);
@@ -189,7 +176,7 @@ function Home() {
             key: index,
             product: product.name,
             category: product.category[0]?.name || "N/A",
-            date: todayDateString,
+            date: todayDateFR,
             stock: product.stock,
             quantitySold: todaySales.reduce(
               (total, sale) => total + sale.quantity,
@@ -204,83 +191,6 @@ function Home() {
      
         
       });
-    } else if (filter == 'This week') {
-
-    const { startDateString, endDateString } = calculateWeekRange();
-
-    fetch("http://localhost:3000/products/allProducts")
-    .then((response) => response.json())
-    .then((data) => {
-      let filteredProducts = data.allProducts.filter((product) => {
-        let soldDates = product.soldAt.map((sale) => sale.date.split("T")[0]);
-        return soldDates.some(date => date >= startDateString && date <= endDateString);
-      });
-
-      let formattedData = filteredProducts.map((product, index) => {
-        const weekSales = product.soldAt.filter((sale) => {
-          const saleDate = sale.date.split("T")[0];
-          return saleDate >= startDateString && saleDate <= endDateString;
-        });
-        
-        const soldHistory = [
-          product.soldAt
-            ? product.soldAt.map((sale) => ({
-                type: "sold",
-                quantity: sale.quantity,
-                date: convertirFormatDate(sale.date),
-              }))
-            : []
-        ];
-        
-        const restockHistory = [
-          product.restockAt
-            ? product.restockAt.map((restock) => ({
-                type: "restock",
-                quantity: restock.quantity,
-                date: convertirFormatDate(restock.date),
-              }))
-            : []
-        ];
-
-      const historyExtended = soldHistory.concat(restockHistory).flat()
-      .sort((a, b) => {
-        const dateA = a.date.split('/').reverse().join('');
-        const dateB = b.date.split('/').reverse().join('');
-        return parseInt(dateB) - parseInt(dateA);
-      })
-
-      const history = [];
-      for (let i = 0; i < historyExtended.length; i++) {
-        let found = false;
-
-        for (let j = 0; j < history.length; j++) {
-          if (historyExtended[i].type === history[j].type && historyExtended[i].date === history[j].date) {
-            history[j].quantity += historyExtended[i].quantity;
-            found = true;
-            break;
-          }
-        }
-
-        if (!found) {
-          history.push(historyExtended[i] );
-        }
-      }      
-
-        return {
-          key: index,
-          product: product.name,
-          category: product.category[0]?.name || "N/A",
-          date: startDateString + " to " + endDateString,
-          stock: product.stock,
-          quantitySold: weekSales.reduce((total, sale) => total + sale.quantity, 0),
-          sales: weekSales.length,
-          history: history,
-        };
-      });
-
-      setDisplayProducts(formattedData);
-    });
-    }
 
   }, [refresh, filter]);
 
@@ -427,12 +337,13 @@ useEffect(() => { // pour lister les produits à droite
         <div className={styles.leftSection}>
           <div className={styles.productButton}>
             <div className={styles.groupButtons}>
+              {/* <div className={styles.product}> Add stock</div>
+              <div className={styles.product}> Sale product</div> */}
               <button className={styles.addProduct}onClick={handleAddStockButtonClick}> Add stock </button>
               <button className={styles.saleProduct} onClick={handleSaleButtonClick}> Sale Products </button>
             </div>
             <div className={styles.dateFilter}>
               <p className={styles.todaySales}>Today's sales</p>
-              {/* <FilterDate handleFilterDateChange={handleFilterDateChange} /> */}
             </div>
           </div>
           <div className={styles.sale}>
