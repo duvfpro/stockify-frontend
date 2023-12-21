@@ -49,7 +49,7 @@ function HeaderBar () {
         </div>
         <div className={styles.rightContainer}>
           <div className={styles.nameContainer}>
-          <p className={styles.welcome}>welcome</p>
+          <p className={styles.welcome}>Welcome</p>
           <p className={styles.userName} >{user.username}</p>
           </div>
          

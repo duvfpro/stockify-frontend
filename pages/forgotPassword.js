@@ -1,5 +1,5 @@
 import { Form, Input, Button } from 'antd';
-
+import styles from '../styles/Pages/forgotPassword.module.css'
 
 const ForgotPassword = () => {
 
@@ -10,7 +10,7 @@ const ForgotPassword = () => {
     const handleSubmit = async (values) => {
         try {
             // Envoie une requête POST au backend avec l'adresse e-mail pour réinitialiser le mot de passe
-            const response = await fetch('http://localhost:3000/users/forgotPassword', {
+            const response = await fetch('https://stockify-backend-wheat.vercel.app/users/forgotPassword', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -45,15 +45,20 @@ const ForgotPassword = () => {
 
     
     return (
-        <div>
-            <h1>Forgot Password</h1>
+        <div className={styles.Main}>
+            
+            <div className={styles.formContainer}>
+                <div className={styles.title}>
+                   <h1>Forgot Password</h1> 
+                </div>
+                
             <Form
                 onFinish={handleSubmit}
                 labelCol={{
                     span: 1,
                 }}
                 wrapperCol={{
-                    span: 5,
+                    span: 28,
                 }}
                 initialValues={{
                     remember: true,
@@ -64,6 +69,7 @@ const ForgotPassword = () => {
                 label = 'email'
                 name ='email'
                 rules ={[
+                    
                     {
                         type:'email',
                         message:'please enter a valid email adresse'
@@ -74,14 +80,22 @@ const ForgotPassword = () => {
                         message : 'please enter your email adresse'
                     }
                 ]}>
-                    <Input placeholder='enter your email adresse' />
+                    <div className={styles.input}>
+                        <Input placeholder='enter your email adresse' />
+                        </div>
+                    
                    
                 </Form.Item>
-                <Button type="primary" htmlType="submit"
+                <div className={styles.Btn}>
+                     <Button type="primary" htmlType="submit"
                 >
                         Reset Password
                     </Button>
+                </div>
+               
             </Form>
+            </div>
+            
         </div>
     );
 };

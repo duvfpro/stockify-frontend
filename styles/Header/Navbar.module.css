@@ -47,7 +47,6 @@
 .rightContainer {
   display: flex;
   justify-content: space-between;
-  width: 7rem;
 }
 
 .userName {

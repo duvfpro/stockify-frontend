@@ -1,6 +1,8 @@
 import { Form, Input, Button } from 'antd';
 import { useRouter } from 'next/router';
 import { useState,useEffect } from 'react';
+import styles from '../styles/Pages/resetPassword.module.css'
+
 
 const ResetPassword = () => {
     const router = useRouter();
@@ -17,7 +19,7 @@ const ResetPassword = () => {
 
     const handleSubmit = async (values) => {
         try {
-            const response = await fetch('http://localhost:3000/users/resetPassword', {
+            const response = await fetch('https://stockify-backend-wheat.vercel.app/users/resetPassword', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -48,8 +50,13 @@ const ResetPassword = () => {
     };
 
     return (
-        <div>
-            <h1>Reset Password</h1>
+        <div className={styles.Main}>
+
+            <div className={styles.formContainer}>
+            <div className={styles.title}>
+               <h1>Reset Password</h1> 
+            </div>
+            
             <Form onFinish={handleSubmit}>
                 <Form.Item
                     label="New Password"
@@ -60,8 +67,10 @@ const ResetPassword = () => {
                             message: 'Please enter your new password',
                         },
                     ]}
-                >
-                    <Input.Password placeholder="Enter your new password" />
+                >   
+                      <Input.Password placeholder="Enter your new password" /> 
+                   
+                    
                 </Form.Item>
                 <Form.Item
                     label="Confirm Password"
@@ -81,13 +90,20 @@ const ResetPassword = () => {
                             },
                         }),
                     ]}
-                >
-                    <Input.Password placeholder="Confirm your new password" />
+                >    
+                    
+                         <Input.Password placeholder="Confirm your new password" />
+                   
+                   
                 </Form.Item>
-                <Button type="primary" htmlType="submit">
+                 <div className={styles.Btn}>
+                    <Button type="primary" htmlType="submit">
                     Reset Password
-                </Button>
+                    </Button>
+                 </div>
+                
             </Form>
+            </div>
         </div>
     );
 };

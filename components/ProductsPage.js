@@ -37,7 +37,7 @@ function ProductsPage(props) {
     const fetchData = async () => {
       try {
         setTimeout(async () => {
-          const response = await fetch('http://localhost:3000/products/allProducts');
+          const response = await fetch('https://stockify-backend-wheat.vercel.app/products/allProducts');
           const data = await response.json();
           setMyProducts(data.allProducts);
         }, 1000)
@@ -52,7 +52,7 @@ function ProductsPage(props) {
     const fetchData = async () => {
       try {
         setTimeout(async () => {
-          const response = await fetch('http://localhost:3000/categories/allCategories');
+          const response = await fetch('https://stockify-backend-wheat.vercel.app/categories/allCategories');
           const data = await response.json();
           setCategory(data.allCategories);
           setCategoryId(data.allCategories[0]._id);
@@ -67,7 +67,7 @@ function ProductsPage(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:3000/products/allProducts');
+        const response = await fetch('https://stockify-backend-wheat.vercel.app/products/allProducts');
         const data = await response.json();
 
         if(selectedFilters.length === 0) {
@@ -115,7 +115,7 @@ function ProductsPage(props) {
 
 
   useEffect(() => {
-    fetch('http://localhost:3000/categories/allCategories')
+    fetch('https://stockify-backend-wheat.vercel.app/categories/allCategories')
       .then(response => response.json())
       .then(data => {
         let categories = [];
@@ -150,7 +150,7 @@ function ProductsPage(props) {
   const handleDeleteButton = (name) => {
     const isConfirmed = window.confirm('Are you sure you want to delete this product?');
     if (isConfirmed) {
-      fetch(`http://localhost:3000/products/deleteProduct/${name}`, {
+      fetch(`https://stockify-backend-wheat.vercel.app/products/deleteProduct/${name}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
       })
@@ -204,7 +204,7 @@ function ProductsPage(props) {
   };
 
   const handleSaveButton = () => {
-    fetch(`http://localhost:3000/products/updateMyProduct/${nameToSave}`, {
+    fetch(`https://stockify-backend-wheat.vercel.app/products/updateMyProduct/${nameToSave}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: productName, category: categoryId, price: price, stock: stock })
