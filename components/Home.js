@@ -419,7 +419,7 @@ useEffect(() => { // pour lister les produits à droite
     }
     setMyProducts(topTenProducts);
   })
-}, []);
+}, [refresh]);
 
   return (
     <main className={styles.main}>
@@ -427,19 +427,12 @@ useEffect(() => { // pour lister les produits à droite
         <div className={styles.leftSection}>
           <div className={styles.productButton}>
             <div className={styles.groupButtons}>
-              <button
-                className={styles.addProduct}
-                onClick={handleAddStockButtonClick}
-              >
-                Add stock
-              </button>
-
-              <button className={styles.saleProduct} onClick={handleSaleButtonClick}>
-                Sale Products
-              </button>
+              <button className={styles.addProduct}onClick={handleAddStockButtonClick}> Add stock </button>
+              <button className={styles.saleProduct} onClick={handleSaleButtonClick}> Sale Products </button>
             </div>
             <div className={styles.dateFilter}>
-              <FilterDate handleFilterDateChange={handleFilterDateChange} />
+              <p className={styles.todaySales}>Today's sales</p>
+              {/* <FilterDate handleFilterDateChange={handleFilterDateChange} /> */}
             </div>
           </div>
           <div className={styles.sale}>
@@ -485,12 +478,9 @@ useEffect(() => { // pour lister les produits à droite
         
         <div className={styles.rightSection}>
 
-                  {/* NATHAN VA TRAVAILLER ICI */}
 
           <div className={styles.productList}>
-            <h2 className={styles.productsTitle}>
-                  Top 10 products
-            </h2>
+            <h2 className={styles.productsTitle}> Top 10 products </h2>
             <div className={styles.rightProductsContainer}>
               {myProducts.length === 0 ? (
                 <p>No products</p>

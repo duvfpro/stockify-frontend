@@ -6,6 +6,7 @@ import { Table } from "antd";
 import FilterDate from './Tools/FilterDate';
 import AddStock from "./AddStock";
 import Sale from "./Sale";
+import { format, startOfWeek, endOfWeek, addDays } from 'date-fns';
 
 
 function SalesPage() {
@@ -77,15 +78,15 @@ function SalesPage() {
 
   const calculateWeekRange = () => {
     const currentDate = new Date();
-    const startOfWeek = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay()));
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(endOfWeek.getDate() + 6);
+    const startOfWeekDate = startOfWeek(currentDate);
+    const endOfWeekDate = endOfWeek(currentDate);
   
-    const startDateString = startOfWeek.toISOString().split("T")[0];
-    const endDateString = endOfWeek.toISOString().split("T")[0];
+    const startDateString = format(startOfWeekDate, 'dd/MM/yyyy');
+    const endDateString = format(endOfWeekDate, 'dd/MM/yyyy');
   
     return { startDateString, endDateString };
   };
+  
 
 
   function convertirFormatDate(dateStr) {
@@ -116,6 +117,7 @@ function SalesPage() {
         const year = currentDate.getFullYear().toString();
 
         const todayDateString = `${year}-${month}-${date}`;
+        const todayDateFR = `${date}/${month}/${year}`;
 
         let filteredProducts = data.allProducts.filter((product) => {
           let soldDates = product.soldAt.map((sale) => sale.date.split("T")[0]);
@@ -173,7 +175,7 @@ function SalesPage() {
             key: index,
             product: product.name,
             category: product.category[0]?.name || "N/A",
-            date: todayDateString,
+            date: todayDateFR,
             stock: product.stock,
             quantitySold: todaySales.reduce(
               (total, sale) => total + sale.quantity,
@@ -190,7 +192,7 @@ function SalesPage() {
       });
     } else if (filter == 'This week') {
 
-      const { startDateString, endDateString } = calculateWeekRange();
+    const { startDateString, endDateString } = calculateWeekRange();
 
     fetch("http://localhost:3000/products/allProducts")
     .then((response) => response.json())
@@ -295,18 +297,10 @@ function SalesPage() {
 
   return (
     <div className={styles.main}>
-                <div className={styles.productButton}>
+          <div className={styles.productButton}>
             <div className={styles.groupButtons}>
-              <button
-                className={styles.addProduct}
-                onClick={handleAddStockButtonClick}
-              >
-                Add stock
-              </button>
-
-              <button className={styles.saleProduct} onClick={handleSaleButtonClick}>
-                Sale Products
-              </button>
+              <button className={styles.addProduct} onClick={handleAddStockButtonClick}>Add stock </button>
+              <button className={styles.saleProduct} onClick={handleSaleButtonClick}> Sale Products </button>
             </div>
             <div className={styles.dateFilter}>
               <FilterDate handleFilterDateChange={handleFilterDateChange} />

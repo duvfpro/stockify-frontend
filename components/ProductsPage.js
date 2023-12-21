@@ -69,10 +69,16 @@ function ProductsPage(props) {
         const response = await fetch('http://localhost:3000/products/allProducts');
         const data = await response.json();
 
-        if (selectedFilters.length === 0) {
-          setMyProducts(data.allProducts);
-          return;
-        }
+        if(selectedFilters.length === 0) {
+          if (triggerSortByStock === "Stock Ascending") {
+            setMyProducts([...data.allProducts].sort(compareByStock));
+          } else if (triggerSortByStock === "Stock Descending") {
+            setMyProducts([...data.allProducts].sort(compareByStock).reverse());
+          } else {
+            setMyProducts(data.allProducts);
+          }
+
+        } else {
 
         let productTab = [];
 
@@ -84,24 +90,28 @@ function ProductsPage(props) {
           }
         }
 
-        if (JSON.stringify(productTab) === JSON.stringify([])) {
-          setMyProducts([]);
-        } else {
+        // if (JSON.stringify(productTab) === JSON.stringify([])) {
+        //   setMyProducts([]);
+        // } 
+
           if (triggerSortByStock === "Stock Ascending") {
             setMyProducts(productTab.sort(compareByStock));
+            console.log(triggerSortByStock)
           } else if (triggerSortByStock === "Stock Descending") {
             setMyProducts(productTab.sort(compareByStock).reverse());
           } else {
             setMyProducts(productTab);
           }
-        }
+         }
+         
       } catch (error) {
-        console.error('Erreur lors de la récupération des produits filtrés :', error);
-      }
+        console.error('Erreur lors de la récupération des produits filtrés :', error);    
+    }
     };
 
     fetchData();
   }, [refreshProducts, selectedFilters, triggerSortByStock]);
+
 
   useEffect(() => {
     fetch('http://localhost:3000/categories/allCategories')
@@ -129,10 +139,6 @@ function ProductsPage(props) {
     }
     return 0;
   }
-
-  const handleTriStockButton = () => {
-    setTriggerSortByStock(!triggerSortByStock);
-  };
 
 
   const handleCloseButton = () => {
@@ -218,7 +224,6 @@ function ProductsPage(props) {
 
   const handleStockFilterChange = (stockFilterChange) => {
     setTriggerSortByStock(stockFilterChange);
-
   }
 
 
