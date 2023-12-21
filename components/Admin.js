@@ -1,26 +1,27 @@
+//#region imports
 import React, { useEffect, useState } from "react";
 import { Avatar, List, Button, Modal, Input, Switch } from "antd";
 import styles from "../styles/Pages/Admin.module.css";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPen,
-  faTrash,
-  faUser,
-  faRotateLeft,
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPen, faTrash, faUser, faRotateLeft, faPlus, } from "@fortawesome/free-solid-svg-icons";
+
 const { Search } = Input;
+//#endregion
+
 
 const Admin = () => {
   const [userData, setUserData] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+
   const [modalVisible, setModalVisible] = useState(false);
+
   const [editedUsername, setEditedUsername] = useState("");
   const [createUserPassword, setCreateUserPassword] = useState("");
   const [editedEmail, setEditedEmail] = useState("");
   const [editedIsAdmin, setEditedIsAdmin] = useState(false);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [createUserModalVisible, setCreateUserModalVisible] = useState(false);
 
@@ -40,12 +41,11 @@ const Admin = () => {
         throw new Error(`Error: ${response.status}`);
       }
       const data = await response.json();
-      console.log(data);
       const formattedData = data.data.map((user) => ({
         key: user._id,
         username: user.username,
         email: user.email,
-        isAdmin: user.isAdmin !== undefined ? user.isAdmin.toString() : "",
+        isAdmin: user.isAdmin !== undefined ? user.isAdmin : Boolean,
       }));
       setUserData(formattedData);
     } catch (error) {
@@ -72,39 +72,35 @@ const Admin = () => {
 
   const handleSaveChanges = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/users/updateUser/${selectedUser.key}`,
-        {
-          method: "PUT",
-          headers: { "Content-type": "application/json" },
-          body: JSON.stringify({
-            isAdmin: editedIsAdmin,
-            username: editedUsername,
-            email: editedEmail,
-          }),
-        }
+      const response = await fetch(`http://localhost:3000/users/updateUser/${selectedUser.key}`, {
+        method: "PUT",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({
+          isAdmin: editedIsAdmin,
+          username: editedUsername,
+          email: editedEmail,
+        }),
+      }
       );
 
-      if (response.ok) {
-        const data = await response.json();
-
-        const updatedUserData = userData.map((user) =>
-          user.key === selectedUser.key
-            ? {
-                ...user,
-                isAdmin: editedIsAdmin.toString(),
-                username: editedUsername,
-                email: editedEmail,
-              }
-            : user
-        );
-
-        setUserData(updatedUserData);
-      } else {
+      if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
+
+      const data = await response.json();
+      const updatedUserData = userData.map(user =>
+        user.key === selectedUser.key ? {
+          ...user,
+          isAdmin: String(editedIsAdmin),
+          username: editedUsername,
+          email: editedEmail,
+        } : user
+      );
+
+      setUserData(updatedUserData);
+
     } catch (error) {
-      console.error("Erreur lors de la mise à jour du user: ", error);
+      console.error("Erreur lors de la mise à jour du user:", error.message);
     } finally {
       setModalVisible(false);
     }
@@ -116,27 +112,21 @@ const Admin = () => {
     );
     if (isConfirmed) {
       try {
-        const response = await fetch(
-          `http://localhost:3000/users/${selectedUser.email}`,
-          {
-            method: "DELETE",
-          }
+        const response = await fetch(`http://localhost:3000/users/${selectedUser.email}`, {
+          method: "DELETE",
+        }
         );
-
-        if (response.ok) {
-          const data = await response.json();
-
-          const updatedUserData = userData.filter(
-            (user) => user.key !== selectedUser.key
-          );
-
-          setUserData(updatedUserData);
-        } else {
+        if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
         }
-      } catch (error) {
+        const data = await response.json();
+        const updatedUserData = userData.filter((user) => user.key !== selectedUser.key);
+        setUserData(updatedUserData);
+      }
+      catch (error) {
         console.error("Erreur lors de la suppression du user: ", error);
-      } finally {
+      }
+      finally {
         setModalVisible(false);
       }
     }
@@ -146,13 +136,10 @@ const Admin = () => {
     setSearchTerm(value);
   };
 
-  const filteredData = userData.filter((user) =>
-    user.username.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   const handleCreateUserClick = () => {
     setEditedUsername("");
     setEditedEmail("");
+    setCreateUserPassword("");
     setEditedIsAdmin(false);
     setCreateUserModalVisible(true);
   };
@@ -178,7 +165,7 @@ const Admin = () => {
 
       if (response.ok) {
         const data = await response.json();
-
+        console.log(data)
         fetchData();
 
         setCreateUserModalVisible(false);
@@ -189,6 +176,12 @@ const Admin = () => {
       console.error("Erreur lors de la création du user: ", error);
     }
   };
+
+  const filteredData = userData.filter((user) =>
+    user.username.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+
   if (user.isAdmin) {
     return (
       <div className={styles.container}>
@@ -203,6 +196,7 @@ const Admin = () => {
             Create User
           </Button>
         </div>
+
         <div className={styles.customListContainer}>
           <List
             dataSource={filteredData}
@@ -215,23 +209,31 @@ const Admin = () => {
                 <List.Item.Meta
                   avatar={
                     <Avatar
-                      src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${item.key}`}
-                    />
+                      src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${item.key}`} />
                   }
                   title={`${item.username}`}
                   description={
                     <>
                       {item.email}, <br />
-                      Is An Admin: {item.isAdmin.toString()}
+                      Is an admin :
+                      <span
+                        style={{
+                          fontWeight: 'bold',
+                          color: item.isAdmin ? 'green' : 'red'
+                        }}
+                      >
+                        {item.isAdmin.toString()}
+                      </span>
                     </>
                   }
                 />
+      
                 <Button
                   type="primary"
                   className={styles.editButton}
                   onClick={() => handleEditClick(item.key)}
                 >
-               <FontAwesomeIcon icon={faPen} color="white" />
+                  <FontAwesomeIcon icon={faPen} color="white" />
                 </Button>
               </List.Item>
             )}
@@ -275,6 +277,7 @@ const Admin = () => {
                 onChange={(e) => setEditedEmail(e.target.value)}
               />
             </div>
+
             <div className={styles.switchContainer}>
               <label htmlFor="editedIsAdmin">isAdmin:</label>
               <div className={styles.switchField}>
@@ -287,6 +290,8 @@ const Admin = () => {
             </div>
           </Modal>
         )}
+
+
         {createUserModalVisible && (
           <Modal
             title={`Create User`}
@@ -342,13 +347,16 @@ const Admin = () => {
         )}
       </div>
     );
-  } else {
+  }
+
+  else {
     return (
-      <div>
+      <div className={styles.centered_text}>
         <h1>This page is not allowed to intern</h1>
       </div>
     );
   }
 };
+
 
 export default Admin;

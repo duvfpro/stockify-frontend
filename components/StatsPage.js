@@ -28,6 +28,10 @@ import transformDataStock from "./transformDataStock";
 import transformDataRestock from "./transformDataRestock";
 import transformDataByP from "./transformDataByP";
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 1f6ea9e4dd13d4f1fc0c70dc023300951dfabc41
 
 function StatsPage() {
   // Get the router object from the 'next/router' module

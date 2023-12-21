@@ -62,3 +62,10 @@
 .switchField {
   margin-left: 8px;
 }
+
+
+.centered_text {
+  display: flex;
+  justify-content: center;
+  color: #808080;
+}

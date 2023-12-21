@@ -17,15 +17,13 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 10px;
-  }
-
-  .productButton{
     margin-left: 10px;
   }
 
-  .dateFilter{
+
+  /* .dateFilter{
     width: 225px;
-  }
+  } */
 
   .leftSection{
     margin-left: 4vw;
@@ -133,3 +131,9 @@
     border-radius: 5px;
   }
 
+
+  .todaySales {
+    margin-right: 3rem;
+    margin-bottom: 0;
+    padding-top: 1rem;
+  }
