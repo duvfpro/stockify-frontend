@@ -3,7 +3,7 @@ import AddNewProduct from './AddNewProduct';
 import Product from './Product';
 import FilterCascader from './Tools/FilterCascader';
 import FilterStock from './Tools/FilterStock';
-import { Modal, Input, Select } from 'antd';
+import { Modal, Input, Select,Spin  } from 'antd';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
@@ -27,26 +27,13 @@ function ProductsPage(props) {
   const router = useRouter();
   const [nameToSave, setNameToSave] = useState('');
 
+  const [spinning, setSpinning] = useState(false);
+
   useEffect(() => {
     if (!user.token) {
       router.push('/');
     }
   }, [user.token, router]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       setTimeout(async () => {
-  //         const response = await fetch('https://stockify-backend-wheat.vercel.app/products/allProducts');
-  //         const data = await response.json();
-  //         setMyProducts(data.allProducts);
-  //       }, 1000)
-  //     } catch (error) {
-  //       console.error('Erreur lors de la récupération des produits :', error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,9 +54,13 @@ function ProductsPage(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setSpinning(true);
+
         setTimeout(async () => {
+
         const response = await fetch('https://stockify-backend-wheat.vercel.app/products/allProducts');
         const data = await response.json();
+        setSpinning(false);
       
         if(selectedFilters.length === 0) {
           if (triggerSortByStock === "Stock Ascending") {
@@ -92,9 +83,6 @@ function ProductsPage(props) {
           }
         }
 
-        // if (JSON.stringify(productTab) === JSON.stringify([])) {
-        //   setMyProducts([]);
-        // } 
 
           if (triggerSortByStock === "Stock Ascending") {
             setMyProducts(productTab.sort(compareByStock));
@@ -232,7 +220,9 @@ function ProductsPage(props) {
 
 
   return (
+
     <div className={styles.main}>
+      <Spin spinning={spinning} fullscreen />
       <div className={styles.filtersContainer}>
         <div className={styles.myFilters}>
           <FilterCascader handleFilterChange={handleFilterChange} />
