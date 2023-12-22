@@ -33,20 +33,20 @@ function ProductsPage(props) {
     }
   }, [user.token, router]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setTimeout(async () => {
-          const response = await fetch('https://stockify-backend-wheat.vercel.app/products/allProducts');
-          const data = await response.json();
-          setMyProducts(data.allProducts);
-        }, 1000)
-      } catch (error) {
-        console.error('Erreur lors de la récupération des produits :', error);
-      }
-    };
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       setTimeout(async () => {
+  //         const response = await fetch('https://stockify-backend-wheat.vercel.app/products/allProducts');
+  //         const data = await response.json();
+  //         setMyProducts(data.allProducts);
+  //       }, 1000)
+  //     } catch (error) {
+  //       console.error('Erreur lors de la récupération des produits :', error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,9 +67,10 @@ function ProductsPage(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setTimeout(async () => {
         const response = await fetch('https://stockify-backend-wheat.vercel.app/products/allProducts');
         const data = await response.json();
-
+      
         if(selectedFilters.length === 0) {
           if (triggerSortByStock === "Stock Ascending") {
             setMyProducts([...data.allProducts].sort(compareByStock));
@@ -104,7 +105,7 @@ function ProductsPage(props) {
             setMyProducts(productTab);
           }
          }
-         
+        }, 1000)
       } catch (error) {
         console.error('Erreur lors de la récupération des produits filtrés :', error);    
     }

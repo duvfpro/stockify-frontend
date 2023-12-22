@@ -7,10 +7,14 @@ import Product from "./Product";
 import Sale from "./Sale";
 import { Table } from "antd";
 import FilterDate from "./Tools/FilterDate";
-import { FontAwesomeIcon, } from "@fortawesome/react-fontawesome";
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
-import { faCircle, } from "@fortawesome/free-solid-svg-icons";
-import { faMinus, faExclamation, faCheck } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
+import { faCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMinus,
+  faExclamation,
+  faCheck,
+} from "@fortawesome/free-solid-svg-icons";
 
 // Importe CategoryScale de Chart.js pour la mise à l'échelle des catégories sur les graphiques.
 import { CategoryScale } from "chart.js";
@@ -89,8 +93,6 @@ function Home() {
     },
   ];
 
-
-
   function convertirFormatDate(dateStr) {
     const dateObj = new Date(dateStr);
 
@@ -107,7 +109,6 @@ function Home() {
     fetch("https://stockify-backend-wheat.vercel.app/products/allProducts")
       .then((response) => response.json())
       .then((data) => {
-
         const currentDate = new Date();
         const date = currentDate.getDate().toString();
         const month = (currentDate.getMonth() + 1).toString();
@@ -122,41 +123,48 @@ function Home() {
         });
 
         let formattedData = filteredProducts.map((product, index) => {
-          const todaySales = product.soldAt.filter((sale) => sale.date.split("T")[0] === todayDateString);
+          const todaySales = product.soldAt.filter(
+            (sale) => sale.date.split("T")[0] === todayDateString
+          );
 
           const soldHistory = [
             product.soldAt
               ? product.soldAt.map((sale) => ({
-                type: "sold",
-                quantity: sale.quantity,
-                date: convertirFormatDate(sale.date),
-              }))
-              : []
+                  type: "sold",
+                  quantity: sale.quantity,
+                  date: convertirFormatDate(sale.date),
+                }))
+              : [],
           ];
 
           const restockHistory = [
             product.restockAt
               ? product.restockAt.map((restock) => ({
-                type: "restock",
-                quantity: restock.quantity,
-                date: convertirFormatDate(restock.date),
-              }))
-              : []
+                  type: "restock",
+                  quantity: restock.quantity,
+                  date: convertirFormatDate(restock.date),
+                }))
+              : [],
           ];
 
-          const historyExtended = soldHistory.concat(restockHistory).flat()
+          const historyExtended = soldHistory
+            .concat(restockHistory)
+            .flat()
             .sort((a, b) => {
-              const dateA = a.date.split('/').reverse().join('');
-              const dateB = b.date.split('/').reverse().join('');
+              const dateA = a.date.split("/").reverse().join("");
+              const dateB = b.date.split("/").reverse().join("");
               return parseInt(dateB) - parseInt(dateA);
-            })
+            });
 
           const history = [];
           for (let i = 0; i < historyExtended.length; i++) {
             let found = false;
 
             for (let j = 0; j < history.length; j++) {
-              if (historyExtended[i].type === history[j].type && historyExtended[i].date === history[j].date) {
+              if (
+                historyExtended[i].type === history[j].type &&
+                historyExtended[i].date === history[j].date
+              ) {
                 history[j].quantity += historyExtended[i].quantity;
                 found = true;
                 break;
@@ -184,10 +192,7 @@ function Home() {
         });
 
         setDisplayProducts(formattedData);
-
-
       });
-
   }, [refresh, filter]);
 
   const tableStyle = {
@@ -327,7 +332,7 @@ function Home() {
           topTenProducts = productsSold.slice(0, 10);
         }
         setMyProducts(topTenProducts);
-      })
+      });
   }, [refresh]);
 
   return (
@@ -338,8 +343,20 @@ function Home() {
             <div className={styles.groupButtons}>
               {/* <div className={styles.product}> Add stock</div>
               <div className={styles.product}> Sale product</div> */}
-              <button className={styles.addProduct} onClick={handleAddStockButtonClick}> Add stock </button>
-              <button className={styles.saleProduct} onClick={handleSaleButtonClick}> Sale Products </button>
+              <button
+                className={styles.addProduct}
+                onClick={handleAddStockButtonClick}
+              >
+                {" "}
+                Add stock{" "}
+              </button>
+              <button
+                className={styles.saleProduct}
+                onClick={handleSaleButtonClick}
+              >
+                {" "}
+                Sale Products{" "}
+              </button>
             </div>
             <div className={styles.dateFilter}>
               <p className={styles.todaySales}>Today's sales</p>
@@ -366,10 +383,11 @@ function Home() {
                               (operationGroup, groupIndex) => (
                                 <li key={groupIndex}>
                                   {operationGroup.type &&
-                                    operationGroup.quantity &&
-                                    operationGroup.date
-                                    ? `${operationGroup.date.split(" ")[0]}: ${operationGroup.quantity
-                                    } ${operationGroup.type}`
+                                  operationGroup.quantity &&
+                                  operationGroup.date
+                                    ? `${operationGroup.date.split(" ")[0]}: ${
+                                        operationGroup.quantity
+                                      } ${operationGroup.type}`
                                     : ""}
                                 </li>
                               )
@@ -387,7 +405,7 @@ function Home() {
           {/* GRAPH SECTION */}
           <div>
             <div className={styles.firstChart}>
-              <h2>Sales Statistics</h2>
+              <h2>Stock Statistics</h2>
               <BarChart chartData={chartData} yAxisLegend="Quantité en stock" />
             </div>
           </div>
@@ -395,8 +413,6 @@ function Home() {
         </div>
 
         <div className={styles.rightSection}>
-
-
           <div className={styles.productList}>
             <h2 className={styles.productsTitle}> Top 10 products </h2>
             <div className={styles.rightProductsContainer}>
