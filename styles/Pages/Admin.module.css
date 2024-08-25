@@ -1,0 +1,92 @@
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.searchBar {
+  margin-bottom: 16px;
+  margin-top: 16px;
+}
+
+.customListContainer {
+  max-width: 100%;
+  margin: 0 auto;
+  height: 70vh;
+  overflow-y: auto;
+}
+
+.customListContainer::-webkit-scrollbar {
+  width: 6px;
+}
+
+.customListContainer::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+}
+
+.listItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.listItem:hover {
+  background-color: #b3acb22c;
+  cursor: pointer;
+}
+
+.editButton {
+  margin-right: 12px;
+}
+
+.btnEditUser {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
+
+}
+
+.createBtn {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.cancelBtn {
+  background-color: #734a3f;
+}
+
+.modalField {
+  margin-bottom: 16px;
+}
+
+.switchContainer {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.switchField {
+  margin-left: 8px;
+}
+
+
+.centered_text {
+  display: flex;
+  justify-content: center;
+  color: #808080;
+}
+
+.modalTitle {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.nohover:hover {
+border: 0;
+margin: 0;
+padding: 0;
+border-radius: 12px;
+
+}
