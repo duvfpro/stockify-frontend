@@ -17,7 +17,7 @@ function AddNewProduct(props) {
 
 
     useEffect(() => { // fetch toutes les catégories pour le menu déroulant de la modal
-        fetch('https://stockify-backend-wheat.vercel.app/categories/allCategories')
+        fetch('https://stockify-backend-one.vercel.app/categories/allCategories')
         .then(response => response.json())
         .then(data => {
             let categories = [];
@@ -37,7 +37,7 @@ function AddNewProduct(props) {
     const handleSubmitButton = () => {
 
         if(productImage === "https://res.cloudinary.com/dj6bueyfl/image/upload/v1702976676/stockpic_unkgms.jpg") {
-            fetch('https://stockify-backend-wheat.vercel.app/products/newProduct', {
+            fetch('https://stockify-backend-one.vercel.app/products/newProduct', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: productName, image: productImage, stock: productStock, category: categotyId, price: productPrice }),
@@ -62,7 +62,7 @@ function AddNewProduct(props) {
             formData.append('price', productPrice); 
 
 
-        fetch('https://stockify-backend-wheat.vercel.app/products/newProductWithImage', {
+        fetch('https://stockify-backend-one.vercel.app/products/newProductWithImage', {
             method: 'POST',
             body: formData,
             })

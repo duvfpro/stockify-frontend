@@ -10,7 +10,7 @@ const FilterCascader = (props) => {
 
 
   useEffect(() => {
-    fetch("https://stockify-backend-wheat.vercel.app/categories/allCategories")
+    fetch("https://stockify-backend-one.vercel.app/categories/allCategories")
       .then((response) => response.json())
       .then((data) => {
         let categories = [];
