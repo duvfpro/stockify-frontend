@@ -106,11 +106,7 @@ function Home() {
   }
 
   useEffect(() => {
-<<<<<<< HEAD
     fetch("https://stockify-backend-one.vercel.app/products/allProducts")
-=======
-    fetch("https://stockify-backend-wheat.vercel.app/products/allProducts")
->>>>>>> 7edc7c55abffec476d15d05f2761a9959f590298
       .then((response) => response.json())
       .then((data) => {
         const currentDate = new Date();
